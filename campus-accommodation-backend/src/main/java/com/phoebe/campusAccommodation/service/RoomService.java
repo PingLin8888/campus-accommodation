@@ -14,11 +14,10 @@ import java.sql.SQLException;
 
 @Service
 @RequiredArgsConstructor
-public class RoomService implements IRoomService{
+public class RoomService {
 
     private final RoomRepository roomRepository;
 
-    @Override
     public Room addNewRoom(MultipartFile photo, String roomType, BigDecimal roomPrice) throws IOException, SQLException {
         Room room = new Room();
         room.setRoomType(roomType);
