@@ -1,4 +1,4 @@
 package com.phoebe.campusAccommodation.controller;
 
-public class BookedRoomController {
+public class BookingController {
 }

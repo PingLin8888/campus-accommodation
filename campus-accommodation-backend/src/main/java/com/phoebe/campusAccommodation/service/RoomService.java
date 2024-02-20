@@ -5,6 +5,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
-public interface IRoomService {
-    Room addNewRoom(MultipartFile photo, String roomType, BigDecimal roomPrice);
+public class RoomService implements IRoomService{
+
+    @Override
+    public Room addNewRoom(MultipartFile photo, String roomType, BigDecimal roomPrice) {
+        return null;
+    }
 }

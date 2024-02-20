@@ -1,4 +1,4 @@
 package com.phoebe.campusAccommodation.repository;
 
-public interface BookedRoomRepository {
+public interface BookingRepository {
 }
