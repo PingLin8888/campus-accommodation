@@ -52,6 +52,10 @@ function AddRoom() {
     } catch (error) {
       setErrorMessage(error.message);
     }
+    setTimeout(() => {
+      setSuccessMessage("");
+      setErrorMessage("");
+    }, 3000);
   };
 
   //create UI
@@ -61,6 +65,14 @@ function AddRoom() {
         <div className="row justify-content-center">
           <div className="clo-md-8 col-lg-6">
             <h2 className="mt-5 mb-2">Add a new room</h2>
+            {successMessage && (
+              <div className="alert alert-success fade show">
+                {successMessage}
+              </div>
+            )}
+            {errorMessage && (
+              <div className="alert alert-danger fade show">{errorMessage}</div>
+            )}
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="roomType" className="form-label">

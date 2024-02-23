@@ -1,4 +1,7 @@
 package com.phoebe.campusAccommodation.repository;
 
-public interface BookingRepository {
+import com.phoebe.campusAccommodation.model.Booking;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BookingRepository extends JpaRepository<Booking,Long> {
 }
