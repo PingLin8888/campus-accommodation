@@ -19,7 +19,7 @@ function AddRoom() {
     let value = e.target.value;
     if (name === "roomPrice") {
       if (!isNaN(value)) {
-        value.parseInt(value);
+        value = parseFloat(value);
       } else {
         value = "";
       }
