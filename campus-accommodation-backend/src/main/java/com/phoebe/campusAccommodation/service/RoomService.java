@@ -54,4 +54,11 @@ public class RoomService {
         }
         return null;
     }
+
+    public void deleteRoom(Long id) {
+        Optional<Room> room = roomRepository.findById(id);
+        if (room.isPresent()) {
+            roomRepository.deleteById(id);
+        }
+    }
 }

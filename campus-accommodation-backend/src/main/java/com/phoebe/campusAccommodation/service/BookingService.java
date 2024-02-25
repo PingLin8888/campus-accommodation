@@ -14,5 +14,6 @@ public class BookingService {
     private final BookingRepository bookingRepository;
 
     public List<Booking> getAllBookingsByRoomId(Long id) {
+        return null;
     }
 }

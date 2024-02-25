@@ -10,6 +10,7 @@ import com.phoebe.campusAccommodation.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,6 +46,7 @@ public class RoomController {
         return roomService.getAllRoomTypes();
     }
 
+    @GetMapping("/all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
         List<Room> rooms = roomService.getAllRooms();
         List<RoomResponse> roomResponses = new ArrayList<>();
@@ -60,13 +62,20 @@ public class RoomController {
         return ResponseEntity.ok(roomResponses);
     }
 
+    @DeleteMapping("/delete/room/{roomId}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long id) {
+        roomService.deleteRoom(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
     private RoomResponse getRoomResponse(Room room) {
         List<Booking> bookings = bookingService.getAllBookingsByRoomId(room.getId());
-        List<BookingResponse> bookingInfo = bookings
-                .stream()
-                .map(booking -> new BookingResponse(booking.getBookingId(),
-                        booking.getCheckInDate(), booking.getCheckOutDate(),
-                        booking.getBookingConfirmationCode())).toList();
+//        List<BookingResponse> bookingInfo = bookings
+//                .stream()
+//                .map(booking -> new BookingResponse(booking.getBookingId(),
+//                        booking.getCheckInDate(), booking.getCheckOutDate(),
+//                        booking.getBookingConfirmationCode())).toList();
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();
         if (photoBlob != null) {
@@ -77,7 +86,7 @@ public class RoomController {
             }
 
         }
-        return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(), room.isBooked(), photoBytes, bookingInfo);
+        return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(), room.isBooked(), photoBytes);
     }
 
 }

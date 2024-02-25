@@ -6,7 +6,6 @@ export const api = axios.create({
 
 /* This function adds a new room to the database. */
 export async function addRoom(photo, roomType, roomPrice) {
-  console.log(roomType);
   const formData = new FormData();
   formData.append("photo", photo);
   formData.append("roomType", roomType);
@@ -26,5 +25,23 @@ export async function getRoomTypes() {
     return response.data;
   } catch (error) {
     throw new Error("Error fetching room types.");
+  }
+}
+
+export async function getAllRooms() {
+  try {
+    const result = await api.get("/rooms/all-rooms");
+    return result.data;
+  } catch (error) {
+    throw new Error("Error fetching all rooms.");
+  }
+}
+/* This function deletes a room by ID */
+export async function deleteRoom(roomId) {
+  try {
+    const result = await api.delete(`/rooms/delete/room/${roomId}`);
+    return result.data;
+  } catch (error) {
+    throw new Error(`Error deleting the room. ${error.message}`);
   }
 }
