@@ -36,6 +36,7 @@ export async function getAllRooms() {
     throw new Error("Error fetching all rooms.");
   }
 }
+
 /* This function deletes a room by ID */
 export async function deleteRoom(roomId) {
   try {

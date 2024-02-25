@@ -41,7 +41,7 @@ const ExistingRooms = () => {
       setFilteredRooms(filtered);
     }
     setCurrentPage(1);
-  }, [rooms, selectedRoomType]);
+  }, [rooms, selectedRoomType]); //The dependency array [rooms, selectedRoomType] ensures that the effect is re-executed whenever either rooms or selectedRoomType changes.
 
   const handlePaginationClick = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -86,7 +86,12 @@ const ExistingRooms = () => {
                 <h2>Existing rooms</h2>
               </div>
               <Col md={6} className="mb-3 mb-md-0">
-                <RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
+                {/* <RoomFilter data={rooms} setFilteredData={setFilteredRooms} /> */}
+                {rooms && rooms.length > 0 ? (
+                  <RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
+                ) : (
+                  <p>No rooms available</p>
+                )}
               </Col>
               <table className="table table-bordered table-hover">
                 <thead>
