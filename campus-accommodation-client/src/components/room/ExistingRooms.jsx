@@ -100,6 +100,7 @@ const ExistingRooms = () => {
                 <tbody>
                   {currentRooms.map((room) => (
                     <tr key={room.id} className="text-center">
+                      <td>{room.id}</td>
                       <td>{room.roomType}</td>
                       <td>{room.roomPrice}</td>
                       <td>
