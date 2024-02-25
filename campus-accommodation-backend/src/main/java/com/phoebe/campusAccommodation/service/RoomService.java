@@ -1,5 +1,6 @@
 package com.phoebe.campusAccommodation.service;
 
+import com.phoebe.campusAccommodation.exception.InternalServerException;
 import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.repository.RoomRepository;
@@ -60,5 +61,28 @@ public class RoomService {
         if (room.isPresent()) {
             roomRepository.deleteById(id);
         }
+    }
+
+    public Room updateRoom(Long roomId, String roomType, BigDecimal roomPrice, byte[] photoBytes) {
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found."));
+        if (roomType != null) {
+            room.setRoomType(roomType);
+        }
+        if (roomPrice != null) {
+            room.setRoomPrice(roomPrice);
+        }
+        if (photoBytes != null && photoBytes.length > 0) {
+            try{
+                room.setPhoto(new SerialBlob(photoBytes));
+            }catch (SQLException exception){
+                throw new InternalServerException("Error updating room");
+            }
+
+        }
+        return roomRepository.save(room);
+    }
+
+    public Optional<Room> getRoomById(Long roomId) {
+        return Optional.of(roomRepository.findById(roomId).get());
     }
 }

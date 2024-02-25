@@ -5,7 +5,6 @@ import RoomPaginator from "../common/RoomPaginator";
 import RoomFilter from "../common/RoomFilter";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
 
 const ExistingRooms = () => {
   const [rooms, setRooms] = useState([]);
