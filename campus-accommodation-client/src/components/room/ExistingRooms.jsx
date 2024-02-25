@@ -75,73 +75,71 @@ const ExistingRooms = () => {
   const currentRooms = filteredRooms.slice(indexOfFirstRoom, indexOfLastRoom);
 
   return (
-    <BrowserRouter>
-      <>
-        {isLoading ? (
-          <p>Loading existing rooms</p>
-        ) : (
-          <>
-            <section className="mt-5 mb-5 container">
-              <div className="d-flex justify-content-center mb-3 mt-5">
-                <h2>Existing rooms</h2>
-              </div>
-              <Col md={6} className="mb-3 mb-md-0">
-                {/* <RoomFilter data={rooms} setFilteredData={setFilteredRooms} /> */}
-                {rooms && rooms.length > 0 ? (
-                  <RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
-                ) : (
-                  <p>No rooms available</p>
-                )}
-              </Col>
-              <table className="table table-bordered table-hover">
-                <thead>
-                  <tr className="text-center">
-                    <th>ID</th>
-                    <th>Room Type</th>
-                    <th>Room Price</th>
-                    <th>Actions</th>
+    <>
+      {isLoading ? (
+        <p>Loading existing rooms</p>
+      ) : (
+        <>
+          <section className="mt-5 mb-5 container">
+            <div className="d-flex justify-content-center mb-3 mt-5">
+              <h2>Existing rooms</h2>
+            </div>
+            <Col md={6} className="mb-3 mb-md-0">
+              {/* <RoomFilter data={rooms} setFilteredData={setFilteredRooms} /> */}
+              {rooms && rooms.length > 0 ? (
+                <RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
+              ) : (
+                <p>No rooms available</p>
+              )}
+            </Col>
+            <table className="table table-bordered table-hover">
+              <thead>
+                <tr className="text-center">
+                  <th>ID</th>
+                  <th>Room Type</th>
+                  <th>Room Price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentRooms.map((room) => (
+                  <tr key={room.id} className="text-center">
+                    <td>{room.id}</td>
+                    <td>{room.roomType}</td>
+                    <td>{room.roomPrice}</td>
+                    <td className="gap-2">
+                      <Link to={`/edit-room/${room.id}`}>
+                        <span className="btn btn-info btn-sm">
+                          <FaEye />
+                        </span>
+                        <span className="btn btn-warning btn-sm">
+                          <FaEdit />
+                        </span>
+                      </Link>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDelete(room.id)}
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {currentRooms.map((room) => (
-                    <tr key={room.id} className="text-center">
-                      <td>{room.id}</td>
-                      <td>{room.roomType}</td>
-                      <td>{room.roomPrice}</td>
-                      <td className="gap-2">
-                        <Link to={`/edit-room/${room.id}`}>
-                          <span className="btn btn-info btn-sm">
-                            <FaEye />
-                          </span>
-                          <span className="btn btn-warning btn-sm">
-                            <FaEdit />
-                          </span>
-                        </Link>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelete(room.id)}
-                        >
-                          <FaTrashAlt />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <RoomPaginator
-                currentPage={currentPage}
-                totalPages={calculateTotalPages(
-                  filteredRooms,
-                  roomsPerPage,
-                  rooms
-                )}
-                onPageChange={handlePaginationClick}
-              />
-            </section>
-          </>
-        )}
-      </>
-    </BrowserRouter>
+                ))}
+              </tbody>
+            </table>
+            <RoomPaginator
+              currentPage={currentPage}
+              totalPages={calculateTotalPages(
+                filteredRooms,
+                roomsPerPage,
+                rooms
+              )}
+              onPageChange={handlePaginationClick}
+            />
+          </section>
+        </>
+      )}
+    </>
   );
 };
 
