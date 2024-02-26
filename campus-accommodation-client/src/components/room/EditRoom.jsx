@@ -112,7 +112,7 @@ const EditRoom = () => {
                   Room Photo
                 </label>
                 <input
-                  required
+                  // required
                   type="file"
                   id="photo"
                   name="photo"

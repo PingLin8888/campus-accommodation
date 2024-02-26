@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { addRoom } from "../utils/ApiFunctions";
+import { Link } from "react-router-dom";
 import RoomTypeSelector from "../common/RoomTypeSelector";
 
 function AddRoom() {
@@ -122,7 +123,10 @@ function AddRoom() {
                 )}
               </div>
               <div className="d-grid d-md-flex mt-2">
-                <button className="btn btn-outline-privary ml-5">
+                <Link to={"/existing-rooms"} className="btn btn-outline-info">
+                  Back to existing rooms
+                </Link>
+                <button type="submit" className="btn btn-outline-privary ml-5">
                   Save Room
                 </button>
               </div>
