@@ -86,7 +86,7 @@ public class RoomController {
     }
 
     @GetMapping("/room/{roomId}")
-    public ResponseEntity<Optional<RoomResponse>> getRoomById(Long roomId) {
+    public ResponseEntity<Optional<RoomResponse>> getRoomById(@PathVariable Long roomId) {
         Optional<Room> theRoom = roomService.getRoomById(roomId);
         return theRoom.map(room -> {
             RoomResponse roomResponse = getRoomResponse(room);
@@ -94,9 +94,6 @@ public class RoomController {
         }).orElseThrow(() -> new ResourceNotFoundException("Room is not found."));
 
     }
-
-
-
 
     private RoomResponse getRoomResponse(Room room) {
         List<Booking> bookings = bookingService.getAllBookingsByRoomId(room.getId());
@@ -113,8 +110,8 @@ public class RoomController {
             }catch (SQLException e){
                 throw new PhotoRetrievalException("Error retrieving photo");
             }
-
         }
+        System.out.println(photoBytes == null ? "photo null" : "photo is not null");
         return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(), room.isBooked(), photoBytes);
     }
 

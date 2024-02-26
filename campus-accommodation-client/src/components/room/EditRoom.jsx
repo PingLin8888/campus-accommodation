@@ -12,8 +12,19 @@ const EditRoom = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
   const { roomId } = useParams();
+
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    setRoom({ ...room, photo: selectedImage });
+    setImagePreview(URL.createObjectURL(selectedImage));
+  };
+
+  /* e represents the event object passed to the event handler when an event (such as a change event) occurs on an input element. */
+  const handleRoomInputChange = (e) => {
+    const { name, value } = e.target;
+    setRoom({ ...room, [name]: value });
+  };
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -27,12 +38,6 @@ const EditRoom = () => {
     };
     fetchRoom();
   }, [roomId]);
-
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-    setRoom({ ...room, photo: selectedImage });
-    setImagePreview(URL.createObjectURL(selectedImage));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,25 +53,13 @@ const EditRoom = () => {
         setErrorMessage("Error updating room");
       }
     } catch (error) {
+      console.error(error);
       setErrorMessage(error.message);
     }
     setTimeout(() => {
       setSuccessMessage("");
       setErrorMessage("");
     }, 3000);
-  };
-
-  /* e represents the event object passed to the event handler when an event (such as a change event) occurs on an input element. */
-  const handleRoomInputChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "roomPrice") {
-      if (!isNaN(value)) {
-        value = parseFloat(value);
-      } else {
-        value = "";
-      }
-    }
-    setRoom({ ...room, [name]: value });
   };
 
   return (
@@ -76,12 +69,14 @@ const EditRoom = () => {
           <div className="clo-md-8 col-lg-6">
             <h2 className="mt-5 mb-2">Edit room</h2>
             {successMessage && (
-              <div className="alert alert-success fade show">
+              <div className="alert alert-success" role="alert">
                 {successMessage}
               </div>
             )}
             {errorMessage && (
-              <div className="alert alert-danger fade show">{errorMessage}</div>
+              <div className="alert alert-danger" role="alert">
+                {errorMessage}
+              </div>
             )}
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
@@ -127,6 +122,7 @@ const EditRoom = () => {
                 {imagePreview && (
                   <img
                     src={`data:image/jpeg;base64,${imagePreview}`}
+                    // src={imagePreview}
                     alt="Room preview"
                     style={{ maxWidth: "400px", maxHeight: "400px" }}
                     className="mb-3"
