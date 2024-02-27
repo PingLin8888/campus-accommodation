@@ -21,7 +21,7 @@ function App() {
         <Router>
           <NavBar />
           <Routes>
-            {/* path attribute in Route is relatively arbitually, as long as you keep consistent with the VavBar component. */}
+            {/* path attribute in Route is relatively arbitually, as long as you keep consistent with the NavBar component. */}
             <Route path="/" element={<Home />} />
             <Route path="/edit-room/:roomId" element={<EditRoom />} />
             <Route path="/existing-rooms" element={<ExistingRooms />} />

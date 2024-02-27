@@ -4,7 +4,6 @@ import com.phoebe.campusAccommodation.exception.PhotoRetrievalException;
 import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.Booking;
 import com.phoebe.campusAccommodation.model.Room;
-import com.phoebe.campusAccommodation.response.BookingResponse;
 import com.phoebe.campusAccommodation.response.RoomResponse;
 import com.phoebe.campusAccommodation.service.BookingService;
 import com.phoebe.campusAccommodation.service.RoomService;

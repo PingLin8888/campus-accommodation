@@ -16,4 +16,7 @@ public class BookingService {
     public List<Booking> getAllBookingsByRoomId(Long id) {
         return null;
     }
+
+    public List<Booking> getAllBookings() {
+    }
 }
