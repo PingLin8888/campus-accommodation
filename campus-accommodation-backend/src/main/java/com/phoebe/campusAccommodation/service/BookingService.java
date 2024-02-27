@@ -19,4 +19,10 @@ public class BookingService {
 
     public List<Booking> getAllBookings() {
     }
+
+    public Booking findByBookingConfirmationCode(String confimationCode) {
+    }
+
+    public String saveBooking(long roomId, Booking bookingRequest) {
+    }
 }

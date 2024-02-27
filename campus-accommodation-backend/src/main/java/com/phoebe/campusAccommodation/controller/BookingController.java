@@ -1,14 +1,13 @@
 package com.phoebe.campusAccommodation.controller;
 
+import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.Booking;
 import com.phoebe.campusAccommodation.response.BookingResponse;
 import com.phoebe.campusAccommodation.service.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +30,25 @@ public class BookingController {
         return ResponseEntity.ok(bookingResponses);
     }
 
-    public ResponseEntity<?> getBookingByConfirmationCode(String confimationCode){
+    @GetMapping("/confirmation/{confirmationCode}")
+    public ResponseEntity<?> getBookingByConfirmationCode(@PathVariable String confimationCode){
         try{
             Booking booking = bookingService.findByBookingConfirmationCode(confimationCode);
-            BookingResponse 
+            BookingResponse bookingResponse = getBookingResponse(booking);
+            return ResponseEntity.ok(bookingResponse);
+        }catch (ResourceNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> saveBooking(@PathVariable long roomId, @RequestBody Booking bookingRequest) {
+        try{
+            String confirmationCode = bookingService.saveBooking(roomId, bookingRequest);
+            
         }catch (){
 
         }
     }
-
 
     private BookingResponse getBookingResponse(Booking booking) {
     }
