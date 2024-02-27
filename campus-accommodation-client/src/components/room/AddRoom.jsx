@@ -126,7 +126,7 @@ function AddRoom() {
                 <Link to={"/existing-rooms"} className="btn btn-outline-info">
                   Back to existing rooms
                 </Link>
-                <button type="submit" className="btn btn-outline-privary ml-5">
+                <button type="submit" className="btn btn-outline-primary ml-5">
                   Save Room
                 </button>
               </div>

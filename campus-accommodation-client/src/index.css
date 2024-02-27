@@ -82,19 +82,20 @@ body {
 
 
 .parallax {
-  background-image: url("./assets/images/parrall.jpg");
+  background-image: url("./assets/images/dark_sky.jpeg");
   background-attachment: fixed;
   background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 50vh;
+  /* position: relative; */
+  /* background-repeat: no-repeat; */
+  background-size: contain;
+  height: 25vh;
 }
 
 .header {
   position: relative;
   height: 150px;
-  background-size: cover;
-  background-image: url("./assets/images/services4.jpg");
+  background-size: contain;
+  background-image: url("./assets/images/CappavillaAerial21.jpg");
   background-position: center center;
 }
 .header-title {
@@ -176,7 +177,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
   }
   .overlay-content {
     position: absolute;
@@ -187,9 +188,9 @@ body {
     justify-content: flex-start;
   }
 
-/* The header banner */
+/* The header banner. toppest */
 .header-banner {
-  background-image:  url("./assets/images/services-1.jpg");
+  background-image:  url("./assets/images/images2.jpeg");
    background-size: cover;
   background-position: center;
    position: relative;
