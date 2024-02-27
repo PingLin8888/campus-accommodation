@@ -28,6 +28,7 @@ export async function getRoomTypes() {
   }
 }
 
+//Works.
 export async function getAllRooms() {
   try {
     const result = await api.get("/rooms/all-rooms");
