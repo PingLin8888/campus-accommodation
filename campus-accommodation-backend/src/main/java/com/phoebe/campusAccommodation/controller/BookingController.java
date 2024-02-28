@@ -1,9 +1,13 @@
 package com.phoebe.campusAccommodation.controller;
 
+import com.phoebe.campusAccommodation.exception.InvalidBookingRequestException;
 import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.Booking;
+import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.response.BookingResponse;
+import com.phoebe.campusAccommodation.response.RoomResponse;
 import com.phoebe.campusAccommodation.service.BookingService;
+import com.phoebe.campusAccommodation.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,7 @@ import java.util.List;
 @RequestMapping("/bookings")
 public class BookingController {
     private final BookingService bookingService;
+    private final RoomService roomService;
 
     @GetMapping("get-all-bookings")
     public ResponseEntity<List<BookingResponse>> getAllBookings() {
@@ -41,15 +46,27 @@ public class BookingController {
         }
     }
 
+    @PostMapping("/room/{roomId}/booking")
     public ResponseEntity<?> saveBooking(@PathVariable long roomId, @RequestBody Booking bookingRequest) {
         try{
             String confirmationCode = bookingService.saveBooking(roomId, bookingRequest);
-            
-        }catch (){
-
+            return ResponseEntity.ok("Room was booked successfully! Your booking confirmation code is: " + confirmationCode);
+        }catch (InvalidBookingRequestException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    @DeleteMapping("/booking/{bookingId}/delete")
+    public void cancelBooking(@PathVariable Long bookingId){
+        bookingService.cancelBooking(bookingId);
+    }
+
     private BookingResponse getBookingResponse(Booking booking) {
+        Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
+        RoomResponse room = new RoomResponse(theRoom.getId(), theRoom.getRoomType(), theRoom.getRoomPrice());
+        return new BookingResponse(booking.getBookingId(), booking.getCheckInDate(), booking.getCheckOutDate(),
+                booking.getGuestFullName(), booking.getGuestEmail(), booking.getNumOfAdults(), booking.getNumOfChildren(),
+                booking.getTotalNumOfGuest(), booking.getBookingConfirmationCode(), room);
+
     }
 }
