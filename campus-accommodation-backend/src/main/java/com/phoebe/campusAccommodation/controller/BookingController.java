@@ -9,19 +9,21 @@ import com.phoebe.campusAccommodation.response.RoomResponse;
 import com.phoebe.campusAccommodation.service.BookingService;
 import com.phoebe.campusAccommodation.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
+    @Autowired
     private final BookingService bookingService;
+    @Autowired
     private final RoomService roomService;
 
     @GetMapping("all-bookings")
@@ -65,7 +67,7 @@ public class BookingController {
         Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
         RoomResponse room = new RoomResponse(theRoom.getId(), theRoom.getRoomType(), theRoom.getRoomPrice());
         return new BookingResponse(booking.getBookingId(), booking.getCheckInDate(), booking.getCheckOutDate(),
-                booking.getGuestFullName(), booking.getGuestEmail(), booking.getNumOfAdults(), booking.getNumOfChildren(),
+                booking.getGuestName(), booking.getGuestEmail(), booking.getNumOfAdults(), booking.getNumOfChildren(),
                 booking.getTotalNumOfGuest(), booking.getBookingConfirmationCode(), room);
 
     }

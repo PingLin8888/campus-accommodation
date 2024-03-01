@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-
 @Entity
 @Getter
 @Setter
@@ -19,11 +18,16 @@ public class Booking {
     private Long bookingId;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
-    private String guestFullName;
+    @Column(name = "guest_full_name")
+    private String guestName;
+    @Column(name = "guest_email")
     private String guestEmail;
-    private int numOfAdults;
-    private int numOfChildren;
-    private int totalNumOfGuest;
+    @Column(name = "num_of_adults")
+    private Integer numOfAdults;
+    @Column(name = "num_of_children")
+    private Integer numOfChildren;
+    @Column(name = "total_num_of_guest")
+    private Integer totalNumOfGuest;
     private String bookingConfirmationCode;
     @ManyToOne(fetch = FetchType.LAZY)//one room can have many booking history
     @JoinColumn(name = "room_id")
