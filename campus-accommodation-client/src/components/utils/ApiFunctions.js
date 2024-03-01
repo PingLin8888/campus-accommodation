@@ -72,6 +72,7 @@ export async function getRoomById(roomId) {
 /* This function saves a new booking to the database. */
 export async function bookRoom(roomId, booking) {
   try {
+    console.log("Booking request:", booking); // Log the booking data before sending the request
     const response = await api.post(
       `/bookings/room/${roomId}/bookRoom`,
       booking
