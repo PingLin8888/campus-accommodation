@@ -27,8 +27,18 @@ const BookingForm = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
 
+  const calculatePayment = () => {
+    const checkInDate = moment(booking.checkInDate);
+    const checkOutDate = moment(booking.checkOutDate);
+    const diffInDays = checkOutDate.diff(checkInDate, "days");
+    const price = roomPrice ? roomPrice : 0;
+    console.log(`Price: ${price}, Difference in Days: ${diffInDays}`);
+    return diffInDays * price;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Name: ${name}, Value: ${value}`);
     setBooking({ ...booking, [name]: value });
     setErrorMessage("");
   };
@@ -45,14 +55,6 @@ const BookingForm = () => {
   useEffect(() => {
     getRoomPriceById(roomId);
   }, [roomId]);
-
-  const calculatePayment = () => {
-    const checkInDate = moment(booking.checkInDate);
-    const checkOutDate = moment(booking.checkOutDate);
-    const diffInDays = checkOutDate.diff(checkInDate);
-    const price = roomPrice ? roomPrice : 0;
-    return diffInDays * price;
-  };
 
   const isGuestCountValid = () => {
     const adultCount = parseInt(booking.numberOfAdults);
@@ -248,9 +250,9 @@ const BookingForm = () => {
             {isSubmitted && (
               <BookingSummary
                 booking={booking}
-                payment={calculatePayment}
                 isFormValid={isValidated}
                 onConfirm={handleBooking}
+                calculatePayment={calculatePayment}
               />
             )}
           </div>

@@ -3,13 +3,20 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const BookingSummary = ({ booking, payment, isFormValid, onConfirm }) => {
+const BookingSummary = ({
+  booking,
+  isFormValid,
+  onConfirm,
+  calculatePayment,
+}) => {
   const checkInDate = moment(booking.checkInDate);
   const checkOutDate = moment(booking.checkOutDate);
   const numberOfDays = checkOutDate.diff(checkInDate, "days");
   const [isBookingConfirmed, setIsBookingConfirmed] = useState(false);
   const [isProcessingPayment, setIsprocessingPayment] = useState(false);
   const navigate = useNavigate();
+
+  const payment = calculatePayment();
 
   const handleConfirmBooking = () => {
     setIsprocessingPayment(true);
