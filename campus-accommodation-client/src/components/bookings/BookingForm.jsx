@@ -32,13 +32,13 @@ const BookingForm = () => {
     const checkOutDate = moment(booking.checkOutDate);
     const diffInDays = checkOutDate.diff(checkInDate, "days");
     const price = roomPrice ? roomPrice : 0;
-    console.log(`Price: ${price}, Difference in Days: ${diffInDays}`);
+    // console.log(`Price: ${price}, Difference in Days: ${diffInDays}`);
     return diffInDays * price;
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Name: ${name}, Value: ${value}`);
+    // console.log(`Name: ${name}, Value: ${value}`);
     setBooking({ ...booking, [name]: value });
     setErrorMessage("");
   };
@@ -94,10 +94,10 @@ const BookingForm = () => {
     try {
       const confirmationCode = await bookRoom(roomId, booking);
       setIsSubmitted(true);
-      navigate("/", { state: { message: confirmationCode } });
+      navigate("/booking-success", { state: { message: confirmationCode } });
     } catch (error) {
       setErrorMessage(error.message);
-      navigate("/", { state: { error: errorMessage } });
+      navigate("/booking-success", { state: { error: errorMessage } });
     }
   };
 
