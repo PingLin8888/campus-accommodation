@@ -67,8 +67,8 @@ public class BookingController {
         Room theRoom = roomService.getRoomById(booking.getRoom().getId()).get();
         RoomResponse room = new RoomResponse(theRoom.getId(), theRoom.getRoomType(), theRoom.getRoomPrice());
         return new BookingResponse(booking.getBookingId(), booking.getCheckInDate(), booking.getCheckOutDate(),
-                booking.getGuestName(), booking.getGuestEmail(), booking.getNumOfAdults(), booking.getNumOfChildren(),
-                booking.getTotalNumOfGuest(), booking.getBookingConfirmationCode(), room);
+                booking.getGuestName(), booking.getGuestEmail(), booking.getNumberOfAdults(), booking.getNumberOfChildren(),
+                booking.getTotalNumberOfGuest(), booking.getBookingConfirmationCode(), room);
 
     }
 }

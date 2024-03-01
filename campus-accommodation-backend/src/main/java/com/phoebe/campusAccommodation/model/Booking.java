@@ -23,27 +23,27 @@ public class Booking {
     @Column(name = "guest_email")
     private String guestEmail;
     @Column(name = "num_of_adults")
-    private Integer numOfAdults;
+    private int numberOfAdults;
     @Column(name = "num_of_children")
-    private Integer numOfChildren;
+    private int numberOfChildren;
     @Column(name = "total_num_of_guest")
-    private Integer totalNumOfGuest;
+    private int totalNumberOfGuest;
     private String bookingConfirmationCode;
     @ManyToOne(fetch = FetchType.LAZY)//one room can have many booking history
     @JoinColumn(name = "room_id")
     private Room room;
 
     public void calculateTotalGuests(){
-        this.totalNumOfGuest = this.numOfAdults + this.numOfChildren;
+        this.totalNumberOfGuest = this.numberOfAdults + this.numberOfChildren;
     }
 
-    public void setNumOfAdults(int numOfAdults) {
-        this.numOfAdults = numOfAdults;
+    public void setNumberOfAdults(int numOfAdults) {
+        this.numberOfAdults = numOfAdults;
         calculateTotalGuests();
     }
 
-    public void setNumOfChildren(int numOfChildren) {
-        this.numOfChildren = numOfChildren;
+    public void setNumberOfChildren(int numOfChildren) {
+        this.numberOfChildren = numOfChildren;
         calculateTotalGuests();
     }
 
