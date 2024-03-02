@@ -10,6 +10,7 @@ import {
   FaWifi,
   FaWineGlassAlt,
 } from "react-icons/fa";
+import RoomCarousel from "../common/RoomCarousel";
 
 const Checkout = () => {
   const [error, setError] = useState("");
@@ -73,7 +74,7 @@ const Checkout = () => {
             ) : (
               <div className="room-info">
                 <img
-                  src={`data:image/png;base,${roomInfo.photo}`}
+                  src={`data:image/png;base64,${roomInfo.photo}`}
                   alt="Room Photo"
                   style={{ width: "100%", height: "200px" }}
                 />
@@ -124,11 +125,14 @@ const Checkout = () => {
               </div>
             )}
           </div>
-          <div className="col-md-6">
+          <div className="col-md-8">
             <BookingForm />
           </div>
         </div>
       </section>
+      <div className="container">
+        <RoomCarousel />
+      </div>
     </div>
   );
 };

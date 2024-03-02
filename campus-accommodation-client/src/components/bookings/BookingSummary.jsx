@@ -34,69 +34,73 @@ const BookingSummary = ({
   }, [isBookingConfirmed, navigate]);
 
   return (
-    <div className="card card-body mt-5">
-      <h4>Reservation Summary</h4>
-      <p>
-        FullName: <strong>{booking.guestName}</strong>
-      </p>
-      <p>
-        Email:<strong>{booking.guestEmail}</strong>
-      </p>
-      <p>
-        Check-In Date:
-        <strong>{moment(booking.checkInDate).format("MMM Do YYYY")}</strong>
-      </p>
-      <p>
-        Check-Out Date:
-        <strong>{moment(booking.checkOutDate).format("MMM Do YYYY")}</strong>
-      </p>
-      <p>
-        Number of Days:<strong>{numberOfDays}</strong>
-      </p>
-      <div>
-        <h5>Number of Guests</h5>
-        <strong>
-          Adult{booking.numberOfAdults > 1 ? "s" : ""}:{booking.numberOfAdults}
-        </strong>
-        <strong>Children:{booking.numberOfChildren}</strong>
-      </div>
-
-      {payment > 0 ? (
-        <>
-          <p>
-            Total Payment: <strong>${payment}</strong>
-          </p>
-          {/* When Form is valid and booking is not confirmed, handle the event of booking confirmation. */}
-          {isFormValid && !isBookingConfirmed ? (
-            /* variant: This prop defines the visual style or appearance of the button. In this case, variant="success" indicates that the button should have a green color scheme typically associated with success or positive actions. It's a way to visually differentiate buttons based on their purpose or context. */
-            <Button variant="success" onClick={handleConfirmBooking}>
-              {isProcessingPayment ? (
-                <>
-                  <span
-                    className="spinnner-border spinner-border-sm mr-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  Booking Confirmed, redirecting to payment...
-                </>
-              ) : (
-                "Confirm Booking and proceed to payment"
-              )}
-            </Button>
-          ) : isBookingConfirmed ? (
-            <div className="d-flex justify-content-center align-items-center">
-              <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading</span>
-              </div>
-            </div>
-          ) : /* Form is not valid */
-          null}
-        </>
-      ) : (
-        <p className="text-danger">
-          Check-out date must be after check-in date
+    <div className="row">
+      <div className="col-md-6"></div>
+      <div className="card card-body mt-5">
+        <h4>Reservation Summary</h4>
+        <p>
+          FullName: <strong>{booking.guestName}</strong>
         </p>
-      )}
+        <p>
+          Email:<strong>{booking.guestEmail}</strong>
+        </p>
+        <p>
+          Check-In Date:
+          <strong>{moment(booking.checkInDate).format("MMM Do YYYY")}</strong>
+        </p>
+        <p>
+          Check-Out Date:
+          <strong>{moment(booking.checkOutDate).format("MMM Do YYYY")}</strong>
+        </p>
+        <p>
+          Number of Days:<strong>{numberOfDays}</strong>
+        </p>
+        <div>
+          <h5>Number of Guests</h5>
+          <strong>
+            Adult{booking.numberOfAdults > 1 ? "s" : ""}:
+            {booking.numberOfAdults}
+          </strong>
+          <strong>Children:{booking.numberOfChildren}</strong>
+        </div>
+
+        {payment > 0 ? (
+          <>
+            <p>
+              Total Payment: <strong>${payment}</strong>
+            </p>
+            {/* When Form is valid and booking is not confirmed, handle the event of booking confirmation. */}
+            {isFormValid && !isBookingConfirmed ? (
+              /* variant: This prop defines the visual style or appearance of the button. In this case, variant="success" indicates that the button should have a green color scheme typically associated with success or positive actions. It's a way to visually differentiate buttons based on their purpose or context. */
+              <Button variant="success" onClick={handleConfirmBooking}>
+                {isProcessingPayment ? (
+                  <>
+                    <span
+                      className="spinnner-border spinner-border-sm mr-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    Booking Confirmed, redirecting to payment...
+                  </>
+                ) : (
+                  "Confirm Booking and proceed to payment"
+                )}
+              </Button>
+            ) : isBookingConfirmed ? (
+              <div className="d-flex justify-content-center align-items-center">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="sr-only">Loading</span>
+                </div>
+              </div>
+            ) : /* Form is not valid */
+            null}
+          </>
+        ) : (
+          <p className="text-danger">
+            Check-out date must be after check-in date
+          </p>
+        )}
+      </div>
     </div>
   );
 };
