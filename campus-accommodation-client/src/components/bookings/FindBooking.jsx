@@ -3,15 +3,14 @@ import {
   cancelBooking,
   getBookingByConfirmationCode,
 } from "../utils/ApiFunctions";
-import { tr } from "date-fns/locale";
-import { Form } from "react-router-dom";
+import { Form } from "react-bootstrap";
 
 const FindBooking = () => {
   const [confirmationCode, setConfirmationCode] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [bookingInfo, setBookingInfo] = useState({
-    id: "",
+    bookingId: "",
     room: "",
     bookingConfirmationCode: "",
     roomNumber: "",
@@ -26,7 +25,7 @@ const FindBooking = () => {
   const [isDeleted, setIsDeleted] = useState(false);
 
   const clearBookingInfo = {
-    id: "",
+    bookingId: "",
     room: "",
     bookingConfirmationCode: "",
     roomNumber: "",
@@ -64,7 +63,8 @@ const FindBooking = () => {
 
   const handleBookingCancellation = async (bookingId) => {
     try {
-      await cancelBooking(bookingInfo.id);
+      //   console.log(bookingInfo);
+      await cancelBooking(bookingInfo.bookingId);
       setIsDeleted(true);
       setBookingInfo(clearBookingInfo);
       setConfirmationCode("");
@@ -94,28 +94,41 @@ const FindBooking = () => {
             </button>
           </div>
         </Form>
-        {isLoading?(
-            <div className="text-danger">{error}</div>
-        );(
-            bookingInfo.bookingConfirmationCode?(
-                <div className="col-md-6 mt-4 mb-5">
-                    <h3>Booking Information</h3>
-                    <p>Booking Confirmation Code: {bookingInfo.bookingConfirmationCode}</p>
-                    <p>Booking ID: {bookingInfo.id}</p>
-                    <p>Room Number: {bookingInfo.room.id}</p>
-                    <p>Check-in Date: {bookingInfo.checkInDate}</p>
-                    <p>Check-out Date: {bookingInfo.checkOutDate}</p>
-                    <p>Full Name: {bookingInfo.guestFullName}</p>
-                    <p>Email Address: {bookingInfo.guestEmail}</p>
-                    <p>Adults: {bookingInfo.numOfAdults}</p>
-                    <p>Children: {bookingInfo.numOfChildren}</p>
-                    <p>Total Guests: {bookingInfo.totalNumOfGuest}</p>
-
-
-                </div>
-            ):()
+        {isLoading ? (
+          <div className="text-danger">{error}</div>
+        ) : bookingInfo.bookingConfirmationCode ? (
+          <div className="col-md-6 mt-4 mb-5">
+            <h3>Booking Information</h3>
+            <p>
+              Booking Confirmation Code: {bookingInfo.bookingConfirmationCode}
+            </p>
+            {/* <p>Booking ID: {bookingInfo.id}</p> */}
+            <p>Room Number: {bookingInfo.room.id}</p>
+            <p>Check-in Date: {bookingInfo.checkInDate}</p>
+            <p>Check-out Date: {bookingInfo.checkOutDate}</p>
+            <p>Full Name: {bookingInfo.guestFullName}</p>
+            <p>Email Address: {bookingInfo.guestEmail}</p>
+            <p>Adults: {bookingInfo.numOfAdults}</p>
+            <p>Children: {bookingInfo.numOfChildren}</p>
+            <p>Total Guests: {bookingInfo.totalNumOfGuest}</p>
+            {!isDeleted && (
+              <button
+                className="btn btn-danger"
+                onClick={() => handleBookingCancellation(bookingInfo.bookingId)}
+              >
+                Cancle Booking
+              </button>
+            )}
+          </div>
+        ) : (
+          <div> FindBooking</div>
         )}
-        FindBooking
+
+        {isDeleted && (
+          <div className="alert alert-success mt-3" role="alert">
+            Booking has been cacelled successfully
+          </div>
+        )}
       </div>
     </>
   );
