@@ -33,7 +33,6 @@ public class BookingService {
     }
 
     public String saveBooking(long roomId, Booking bookingRequest) {
-        Booking getBookingFormRequest = bookingRequest;
         if (bookingRequest.getCheckOutDate().isBefore(bookingRequest.getCheckInDate())) {
             throw new InvalidBookingRequestException("Check-in date must come before check-out date");
         }
