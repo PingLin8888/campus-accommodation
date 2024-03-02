@@ -86,6 +86,15 @@ export async function bookRoom(roomId, booking) {
   }
 }
 
+// catch (error) {
+//   setBookingInfo(clearBookingInfo);
+//   if (error.response && error.response.status === 404) {
+//     setError(error.response.data.message);
+//   } else {
+//     setError(error.message);
+//   }
+// }
+
 /* This function gets all bookings */
 export async function getAllBookings() {
   try {

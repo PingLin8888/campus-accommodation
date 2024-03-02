@@ -48,12 +48,13 @@ const FindBooking = () => {
     try {
       const data = await getBookingByConfirmationCode(confirmationCode);
       setBookingInfo(data);
+      setError(null);
     } catch (error) {
       setBookingInfo(clearBookingInfo);
-      if (error.response && error.response.status === 400) {
+      if (error.response && error.response.status === 404) {
         setError(error.response.data.message);
       } else {
-        setError(error.response);
+        setError(error.message);
       }
     }
     setTimeout(() => {

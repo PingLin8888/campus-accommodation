@@ -1,6 +1,7 @@
 package com.phoebe.campusAccommodation.service;
 
 import com.phoebe.campusAccommodation.exception.InvalidBookingRequestException;
+import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.Booking;
 import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.repository.BookingRepository;
@@ -8,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +29,8 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public Booking findByBookingConfirmationCode(String confimationCode) {
-        return bookingRepository.findByBookingConfirmationCode(confimationCode);
+    public Booking findByBookingConfirmationCode(String confirmationCode) {
+        return bookingRepository.findByBookingConfirmationCode(confirmationCode).orElseThrow(() -> new ResourceNotFoundException("No booking found with confirmation code: " + confirmationCode));
     }
 
     public String saveBooking(long roomId, Booking bookingRequest) {
