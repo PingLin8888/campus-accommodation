@@ -16,9 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookingService {
 
-    @Autowired
     private final BookingRepository bookingRepository;
-    @Autowired
     private final RoomService roomService;
 
     public List<Booking> getAllBookingsByRoomId(Long RoomId) {
