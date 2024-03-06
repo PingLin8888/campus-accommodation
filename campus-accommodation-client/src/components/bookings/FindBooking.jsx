@@ -8,6 +8,7 @@ import { Form } from "react-bootstrap";
 const FindBooking = () => {
   const [confirmationCode, setConfirmationCode] = useState("");
   const [error, setError] = useState("");
+  const [successCancellMessage, setSuccessCancellMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [bookingInfo, setBookingInfo] = useState({
     bookingId: "",
@@ -59,6 +60,7 @@ const FindBooking = () => {
     }
     setTimeout(() => {
       setIsLoading(false);
+      setIsDeleted(false);
     }, 2000);
   };
 
@@ -70,9 +72,13 @@ const FindBooking = () => {
       setBookingInfo(clearBookingInfo);
       setConfirmationCode("");
       setError("");
+      setSuccessCancellMessage("Booking has been cacelled successfully");
     } catch (error) {
       setError(error.message);
     }
+    // setTimeout(() => {
+    //   setSuccessCancellMessage("");
+    // }, 2000);
   };
 
   return (
@@ -96,11 +102,13 @@ const FindBooking = () => {
           </div>
         </Form>
         {isLoading ? (
-          <div className="text-danger">{error}</div>
+          <div>Finding your booking...</div>
+        ) : error ? (
+          <div className="text-danger">Error: {error}</div>
         ) : bookingInfo.bookingConfirmationCode ? (
           <div className="col-md-6 mt-4 mb-5">
             <h3>Booking Information</h3>
-            <p>
+            <p className="text-success">
               Booking Confirmation Code: {bookingInfo.bookingConfirmationCode}
             </p>
             {/* <p>Booking ID: {bookingInfo.id}</p> */}
@@ -126,8 +134,8 @@ const FindBooking = () => {
         )}
 
         {isDeleted && (
-          <div className="alert alert-success mt-3" role="alert">
-            Booking has been cacelled successfully
+          <div className="alert alert-success mt-3 fade show" role="alert">
+            {successCancellMessage}
           </div>
         )}
       </div>
