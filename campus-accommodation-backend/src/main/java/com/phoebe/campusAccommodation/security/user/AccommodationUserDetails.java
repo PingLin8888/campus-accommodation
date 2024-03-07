@@ -1,6 +1,5 @@
 package com.phoebe.campusAccommodation.security.user;
 
-import com.phoebe.campusAccommodation.model.Role;
 import com.phoebe.campusAccommodation.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class AccommodationUserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
     private Long id;
     private String email;
@@ -25,46 +24,46 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     private Collection<GrantedAuthority> authorities;
 
-    public static UserDetails buildUserDetails(User user) {
+    public static AccommodationUserDetails buildUserDetails(User user) {
         List<GrantedAuthority> authorities = user.getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
-        return new UserDetails(user.getId(), user.getEmail(), user.getPassword(), authorities);
+        return new AccommodationUserDetails(user.getId(), user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
