@@ -42,7 +42,10 @@ public class UserService {
     /*This means that when this method is invoked, a database transaction will be initiated. If the method completes successfully, the transaction will be committed, and any changes made to the database will be saved permanently. If an exception occurs during the execution of the method, the transaction will be rolled back, and any changes made to the database within the scope of the transaction will be reverted.*/
     @Transactional
     public void deleteUser(String email) {
-        userRepository.deleteByEmail(email);
+        User user = getUser(email);
+        if (user != null) {
+            userRepository.deleteByEmail(email);
+        }
     }
 
     public User getUser(String email) {
