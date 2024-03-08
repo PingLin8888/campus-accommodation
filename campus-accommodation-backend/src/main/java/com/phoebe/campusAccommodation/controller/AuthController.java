@@ -8,7 +8,9 @@ import com.phoebe.campusAccommodation.security.jwt.JwtUtils;
 import com.phoebe.campusAccommodation.security.user.AccommodationUserDetails;
 import com.phoebe.campusAccommodation.service.UserService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,8 @@ import java.util.List;
 //@CrossOrigin(origins = "*")
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
@@ -41,7 +45,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPaswod()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtTokenForUser(authentication);
         AccommodationUserDetails userDetails = (AccommodationUserDetails) authentication.getPrincipal();

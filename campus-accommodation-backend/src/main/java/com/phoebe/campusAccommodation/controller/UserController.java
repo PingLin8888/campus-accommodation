@@ -2,7 +2,9 @@ package com.phoebe.campusAccommodation.controller;
 
 import com.phoebe.campusAccommodation.model.User;
 import com.phoebe.campusAccommodation.service.UserService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
