@@ -34,8 +34,12 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("/register-user")
-    public ResponseEntity<?> registerUser(User user) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {//if missing this annotation,this method can't map the JSON data from the request body to the User object, which ends with user object not null but name and other fields are null.
         try {
+//            System.out.println("user: " + user);
+//            System.out.println("user firstname: "+user.getFirstName());
+//            System.out.println("user email: "+user.getEmail());
+//            System.out.println("user password: "+user.getPassword());
             userService.registerUser(user);
             return ResponseEntity.ok("Registration successful!");
         } catch (UserAlreadyExistsException e) {

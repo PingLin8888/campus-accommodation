@@ -29,12 +29,24 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException(user.getEmail() + " already exists");
         }
-        System.out.println(user.getPassword());
+//        System.out.println(user.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role roleOfUser = roleRepository.findByName("ROLE_USER").get();
+        /*Role roleOfUser = roleRepository.findByName("ROLE_USER").get();
         user.setRoles((Collections.singletonList(roleOfUser)));
+        */
+        roleRepository.findByName("ROLE_USER")
+                .ifPresentOrElse(
+                        userRole -> user.setRoles(Collections.singletonList(userRole)),
+                        () -> {
+                            // Role not found, create it
+                            Role newRole = new Role("ROLE_USER");
+                            roleRepository.save(newRole);
+                            user.setRoles(Collections.singletonList(newRole));
+                        }
+                );
         return userRepository.save(user);
     }
+
 
     public List<User> getUsers() {
         return userRepository.findAll();
