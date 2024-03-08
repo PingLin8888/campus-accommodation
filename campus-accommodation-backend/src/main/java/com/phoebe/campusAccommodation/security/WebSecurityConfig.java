@@ -50,7 +50,9 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated());
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**", "/rooms/**")
+                        .permitAll().requestMatchers("/roles/**").hasRole("ADMIN")
+                        .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

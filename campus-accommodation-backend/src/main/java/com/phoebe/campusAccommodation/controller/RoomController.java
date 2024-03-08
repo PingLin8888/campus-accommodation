@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +39,7 @@ public class RoomController {
     private final BookingService bookingService;
 
     @PostMapping("/add/new-room")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<RoomResponse> addNewRoom(@RequestParam("photo") MultipartFile photo,
                                                    @RequestParam("roomType") String roomType,
                                                    @RequestParam("roomPrice") BigDecimal roomPrice) throws SQLException, IOException {
@@ -67,12 +69,14 @@ public class RoomController {
         return ResponseEntity.ok(roomResponses);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/room/{roomId}")
     public ResponseEntity<Void> deleteRoom(@PathVariable("roomId") Long id) {
         roomService.deleteRoom(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{roomId}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long roomId,
                                                    @RequestParam(required = false) String roomType,
