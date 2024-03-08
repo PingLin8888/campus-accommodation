@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 //inject dependencies into this class.
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rooms")
