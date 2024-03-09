@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.FOUND;
 
-@RequestMapping("/api/roles")
+@RequestMapping("/roles")
 @RestController
 @AllArgsConstructor
 public class RoleController {
