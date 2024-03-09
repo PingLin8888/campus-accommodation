@@ -24,6 +24,7 @@ public class RoleController {
         return new ResponseEntity<>(roleService.getRoles(), FOUND);
     }
 
+//    works.
     @PostMapping("/create-new-role")
     public ResponseEntity<String> createRole(@RequestBody Role role) {
         try {
@@ -44,13 +45,16 @@ public class RoleController {
         return roleService.removeAllUsersFromRole(roleId);
     }
 
-    @PostMapping("/remove-user-from-role")
-    public User removeUserFromRole(@RequestParam("userId") Long userId, @RequestParam("roleId") Long roleId) {
+//works.
+    @PostMapping("/remove-role-from-user")
+    public User removeRoleFromUser(@RequestParam("userId") Long userId, @RequestParam("roleId") Long roleId) {
         return roleService.removeUserFromRole(userId, roleId);
     }
 
-    @PostMapping("/assign-user-to-role")
-    public User assignUserToRole(@RequestParam("userId") Long userId, @RequestParam("roleId") Long roleId) {
+
+//works.
+    @PostMapping("/assign-role-to-user")
+    public User assignRoleToUser(@RequestParam("userId") Long userId, @RequestParam("roleId") Long roleId) {
         return roleService.assignRoleToUser(userId, roleId);
     }
 }

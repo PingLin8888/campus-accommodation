@@ -57,7 +57,7 @@ public class WebSecurityConfig {
 //                        .anyRequest().authenticated());
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**", "/rooms/**")
-                        .permitAll().requestMatchers("/roles/**").hasRole("USER")
+                        .permitAll().requestMatchers("/roles/**").hasRole("USER")//roles related request can only be dealt with ADMIN user.
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
