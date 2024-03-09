@@ -24,7 +24,6 @@ public class RoleController {
         return new ResponseEntity<>(roleService.getRoles(), FOUND);
     }
 
-
     @PostMapping("/create-new-role")
     public ResponseEntity<String> createRole(@RequestBody Role role) {
         try {
