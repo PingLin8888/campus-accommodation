@@ -25,10 +25,10 @@ public class RoleService {
 
     public Role createRole(Role theRole) {
         String roleName = "ROLE_" + theRole.getName().toUpperCase();
-        Role role = new Role(roleName);
-        if (roleRepository.existsByName(role)) {
-            throw new RoleAlreadyExistException(role.getName() + " role already exists.");
+        if (roleRepository.existsByName(roleName)) {
+            throw new RoleAlreadyExistException(roleName + " role already exists.");
         }
+        Role role = new Role(roleName);
         return roleRepository.save(role);
     }
 
