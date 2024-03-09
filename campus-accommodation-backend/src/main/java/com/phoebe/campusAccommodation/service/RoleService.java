@@ -38,7 +38,8 @@ public class RoleService {
     }
 
     public Role findByName(String name) {
-        return roleRepository.findByName(name).get();
+        return roleRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Role with name " + name + " not found"));
     }
 
     public User removeUserFromRole(Long userId, Long roleId) {
