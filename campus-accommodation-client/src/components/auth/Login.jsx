@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import AuthProvider from "./AuthProvider";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { loginUser } from "../utils/ApiFunctions";
+import { useAuth } from "./AuthProvider";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -9,11 +10,12 @@ const Login = () => {
     password: "",
   });
   const navigate = useNavigate();
-
-  const { handleLogin } = useContext(AuthProvider);
+  const auth = useAuth();
+  const location = useLocation();
+  const redirecUrl = location.state?.path || "/";
 
   const handleInputChange = (e) => {
-    set({ ...login, [e.target.name]: e.target.value });
+    setLogin({ ...login, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -21,9 +23,9 @@ const Login = () => {
     const success = await loginUser(login);
     if (success) {
       const token = success.token;
-      handleLogin(token);
+      auth.handleLogin(token);
       navigate("/");
-      windown.location.reload();
+      window.location.reload();
     } else {
       setErrorMessage("Invalid username or password. Please try again.");
     }
@@ -36,7 +38,7 @@ const Login = () => {
     <section className="container col-6 mt-5 mb-5">
       {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
       <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <div className="row mb-3">
           <label className="col-sm-2 col-form-label" htmlFor="email">
             Email
@@ -76,7 +78,7 @@ const Login = () => {
             Login
           </button>
           <span style={{ marginRight: "10px" }}>
-            Don't have an account yet?<Link to={"/register"}></Link>
+            Don't have an account yet?<Link to={"/register"}>Register</Link>
           </span>
         </div>
       </form>

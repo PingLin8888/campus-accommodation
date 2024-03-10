@@ -1,18 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import LogOut from "../auth/LogOut";
-import { AuthContext } from "../auth/AuthProvider";
 
 const NavBar = () => {
   const [showAccount, setShowAccount] = useState(false);
-
-  const { user } = useContext(AuthContext);
 
   const handleAccountClick = () => {
     setShowAccount(!showAccount);
   };
 
-  const isLoggedIn = user !== null;
+  const isLoggedIn = localStorage.getItem("token");
   const userRole = localStorage.getItem("userRole");
 
   return (
@@ -32,6 +29,7 @@ const NavBar = () => {
         >
           <span className="navbar-toggle-icon"></span>
         </button>
+
         <div className="collapse navbar-collapse" id="navbarScroll">
           <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
             <li className="nav-item">
@@ -58,8 +56,9 @@ const NavBar = () => {
                 Find My Booking
               </NavLink>
             </li>
+
             <li className="nav-item dropdown">
-              <a
+              {/* <a
                 className={`nav-link dropdown-toggle ${
                   showAccount ? "show" : ""
                 }`}
@@ -71,21 +70,29 @@ const NavBar = () => {
               >
                 {" "}
                 Account
-              </a>
+              </a> */}
+              <Link
+                className={`nav-link dropdown-toggle ${
+                  showAccount ? "show" : ""
+                }`}
+                to="#"
+                role="button"
+                onClick={handleAccountClick}
+              >
+                Account
+              </Link>
 
               <ul
                 className={`dropdown-menu ${showAccount ? "show" : ""}`}
                 aria-labelledby="navbarDropdown"
               >
-                {!isLoggedIn ? (
+                {isLoggedIn ? (
+                  <LogOut />
+                ) : (
                   <li>
                     <Link to={"/login"} className="dropdown-item">
                       Login
                     </Link>
-                  </li>
-                ) : (
-                  <li>
-                    <LogOut />
                   </li>
                 )}
               </ul>

@@ -111,10 +111,10 @@ const Registration = () => {
             className="btn btn-hotel"
             style={{ marginRight: "10px" }}
           >
-            Login
+            Register
           </button>
           <span style={{ marginRight: "10px" }}>
-            Don't have an account yet?<Link to={"/register"}></Link>
+            Already have an account?<Link to={"/login"}>Login</Link>
           </span>
         </div>
       </form>

@@ -19,7 +19,7 @@ import Login from "./components/auth/Login";
 import Registration from "./components/auth/Registration";
 import Profile from "./components/auth/Profile";
 import LogOut from "./components/auth/LogOut";
-import AuthProvider from "./components/auth/AuthProvider";
+import { AuthProvider } from "./components/auth/AuthProvider";
 
 function App() {
   const [count, setCount] = useState(0);
