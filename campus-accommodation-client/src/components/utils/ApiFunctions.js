@@ -145,7 +145,7 @@ export async function getAvailableRooms(checkInDate, checkOutDate, roomType) {
   return result;
 }
 
-export async function registration(registration) {
+export async function userRegistration(registration) {
   try {
     const response = await api.post("/auth/register-user", registration);
     return response.data;
@@ -180,5 +180,39 @@ export async function getUserProfile(userId, token) {
     return response.data;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function deleteUser(userId) {
+  try {
+    const response = await api.delete(`/users/delete/${userId}`, {
+      deaders: getHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+}
+
+export async function getUser(userId, token) {
+  try {
+    const response = await api.get(`/users/${userId}`, {
+      header: getHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getBookingsByUserId(userId, token) {
+  try {
+    const response = await api.get(`/bookings/user/${userId}/bookings`, {
+      headers: getHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching bookings: ", error.message);
+    throw new Error("Failded to fetch bookings");
   }
 }

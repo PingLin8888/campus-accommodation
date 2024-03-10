@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import AuthProvider from "./AuthProvider";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -9,19 +10,18 @@ const Login = () => {
   });
   const navigate = useNavigate();
 
+  const { handleLogin } = useContext(AuthProvider);
+
   const handleInputChange = (e) => {
     set({ ...login, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await loginUser(login);
     if (success) {
       const token = success.token;
-      const decodedToken = jwtDecode(token);
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", decodedToken.sub);
-      localStorage.setItem("userRole", decodedToken.roles.join(","));
+      handleLogin(token);
       navigate("/");
       windown.location.reload();
     } else {
