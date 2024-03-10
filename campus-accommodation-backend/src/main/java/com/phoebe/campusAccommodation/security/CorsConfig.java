@@ -17,7 +17,7 @@ import java.util.Arrays;
 @EnableWebMvc
 public class CorsConfig {
     private static final Long MAX_AGE = 3600L;
-    private static final int CORS_FILTER_ORDER = -102;
+    private static final int CORS_FILTER_ORDER = -102;//Ensure that the CorsFilter is being applied before other filters in your filter chain.
 
     @Bean
     public FilterRegistrationBean corsFilterRegistration() {
@@ -31,7 +31,7 @@ public class CorsConfig {
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(CORS_FILTER_ORDER);
-        return bean;//or use this way but rename corsFilter to like corsFilterRegistration()
+        return bean;//or use this way but rename corsFilter like corsFilterRegistration()
     }
 
 //    public CorsFilter corsFilter() {
