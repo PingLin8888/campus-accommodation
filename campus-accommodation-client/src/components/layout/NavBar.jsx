@@ -87,7 +87,15 @@ const NavBar = () => {
                 aria-labelledby="navbarDropdown"
               >
                 {isLoggedIn ? (
-                  <LogOut />
+                  // <LogOut />
+                  <>
+                    <Link to={"/profile"} className="dropdown-item">
+                      Profile
+                    </Link>
+                    <Link to={"/logout"} className="dropdown-item">
+                      Logout
+                    </Link>
+                  </>
                 ) : (
                   <li>
                     <Link to={"/login"} className="dropdown-item">
