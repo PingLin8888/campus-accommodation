@@ -1,5 +1,5 @@
-import { tr } from "date-fns/locale";
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import {
   deleteUser,
@@ -33,7 +33,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserProfile(userId, token);
+        const userData = await getUser(userId, token);
         setUser(userData);
       } catch (error) {
         console.error(error);

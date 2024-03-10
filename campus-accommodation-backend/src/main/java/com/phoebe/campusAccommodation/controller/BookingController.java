@@ -50,6 +50,17 @@ public class BookingController {
         }
     }
 
+    @GetMapping("/user/{email}/bookings")
+    public ResponseEntity<List<BookingResponse>> getBookingsByUserEmail(@PathVariable String email){
+        List<Booking> bookings = bookingService.getBookingsByUserEmail(email);
+        List<BookingResponse> bookingResponses = new ArrayList<>();
+        for (Booking booking : bookings) {
+            BookingResponse bookingResponse = getBookingResponse(booking);
+            bookingResponses.add(bookingResponse);
+        }
+        return ResponseEntity.ok(bookingResponses);
+    }
+
     @PostMapping("/room/{roomId}/bookRoom")
     public ResponseEntity<?> saveBooking(@PathVariable long roomId, @RequestBody Booking bookingRequest) {
         try{
