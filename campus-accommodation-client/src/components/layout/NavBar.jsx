@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
-import LogOut from "../auth/LogOut";
 
 const NavBar = () => {
-  const [showAccount, setShowAccount] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Modified: Added state for isLoggedIn
+  const [userRole, setUserRole] = useState("");
 
-  const handleAccountClick = () => {
-    setShowAccount(!showAccount);
-  };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("userRole");
+    setIsLoggedIn(!!token); // Convert token to boolean and update isLoggedIn state
+    setUserRole(role || "");
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   // const handleLogout = () => {
-  //   setShowAccount(false);
+  //   // Clear token from localStorage and update state
   //   localStorage.removeItem("token");
-  //   localStorage.removeItem("userRole");
-  //   history.push("/", { message: "You have been logged out!" });
+  //   setIsLoggedIn(false); // Update isLoggedIn state to false
   // };
-
-  const isLoggedIn = localStorage.getItem("token");
-  const userRole = localStorage.getItem("userRole");
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary px-5 shadow mt-5 sticky-top">
@@ -63,37 +62,19 @@ const NavBar = () => {
                 Find My Booking
               </NavLink>
             </li>
-
             <li className="nav-item dropdown">
               <a
-                className={`nav-link dropdown-toggle ${
-                  showAccount ? "" : "show"
-                }`}
+                className="nav-link dropdown-toggle"
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                onClick={handleAccountClick}
               >
                 Account
               </a>
-              {/* <Link
-                className={`nav-link dropdown-toggle ${
-                  showAccount ? "show" : ""
-                }`}
-                to="#"
-                role="button"
-                onClick={handleAccountClick}
-              >
-                Account
-              </Link> */}
 
-              <ul
-                className={`dropdown-menu ${showAccount ? "show" : ""}`}
-                aria-labelledby="navbarDropdown"
-              >
+              <ul className="dropdown-menu">
                 {isLoggedIn ? (
-                  // <LogOut />
                   <>
                     <Link to={"/profile"} className="dropdown-item">
                       Profile
