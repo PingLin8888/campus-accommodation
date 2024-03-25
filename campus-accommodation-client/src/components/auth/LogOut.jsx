@@ -7,8 +7,9 @@ const LogOut = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    console.log("handling log out");
     auth.handleLogout();
-    window.location.reload();
+    // window.location.reload();
     navigate("/", { state: { message: "You have been logged out!" } });
   };
 

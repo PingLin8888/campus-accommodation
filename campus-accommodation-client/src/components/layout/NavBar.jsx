@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink, Link } from "react-router-dom";
 import LogOut from "../auth/LogOut";
 
@@ -58,44 +58,25 @@ const NavBar = () => {
             </li>
 
             <li className="nav-item dropdown">
-              {/* <a
+              <a
                 className={`nav-link dropdown-toggle ${
                   showAccount ? "show" : ""
                 }`}
                 href="#"
-                role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                onClick={handleAccountClick}
-              >
-                {" "}
-                Account
-              </a> */}
-              <Link
-                className={`nav-link dropdown-toggle ${
-                  showAccount ? "show" : ""
-                }`}
-                to="#"
                 role="button"
                 onClick={handleAccountClick}
               >
                 Account
-              </Link>
+              </a>
 
               <ul
                 className={`dropdown-menu ${showAccount ? "show" : ""}`}
                 aria-labelledby="navbarDropdown"
               >
                 {isLoggedIn ? (
-                  // <LogOut />
-                  <>
-                    <Link to={"/profile"} className="dropdown-item">
-                      Profile
-                    </Link>
-                    <Link to={"/logout"} className="dropdown-item">
-                      Logout
-                    </Link>
-                  </>
+                  <LogOut />
                 ) : (
                   <li>
                     <Link to={"/login"} className="dropdown-item">
