@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import LogOut from "../auth/LogOut";
 
@@ -8,6 +8,13 @@ const NavBar = () => {
   const handleAccountClick = () => {
     setShowAccount(!showAccount);
   };
+
+  // const handleLogout = () => {
+  //   setShowAccount(false);
+  //   localStorage.removeItem("token");
+  //   localStorage.removeItem("userRole");
+  //   history.push("/", { message: "You have been logged out!" });
+  // };
 
   const isLoggedIn = localStorage.getItem("token");
   const userRole = localStorage.getItem("userRole");
@@ -60,23 +67,41 @@ const NavBar = () => {
             <li className="nav-item dropdown">
               <a
                 className={`nav-link dropdown-toggle ${
-                  showAccount ? "show" : ""
+                  showAccount ? "" : "show"
                 }`}
                 href="#"
+                role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-                role="button"
                 onClick={handleAccountClick}
               >
                 Account
               </a>
+              {/* <Link
+                className={`nav-link dropdown-toggle ${
+                  showAccount ? "show" : ""
+                }`}
+                to="#"
+                role="button"
+                onClick={handleAccountClick}
+              >
+                Account
+              </Link> */}
 
               <ul
                 className={`dropdown-menu ${showAccount ? "show" : ""}`}
                 aria-labelledby="navbarDropdown"
               >
                 {isLoggedIn ? (
-                  <LogOut />
+                  // <LogOut />
+                  <>
+                    <Link to={"/profile"} className="dropdown-item">
+                      Profile
+                    </Link>
+                    <Link to={"/logout"} className="dropdown-item">
+                      Logout
+                    </Link>
+                  </>
                 ) : (
                   <li>
                     <Link to={"/login"} className="dropdown-item">

@@ -7,15 +7,11 @@ const LogOut = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    console.log("handling log out");
     auth.handleLogout();
-    // window.location.reload();
     navigate("/", { state: { message: "You have been logged out!" } });
   };
 
-  const isLoggedIn = auth.user !== null;
-
-  return isLoggedIn ? (
+  return (
     <>
       <li>
         <Link className="dropdown-item" to={"/profile"}>
@@ -29,7 +25,7 @@ const LogOut = () => {
         Logout
       </button>
     </>
-  ) : null;
+  );
 };
 
 export default LogOut;
