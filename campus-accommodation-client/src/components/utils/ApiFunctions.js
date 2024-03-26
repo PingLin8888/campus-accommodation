@@ -7,7 +7,7 @@ export const api = axios.create({
 export const getHeader = () => {
   const token = localStorage.getItem("token");
   return {
-    Authentization: `Bearer${token}`,
+    Authorization: `Bearer${token}`,
     "Content-Type": "application/json",
   };
 };

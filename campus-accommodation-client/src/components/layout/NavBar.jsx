@@ -12,12 +12,6 @@ const NavBar = () => {
     setUserRole(role || "");
   }, []); // Empty dependency array ensures this effect runs only once on mount
 
-  // const handleLogout = () => {
-  //   // Clear token from localStorage and update state
-  //   localStorage.removeItem("token");
-  //   setIsLoggedIn(false); // Update isLoggedIn state to false
-  // };
-
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary px-5 shadow mt-5 sticky-top">
       <div className="container-fluid">
