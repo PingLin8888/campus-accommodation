@@ -64,7 +64,7 @@ public class WebSecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-//                .cors(Customizer.withDefaults())
+                .cors(Customizer.withDefaults())
 //                .cors(cors -> cors
 //                        .configurationSource(corsConfigurationSource())
 //                )

@@ -196,6 +196,8 @@ export async function deleteUser(userId) {
 
 export async function getUser(userId, token) {
   try {
+    console.log("Request headers:", getHeader());
+    console.log("Request URL:", `/users/${userId}`);
     const response = await api.get(`/users/${userId}`, {
       header: getHeader(),
     });
