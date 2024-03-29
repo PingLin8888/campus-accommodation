@@ -149,11 +149,15 @@ const Profile = () => {
                       </label>
                       <div className="col-md-10">
                         <ul className="list-unstyled">
-                          {user.roles.map((role) => (
-                            <li key={role.id} className="card-text">
-                              {role.name}
-                            </li>
-                          ))}
+                          {user.roles && user.roles.length > 0 ? (
+                            user.roles.map((role) => (
+                              <li key={role.id} className="card-text">
+                                {role.name}
+                              </li>
+                            ))
+                          ) : (
+                            <li>No roles assigned</li>
+                          )}
                         </ul>
                       </div>
                     </div>

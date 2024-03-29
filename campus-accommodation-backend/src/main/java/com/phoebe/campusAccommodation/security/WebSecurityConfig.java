@@ -65,9 +65,9 @@ public class WebSecurityConfig{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
-//                .cors(cors -> cors
-//                        .configurationSource(corsConfigurationSource())
-//                )
+                .cors(cors -> cors
+                        .configurationSource(corsConfigurationSource())
+                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -80,21 +80,21 @@ public class WebSecurityConfig{
         return http.build();
     }
 
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
 //        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
 //        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-////        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Allow all origins
-////        configuration.setAllowedMethods(Arrays.asList("*")); // Allow all methods
-////        configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
-//        configuration.setAllowCredentials(true);
-//        configuration.setMaxAge(MAX_AGE);
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // Allow all origins
+        configuration.setAllowedMethods(Arrays.asList("*")); // Allow all methods
+        configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(MAX_AGE);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 
 

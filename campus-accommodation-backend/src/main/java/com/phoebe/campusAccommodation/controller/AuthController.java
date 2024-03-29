@@ -7,6 +7,7 @@ import com.phoebe.campusAccommodation.response.JwtResponse;
 import com.phoebe.campusAccommodation.security.jwt.JwtUtils;
 import com.phoebe.campusAccommodation.security.user.AccommodationUserDetails;
 import com.phoebe.campusAccommodation.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,5 +55,8 @@ public class AuthController {
         AccommodationUserDetails userDetails = (AccommodationUserDetails) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         return ResponseEntity.ok(new JwtResponse(userDetails.getId(), userDetails.getEmail(), jwt, roles));
+
     }
+
+
 }

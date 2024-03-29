@@ -7,7 +7,8 @@ export const api = axios.create({
 export const getHeader = () => {
   const token = localStorage.getItem("token");
   return {
-    Authorization: `Bearer${token}`,
+    // Authorization: `Bearer${token}`,
+    Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
   };
 };
@@ -186,7 +187,7 @@ export async function getUserProfile(userId, token) {
 export async function deleteUser(userId) {
   try {
     const response = await api.delete(`/users/delete/${userId}`, {
-      deaders: getHeader(),
+      headers: getHeader(),
     });
     return response.data;
   } catch (error) {
@@ -199,7 +200,7 @@ export async function getUser(userId, token) {
     console.log("Request headers:", getHeader());
     console.log("Request URL:", `/users/${userId}`);
     const response = await api.get(`/users/${userId}`, {
-      header: getHeader(),
+      headers: getHeader(),
     });
     return response.data;
   } catch (error) {
