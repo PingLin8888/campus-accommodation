@@ -43,7 +43,7 @@ const Checkout = () => {
       getRoomById(roomId)
         .then((response) => {
           if (isMounted) {
-            console.log("Response:", response); // Log the response
+            // console.log("Response:", response); // Log the response
             setRoomInfo(response);
             setIsLoading(false);
             setError(null);

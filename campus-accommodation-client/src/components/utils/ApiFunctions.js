@@ -83,7 +83,10 @@ export async function bookRoom(roomId, booking) {
   try {
     const response = await api.post(
       `/bookings/room/${roomId}/bookRoom`,
-      booking
+      booking,
+      {
+        headers: getHeader(),
+      }
     );
     return response.data;
   } catch (error) {
@@ -117,7 +120,9 @@ export async function getAllBookings() {
 /* This function gets booking by confirmation code. */
 export async function getBookingByConfirmationCode(confirmationCode) {
   try {
-    const result = await api.get(`/bookings/confirmation/${confirmationCode}`);
+    const result = await api.get(`/bookings/confirmation/${confirmationCode}`, {
+      headers: getHeader(), // Use getHeader() here to include the token
+    });
     return result.data;
   } catch (error) {
     if (error.response && error.response.data) {
@@ -197,8 +202,6 @@ export async function deleteUser(userId) {
 
 export async function getUser(userId, token) {
   try {
-    console.log("Request headers:", getHeader());
-    console.log("Request URL:", `/users/${userId}`);
     const response = await api.get(`/users/${userId}`, {
       headers: getHeader(),
     });

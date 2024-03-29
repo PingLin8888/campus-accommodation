@@ -4,6 +4,7 @@ import {
   getBookingByConfirmationCode,
 } from "../utils/ApiFunctions";
 import { Form } from "react-bootstrap";
+import moment from "moment";
 
 const FindBooking = () => {
   const [confirmationCode, setConfirmationCode] = useState("");
@@ -114,8 +115,18 @@ const FindBooking = () => {
             {/* <p>Booking ID: {bookingInfo.id}</p> */}
             <p>Room Number: {bookingInfo.room.id}</p>
             <p>Room Type: {bookingInfo.room.roomType}</p>
-            <p>Check-in Date: {bookingInfo.checkInDate}</p>
-            <p>Check-out Date: {bookingInfo.checkOutDate}</p>
+            <p>
+              Check-in Date:{" "}
+              {moment(bookingInfo.checkInDate)
+                .subtract(1, "month")
+                .format("MMM Do, YYYY")}
+            </p>
+            <p>
+              Check-out Date:{" "}
+              {moment(bookingInfo.checkOutDate)
+                .subtract(1, "month")
+                .format("MMM Do, YYYY")}
+            </p>
             <p>Full Name: {bookingInfo.guestFullName}</p>
             <p>Email Address: {bookingInfo.guestEmail}</p>
             <p>Adults: {bookingInfo.numOfAdults}</p>
