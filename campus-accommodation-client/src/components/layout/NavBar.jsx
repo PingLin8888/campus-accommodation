@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import LogOut from "../auth/LogOut";
 import Login from "../auth/Login";
+import { useAuth } from "../auth/AuthProvider";
 
 const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("");
+
+  const { user, handleLogout } = useAuth(); // Updated to use user and handleLogout from AuthProvider
 
   const checkAuthStatus = () => {
     const token = localStorage.getItem("token");
@@ -27,7 +30,7 @@ const NavBar = () => {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, []);
+  }, [user]);
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary px-5 shadow mt-5 sticky-top">

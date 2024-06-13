@@ -23,10 +23,11 @@ const Login = ({ setIsLoggedIn }) => {
     const success = await loginUser(login);
     if (success) {
       const token = success.token;
+      const role = success.userRole;
       auth.handleLogin(token);
       navigate("/");
       // make sure that the LogIn component correctly handles the login process and updates local storage appropriately.
-      setIsLoggedIn(true);
+      // setIsLoggedIn(true);
       //   window.location.reload();
     } else {
       setErrorMessage("Invalid username or password. Please try again.");
