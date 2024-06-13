@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../utils/ApiFunctions";
 import { useAuth } from "./AuthProvider";
 
-const Login = () => {
+const Login = ({ setIsLoggedIn }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [login, setLogin] = useState({
     email: "",
@@ -25,6 +25,8 @@ const Login = () => {
       const token = success.token;
       auth.handleLogin(token);
       navigate("/");
+      // make sure that the LogIn component correctly handles the login process and updates local storage appropriately.
+      setIsLoggedIn(true);
       //   window.location.reload();
     } else {
       setErrorMessage("Invalid username or password. Please try again.");

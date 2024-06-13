@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import LogOut from "../auth/LogOut";
+import Login from "../auth/Login";
 
 const NavBar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Modified: Added state for isLoggedIn
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("");
 
-  useEffect(() => {
+  const checkAuthStatus = () => {
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("userRole");
     setIsLoggedIn(!!token); // Convert token to boolean and update isLoggedIn state
     setUserRole(role || "");
-  }, []); // Empty dependency array ensures this effect runs only once on mount
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
+
+    // Listen for storage changes
+    const handleStorageChange = () => {
+      checkAuthStatus();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary px-5 shadow mt-5 sticky-top">
@@ -67,17 +83,20 @@ const NavBar = () => {
               >
                 Account
               </a>
-
               <ul className="dropdown-menu">
                 {isLoggedIn ? (
                   <>
                     {/* <Link to={"/profile"} className="dropdown-item">
                       Profile
-                    </Link> */}
-                    {/* <Link to={"/logout"} className="dropdown-item">
+                    </Link>
+                    <Link to={"/logout"} className="dropdown-item">
                       Logout
                     </Link> */}
-                    <LogOut />
+                    {/* Pass State Up to Parent Component Ensure that the LogOut
+                    component receives the setIsLoggedIn prop correctly to
+                    update the state in the NavBar component. 
+                    Ensure that the NavBar component is passing the necessary state and setState functions to child components properly.*/}
+                    <LogOut setIsLoggedIn={setIsLoggedIn} />
                   </>
                 ) : (
                   <li>
