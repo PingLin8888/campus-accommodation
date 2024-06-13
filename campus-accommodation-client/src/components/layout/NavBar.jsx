@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
+import LogOut from "../auth/LogOut";
 
 const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Modified: Added state for isLoggedIn
@@ -53,7 +54,7 @@ const NavBar = () => {
           <ul className="d-flex navbar-nav">
             <li className="nav-item">
               <NavLink className="nav-link" to={"/find-booking"}>
-                Find My Booking
+                Find Booking
               </NavLink>
             </li>
             <li className="nav-item dropdown">
@@ -70,12 +71,13 @@ const NavBar = () => {
               <ul className="dropdown-menu">
                 {isLoggedIn ? (
                   <>
-                    <Link to={"/profile"} className="dropdown-item">
+                    {/* <Link to={"/profile"} className="dropdown-item">
                       Profile
-                    </Link>
-                    <Link to={"/logout"} className="dropdown-item">
+                    </Link> */}
+                    {/* <Link to={"/logout"} className="dropdown-item">
                       Logout
-                    </Link>
+                    </Link> */}
+                    <LogOut />
                   </>
                 ) : (
                   <li>
