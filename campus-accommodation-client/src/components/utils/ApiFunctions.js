@@ -10,6 +10,15 @@ export const getHeader = () => {
     // Authorization: `Bearer${token}`,
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
+    // "Content-Type": "multipart/form-data",
+  };
+};
+
+export const getHeaderAddRoom = () => {
+  const token = localStorage.getItem("token");
+  return {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "multipart/form-data",
   };
 };
 
@@ -20,7 +29,9 @@ export async function addRoom(photo, roomType, roomPrice) {
   formData.append("roomType", roomType);
   formData.append("roomPrice", roomPrice);
 
-  const response = await api.post("/rooms/add/new-room", formData);
+  const response = await api.post("/rooms/add/new-room", formData, {
+    headers: getHeaderAddRoom(),
+  });
   if (response.status == 201) {
     return true;
   } else {
@@ -52,7 +63,9 @@ export async function getAllRooms() {
 /* This function deletes a room by ID */
 export async function deleteRoom(roomId) {
   try {
-    const result = await api.delete(`/rooms/delete/room/${roomId}`);
+    const result = await api.delete(`/rooms/delete/room/${roomId}`, {
+      headers: getHeader(),
+    });
     return result.data;
   } catch (error) {
     throw new Error(`Error deleting the room. ${error.message}`);
@@ -65,7 +78,9 @@ export async function updateRoom(roomId, roomData) {
   formData.append("roomType", roomData.roomType);
   formData.append("roomPrice", roomData.roomPrice);
   formData.append("photo", roomData.photo);
-  const response = await api.put(`/rooms/update/${roomId}`, formData);
+  const response = await api.put(`/rooms/update/${roomId}`, formData, {
+    headers: getHeaderAddRoom(),
+  });
   return response;
 }
 
@@ -110,7 +125,9 @@ export async function bookRoom(roomId, booking) {
 /* This function gets all bookings */
 export async function getAllBookings() {
   try {
-    const result = await api.get("/bookings/all-bookings");
+    const result = await api.get("/bookings/all-bookings", {
+      headers: getHeader(), // Use getHeader() here to include the token
+    });
     return result.data;
   } catch (error) {
     throw new Error(`Error fetching all bookings: ${error.message}`);
