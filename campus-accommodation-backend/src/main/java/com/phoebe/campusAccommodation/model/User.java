@@ -25,7 +25,8 @@ public class User {
     private String password;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    @JsonIgnore// You should consider using @JsonIgnore on fields that may cause circular references or are not necessary to be serialized. In this case, you might want to ignore the roles field to avoid serializing the entire role objects.
+    @JsonIgnore
+// You should consider using @JsonIgnore on fields that may cause circular references or are not necessary to be serialized. In this case, you might want to ignore the roles field to avoid serializing the entire role objects.
     private Collection<Role> roles = new HashSet<>();
 
     public void setFirstName(String firstName) {
