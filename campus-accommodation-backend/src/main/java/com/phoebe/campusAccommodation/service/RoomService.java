@@ -6,6 +6,7 @@ import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.repository.RoomRepository;
 import com.phoebe.campusAccommodation.response.RoomResponse;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,10 +35,11 @@ public class RoomService {
     @PostConstruct
     public void init(){
         List<Room> allRooms = roomRepository.findAll();
-
+        
         // Initialize min-heap for cheapest rooms
         cheapestRooms = new PriorityQueue<>(Comparator.comparing(Room::getRoomPrice));
         cheapestRooms.addAll(allRooms.stream().filter(Room::isAvailable).collect(Collectors.toList()));
+
 
         // Initialize max-heap for most in-demand rooms
         mostInDemandRooms = new PriorityQueue<>((r1, r2) -> Integer.compare(r2.getBookings().size(), r1.getBookings().size()));
@@ -136,5 +138,14 @@ public class RoomService {
 
     public Room getMostInDemandRoom() {
         return mostInDemandRooms.peek();
+    }
+
+    public void updatePricesBasedOnDemand(){
+        List<Room> rooms = roomRepository.findAll();
+        for (Room room : rooms) {
+            room.adjustPriceBasedOnDemand();
+            roomRepository.save(room);
+        }
+        init();
     }
 }

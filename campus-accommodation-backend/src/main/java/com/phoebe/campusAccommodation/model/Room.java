@@ -73,4 +73,13 @@ public class Room {
             return booking.getCheckOutDate().isAfter(today) && booking.getCheckInDate().isBefore(today);
         });
     }
+
+    public void adjustPriceBasedOnDemand() {
+        BigDecimal newPrice = this.getRoomPrice().multiply(BigDecimal.valueOf(1 + 0.1 * this.getDemand()));
+        this.roomPrice = newPrice;
+    }
+
+    public int getDemand(){
+        return this.bookings.size();
+    }
 }

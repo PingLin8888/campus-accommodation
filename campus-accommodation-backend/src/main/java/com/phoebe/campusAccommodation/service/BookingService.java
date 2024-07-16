@@ -42,7 +42,8 @@ public class BookingService {
         }
         Room room = roomService.getRoomById(roomId).get();
         List<Booking> bookings = room.getBookings();
-        boolean roomIsAvailable = roomIsAvailable(bookingRequest, bookings);
+//        boolean roomIsAvailable = roomIsAvailable(bookingRequest, bookings);
+        boolean roomIsAvailable = room.isAvailable(bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate());
         if (roomIsAvailable) {
             room.addBooking(bookingRequest);
             bookingRepository.save(bookingRequest);
