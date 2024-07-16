@@ -22,6 +22,7 @@ public class Room {
     private String roomType;
     private BigDecimal roomPrice;
     private boolean isBooked = false;
+    private int demand; // Number of bookings made for this room
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)//If the room is deleted, the booking will be gone too.
     private List<Booking> bookings;
     @Lob
@@ -31,14 +32,28 @@ public class Room {
         this.bookings = new ArrayList<>();
     }
 
-    public void addBooking(Booking booking) {
+    public synchronized void addBooking(Booking booking) {
         if (this.bookings == null) {
             bookings = new ArrayList<>();
         }
         bookings.add(booking);
         booking.setRoom(this);
         isBooked = true;
+        demand++;
         String bookingCode = RandomStringUtils.randomNumeric(10);
         booking.setBookingConfirmationCode(bookingCode);
     }
+
+    public synchronized void removeBooking(Booking booking) {
+        if (this.bookings != null) {
+            bookings.remove(booking);
+            demand--;
+            isBooked = bookings.isEmpty() ? false : true;
+        }
+    }
+
+    public void updateCurrentPrice(BigDecimal newPrice) {
+        this.roomPrice = newPrice;
+    }
+
 }

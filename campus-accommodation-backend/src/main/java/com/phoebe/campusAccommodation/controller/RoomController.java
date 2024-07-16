@@ -124,6 +124,20 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/cheapest-room")
+    public ResponseEntity<RoomResponse> getCheapestAvailableRoom(){
+        Room room = bookingService.getCheapestAvailableRoom();
+        RoomResponse roomResponse = getRoomResponse(room);
+        return ResponseEntity.ok(roomResponse);
+    }
+
+    @GetMapping("/most-in-demand-room")
+    public ResponseEntity<RoomResponse> getMostInDemandRoom(){
+        Room room = bookingService.getMostInDemandRoom();
+        RoomResponse roomResponse = getRoomResponse(room);
+        return ResponseEntity.ok(roomResponse);
+    }
+
 
     private RoomResponse getRoomResponse(Room room) {
         List<Booking> bookings = bookingService.getAllBookingsByRoomId(room.getId());
@@ -144,5 +158,7 @@ public class RoomController {
 //        System.out.println(photoBytes == null ? "photo null" : "photo is not null");
         return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(), room.isBooked(), photoBytes);
     }
+
+
 
 }
