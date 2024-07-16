@@ -4,10 +4,10 @@ import com.phoebe.campusAccommodation.exception.InternalServerException;
 import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.repository.RoomRepository;
-import com.phoebe.campusAccommodation.response.RoomResponse;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,9 +33,9 @@ public class RoomService {
     private PriorityQueue<Room> mostInDemandRooms;
 
     @PostConstruct
-    public void init(){
-        List<Room> allRooms = roomRepository.findAll();
-        
+    public void initializeHeaps(){
+        List<Room> allRooms = roomRepository.findAllWithBookings();
+
         // Initialize min-heap for cheapest rooms
         cheapestRooms = new PriorityQueue<>(Comparator.comparing(Room::getRoomPrice));
         cheapestRooms.addAll(allRooms.stream().filter(Room::isAvailable).collect(Collectors.toList()));
@@ -146,6 +146,7 @@ public class RoomService {
             room.adjustPriceBasedOnDemand();
             roomRepository.save(room);
         }
-        init();
+        initializeHeaps();
     }
+
 }
