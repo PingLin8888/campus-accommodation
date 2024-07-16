@@ -22,9 +22,7 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final RoomService roomService;
-    /*order Room objects based on the value returned by their getRoomPrice method, in ascending order by default.*/
-    private final PriorityQueue<Room> minPriceHeap = new PriorityQueue<>(Comparator.comparing(Room::getRoomPrice));
-    private final PriorityQueue<Room> maxDemandHeap = new PriorityQueue<>(Comparator.comparing(Room::getDemand).reversed());
+
 
     public List<Booking> getAllBookingsByRoomId(Long RoomId) {
         return bookingRepository.findByRoomId(RoomId);
@@ -48,23 +46,13 @@ public class BookingService {
         if (roomIsAvailable) {
             room.addBooking(bookingRequest);
             bookingRepository.save(bookingRequest);
-            updateHeaps(room);
         } else {
             throw new InvalidBookingRequestException("Sorry. This room is not available for the selected dates.");
         }
         return bookingRequest.getBookingConfirmationCode();
     }
 
-    private void updateHeaps(Room room) {
-        minPriceHeap.remove(room);
-        maxDemandHeap.remove(room);
 
-        // Update room price based on demand (example logic)
-        BigDecimal newPrice = room.getRoomPrice().multiply(BigDecimal.valueOf(1 + 0.1 * room.getDemand()));
-        room.updateCurrentPrice(newPrice);
-        minPriceHeap.add(room);
-        maxDemandHeap.add(room);
-    }
 
     private boolean roomIsAvailable(Booking bookingRequest, List<Booking> bookings) {
         return bookings.stream().noneMatch(booking ->
@@ -100,7 +88,6 @@ public class BookingService {
         Room room = booking.getRoom();
         room.removeBooking(booking);
         bookingRepository.deleteById(bookingId);
-        updateHeaps(room);
     }
 
     public List<Booking> getBookingsByUserEmail(String email) {
@@ -108,10 +95,10 @@ public class BookingService {
     }
 
     public Room getCheapestAvailableRoom() {
-        return minPriceHeap.peek();
+        return roomService.getCheapestAvailableRoom();
     }
 
     public Room getMostInDemandRoom() {
-        return maxDemandHeap.peek();
+        return roomService.getMostInDemandRoom();
     }
 }

@@ -126,14 +126,14 @@ public class RoomController {
 
     @GetMapping("/cheapest-room")
     public ResponseEntity<RoomResponse> getCheapestAvailableRoom(){
-        Room room = bookingService.getCheapestAvailableRoom();
+        Room room = roomService.getCheapestAvailableRoom();
         RoomResponse roomResponse = getRoomResponse(room);
         return ResponseEntity.ok(roomResponse);
     }
 
     @GetMapping("/most-in-demand-room")
     public ResponseEntity<RoomResponse> getMostInDemandRoom(){
-        Room room = bookingService.getMostInDemandRoom();
+        Room room = roomService.getMostInDemandRoom();
         RoomResponse roomResponse = getRoomResponse(room);
         return ResponseEntity.ok(roomResponse);
     }

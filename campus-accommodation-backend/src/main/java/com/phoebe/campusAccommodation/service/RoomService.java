@@ -4,8 +4,9 @@ import com.phoebe.campusAccommodation.exception.InternalServerException;
 import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.repository.RoomRepository;
+import com.phoebe.campusAccommodation.response.RoomResponse;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,14 +16,33 @@ import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    /*order Room objects based on the value returned by their getRoomPrice method, in ascending order by default.*/
+    private PriorityQueue<Room> cheapestRooms;
+    private PriorityQueue<Room> mostInDemandRooms;
+
+    @PostConstruct
+    public void init(){
+        List<Room> allRooms = roomRepository.findAll();
+
+        // Initialize min-heap for cheapest rooms
+        cheapestRooms = new PriorityQueue<>(Comparator.comparing(Room::getRoomPrice));
+        cheapestRooms.addAll(allRooms.stream().filter(Room::isAvailable).collect(Collectors.toList()));
+
+        // Initialize max-heap for most in-demand rooms
+        mostInDemandRooms = new PriorityQueue<>((r1, r2) -> Integer.compare(r2.getBookings().size(), r1.getBookings().size()));
+        mostInDemandRooms.addAll(allRooms);
+    }
 
     public Room addNewRoom(MultipartFile photo, String roomType, BigDecimal roomPrice) throws IOException, SQLException {
         Room room = new Room();
@@ -33,7 +53,12 @@ public class RoomService {
             Blob photoBlob = new SerialBlob(photoBytes);
             room.setPhoto(photoBlob);
         }
-        return roomRepository.save(room);
+        Room savedRoom = roomRepository.save(room);
+        if (savedRoom.isAvailable()) {
+            cheapestRooms.offer(savedRoom);
+        }
+        mostInDemandRooms.offer(savedRoom);
+        return savedRoom;
     }
 
     public List<String> getAllRoomTypes() {
@@ -60,6 +85,9 @@ public class RoomService {
     public void deleteRoom(Long id) {
         Optional<Room> room = roomRepository.findById(id);
         if (room.isPresent()) {
+            Room theRoom = room.get();
+            cheapestRooms.remove(theRoom);
+            mostInDemandRooms.remove(theRoom);
             roomRepository.deleteById(id);
         }
     }
@@ -80,7 +108,15 @@ public class RoomService {
             }
 
         }
-        return roomRepository.save(room);
+
+        Room updatedRoom = roomRepository.save(room);
+        if (updatedRoom.isAvailable()) {
+            cheapestRooms.remove(updatedRoom);
+            cheapestRooms.offer(updatedRoom);
+        }
+        mostInDemandRooms.remove(updatedRoom);
+        mostInDemandRooms.offer(updatedRoom);
+        return updatedRoom;
     }
 
     public Optional<Room> getRoomById(Long roomId) {
@@ -89,5 +125,16 @@ public class RoomService {
 
     public List<Room> getAvailableRooms(LocalDate checkInDate, LocalDate checkOutDate, String roomType) {
         return roomRepository.findAvailableRoomsByDatesAndType(checkInDate, checkOutDate, roomType);
+    }
+
+    public Room getCheapestAvailableRoom() {
+        while (!cheapestRooms.isEmpty() && !cheapestRooms.peek().isAvailable()) {
+            cheapestRooms.poll();
+        }
+        return cheapestRooms.peek();
+    }
+
+    public Room getMostInDemandRoom() {
+        return mostInDemandRooms.peek();
     }
 }

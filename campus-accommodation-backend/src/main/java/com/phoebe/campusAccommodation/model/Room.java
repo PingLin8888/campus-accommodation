@@ -8,6 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.math.BigDecimal;
 import java.sql.Blob;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +24,13 @@ public class Room {
     private BigDecimal roomPrice;
     private boolean isBooked = false;
     private int demand; // Number of bookings made for this room
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)//If the room is deleted, the booking will be gone too.
+    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//If the room is deleted, the booking will be gone too.
     private List<Booking> bookings;
     @Lob
     private Blob photo;
 
-    public Room(){
+    public Room() {
         this.bookings = new ArrayList<>();
     }
 
@@ -56,4 +58,19 @@ public class Room {
         this.roomPrice = newPrice;
     }
 
+    public boolean isAvailable(LocalDate checkInDate, LocalDate checkOutDate) {
+        for (Booking booking : bookings) {
+            if (booking.getCheckOutDate().isAfter(checkInDate) && booking.getCheckInDate().isBefore(checkOutDate)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isAvailable() {
+        return bookings.stream().noneMatch(booking -> {
+            LocalDate today = LocalDate.now();
+            return booking.getCheckOutDate().isAfter(today) && booking.getCheckInDate().isBefore(today);
+        });
+    }
 }
