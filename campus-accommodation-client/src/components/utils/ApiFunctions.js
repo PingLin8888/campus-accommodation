@@ -60,6 +60,26 @@ export async function getAllRooms() {
   }
 }
 
+/* This function gets the cheapest room */
+export async function getCheapestRoom() {
+  try {
+    const result = await api.get("/rooms/cheapest-room");
+    return result.data;
+  } catch (error) {
+    throw new Error("Error fetching the cheapest room.");
+  }
+}
+
+/* This function gets the most demand room */
+export async function getMostDemandRoom() {
+  try {
+    const result = await api.get("/rooms/most-in-demand-room");
+    return result.data;
+  } catch (error) {
+    throw new Error("Error fetching the most demand room.");
+  }
+}
+
 /* This function deletes a room by ID */
 export async function deleteRoom(roomId) {
   try {
