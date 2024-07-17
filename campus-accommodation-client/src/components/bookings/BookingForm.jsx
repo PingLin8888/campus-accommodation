@@ -106,7 +106,7 @@ const BookingForm = () => {
     <>
       <div className="container mb-5">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-7">
             <div className="card card-body mt-5">
               <h4 className="card-title">Reserve Room</h4>
               <Form noValidate validated={isValidated} onSubmit={handleSubmit}>
@@ -248,7 +248,7 @@ const BookingForm = () => {
               </Form>
             </div>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-5">
             {isSubmitted && (
               <BookingSummary
                 booking={booking}

@@ -66,7 +66,7 @@ const Checkout = () => {
     <div>
       <section className="container">
         <div className="row flex-column flex-md-row align-items-center">
-          <div className="col-md-4 mt-5 mb-5">
+          <div className="col-md-8 mt-5 mb-5">
             {isLoading ? (
               <p>Loading room information</p>
             ) : error ? (
@@ -125,6 +125,8 @@ const Checkout = () => {
               </div>
             )}
           </div>
+        </div>
+        <div className="row flex-column flex-md-row align-items-center">
           <div className="col-md-8">
             <BookingForm />
           </div>
