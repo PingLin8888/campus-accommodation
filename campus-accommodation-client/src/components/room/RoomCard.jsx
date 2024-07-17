@@ -19,10 +19,15 @@ const RoomCard = ({ room }) => {
             </Link>
           </div>
           <div className="flex-grow-1 ml-3 px-5">
-            <Card.Title className="hotel-color">{room.roomType}</Card.Title>
-            <Card.Title className="hotel-color">{room.roomPrice}</Card.Title>
+            <Card.Title className="hotel-color">Room ID: {room.id}</Card.Title>
+            <Card.Title className="hotel-color">
+              Room Type: {room.roomType}
+            </Card.Title>
+            <Card.Title className="hotel-color">
+              Room Price: {room.roomPrice}
+            </Card.Title>
             <Card.Text>
-              Some room information goes here for the guest to read through
+              {/* Some room information goes here for the guest to read through */}
             </Card.Text>
           </div>
           <div className="flex-shrink-0 mt-3">
