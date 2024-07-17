@@ -21,6 +21,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String roomType;
+    private BigDecimal basePrice;
     private BigDecimal roomPrice;
     private boolean isBooked = false;
     private int demand; // Number of bookings made for this room
@@ -54,10 +55,6 @@ public class Room {
         }
     }
 
-    public void updateCurrentPrice(BigDecimal newPrice) {
-        this.roomPrice = newPrice;
-    }
-
     public boolean isAvailable(LocalDate checkInDate, LocalDate checkOutDate) {
         for (Booking booking : bookings) {
             if (booking.getCheckOutDate().isAfter(checkInDate) && booking.getCheckInDate().isBefore(checkOutDate)) {
@@ -75,11 +72,22 @@ public class Room {
     }
 
     public void adjustPriceBasedOnDemand() {
-        BigDecimal newPrice = this.getRoomPrice().multiply(BigDecimal.valueOf(1 + 0.1 * this.getDemand()));
-        this.roomPrice = newPrice;
+        BigDecimal demandFactor = BigDecimal.valueOf(1 + 0.1 * this.demand);
+        BigDecimal newPrice = basePrice.multiply(demandFactor);
+        this.setRoomPrice(newPrice);
     }
 
-    public int getDemand(){
-        return this.bookings.size();
+    public void increaseDemand(){
+        this.demand++;
+        adjustPriceBasedOnDemand();
     }
+
+    public void decreaseDemand(){
+        if (this.demand > 0) {
+            this.demand--;
+        }
+        adjustPriceBasedOnDemand();
+    }
+
+
 }

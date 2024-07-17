@@ -155,7 +155,6 @@ public class RoomController {
                 throw new PhotoRetrievalException("Error retrieving photo");
             }
         }
-//        System.out.println(photoBytes == null ? "photo null" : "photo is not null");
         return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(), room.isBooked(), photoBytes);
     }
 

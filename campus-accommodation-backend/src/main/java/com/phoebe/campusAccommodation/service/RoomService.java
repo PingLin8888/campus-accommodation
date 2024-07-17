@@ -6,8 +6,6 @@ import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.repository.RoomRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,19 +35,20 @@ public class RoomService {
         List<Room> allRooms = roomRepository.findAllWithBookings();
 
         // Initialize min-heap for cheapest rooms
-        cheapestRooms = new PriorityQueue<>(Comparator.comparing(Room::getRoomPrice));
+        cheapestRooms = new PriorityQueue<>(Comparator.comparing(Room::getRoomPrice, Comparator.nullsLast(BigDecimal::compareTo)));
         cheapestRooms.addAll(allRooms.stream().filter(Room::isAvailable).collect(Collectors.toList()));
 
 
         // Initialize max-heap for most in-demand rooms
-        mostInDemandRooms = new PriorityQueue<>((r1, r2) -> Integer.compare(r2.getBookings().size(), r1.getBookings().size()));
+        mostInDemandRooms = new PriorityQueue<>((r1, r2) -> Integer.compare(r2.getDemand(), r1.getDemand()));
         mostInDemandRooms.addAll(allRooms);
     }
 
     public Room addNewRoom(MultipartFile photo, String roomType, BigDecimal roomPrice) throws IOException, SQLException {
         Room room = new Room();
         room.setRoomType(roomType);
-        room.setRoomPrice(roomPrice);
+        room.setBasePrice(roomPrice);
+        room.adjustPriceBasedOnDemand();
         if(!photo.isEmpty()){
             byte[] photoBytes = photo.getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);
@@ -100,7 +99,7 @@ public class RoomService {
             room.setRoomType(roomType);
         }
         if (roomPrice != null) {
-            room.setRoomPrice(roomPrice);
+            room.setBasePrice(roomPrice);
         }
         if (photoBytes != null && photoBytes.length > 0) {
             try{
@@ -108,7 +107,6 @@ public class RoomService {
             }catch (SQLException exception){
                 throw new InternalServerException("Error updating room");
             }
-
         }
 
         Room updatedRoom = roomRepository.save(room);

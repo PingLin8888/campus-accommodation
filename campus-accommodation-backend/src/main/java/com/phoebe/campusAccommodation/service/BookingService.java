@@ -47,7 +47,7 @@ public class BookingService {
         if (roomIsAvailable) {
             room.addBooking(bookingRequest);
             bookingRepository.save(bookingRequest);
-            roomService.updatePricesBasedOnDemand();
+            room.increaseDemand();
         } else {
             throw new InvalidBookingRequestException("Sorry. This room is not available for the selected dates.");
         }
@@ -60,7 +60,7 @@ public class BookingService {
         Room room = booking.getRoom();
         room.removeBooking(booking);
         bookingRepository.deleteById(bookingId);
-        roomService.updatePricesBasedOnDemand();
+        room.decreaseDemand();
     }
 
     public List<Booking> getBookingsByUserEmail(String email) {
