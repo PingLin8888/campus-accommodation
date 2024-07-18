@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 //{ room } extracts the room property from the object passed as an argument to the RoomCard component.
 const RoomCard = ({ room }) => {
-  toFixed;
   return (
     <Col className="mb-4" xs={12} key={room.id}>
       <Card>
