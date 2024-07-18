@@ -110,14 +110,29 @@ public class RoomService {
         }
 
         Room updatedRoom = roomRepository.save(room);
+        updateRoom(updatedRoom);
+        return updatedRoom;
+    }
+
+    public synchronized void updateRoom(Room updatedRoom) {
         if (updatedRoom.isAvailable()) {
             cheapestRooms.remove(updatedRoom);
             cheapestRooms.offer(updatedRoom);
         }
-        mostInDemandRooms.remove(updatedRoom);
+        // Remove and reinsert the room in the most in-demand rooms queue
+        boolean removed = mostInDemandRooms.remove(updatedRoom);
+        if (removed) {
+            System.out.println("Room removed successfully from mostInDemandRooms.");
+        } else {
+            System.out.println("Failed to remove room from mostInDemandRooms.");
+        }
+
         mostInDemandRooms.offer(updatedRoom);
-        return updatedRoom;
+
+        // Debugging information
+//        System.out.println("After re-insertion: Peek of mostInDemandRooms: " + mostInDemandRooms.peek());
     }
+
 
     public Optional<Room> getRoomById(Long roomId) {
         return Optional.of(roomRepository.findById(roomId).get());
@@ -147,4 +162,7 @@ public class RoomService {
         initializeHeaps();
     }
 
+    public void syncHeaps() {
+        initializeHeaps();
+    }
 }
