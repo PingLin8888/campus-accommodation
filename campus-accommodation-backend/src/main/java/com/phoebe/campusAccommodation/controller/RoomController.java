@@ -124,14 +124,23 @@ public class RoomController {
         }
     }
 
+    @GetMapping("/cheapest-room")
+    public ResponseEntity<RoomResponse> getCheapestAvailableRoom() {
+        Room room = roomService.getCheapestAvailableRoom();
+        RoomResponse roomResponse = getRoomResponse(room);
+        return ResponseEntity.ok(roomResponse);
+    }
+
+    @GetMapping("/most-in-demand-room")
+    public ResponseEntity<RoomResponse> getMostInDemandRoom() {
+        Room room = roomService.getMostInDemandRoom();
+        RoomResponse roomResponse = getRoomResponse(room);
+        return ResponseEntity.ok(roomResponse);
+    }
+
 
     private RoomResponse getRoomResponse(Room room) {
         List<Booking> bookings = bookingService.getAllBookingsByRoomId(room.getId());
-//        List<BookingResponse> bookingInfo = bookings
-//                .stream()
-//                .map(booking -> new BookingResponse(booking.getBookingId(),
-//                        booking.getCheckInDate(), booking.getCheckOutDate(),
-//                        booking.getBookingConfirmationCode())).toList();
         byte[] photoBytes = null;
         Blob photoBlob = room.getPhoto();
         if (photoBlob != null) {
@@ -141,8 +150,8 @@ public class RoomController {
                 throw new PhotoRetrievalException("Error retrieving photo");
             }
         }
-//        System.out.println(photoBytes == null ? "photo null" : "photo is not null");
         return new RoomResponse(room.getId(), room.getRoomType(), room.getRoomPrice(), room.isBooked(), photoBytes);
     }
+
 
 }
