@@ -8,9 +8,11 @@ import { Link } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import { Carousel, Container, Card } from "react-bootstrap";
 
-const RoomCard = ({ room }) => (
+const RoomCard = ({ room, label }) => (
   <Col key={room.id} className="mb-4" xs={12} md={6} lg={3}>
     <Card>
+      {label && <div className="label">{label}</div>}
+
       <Link to={`/book-room/${room.id}`}>
         <Card.Img
           variant="top"
@@ -96,8 +98,12 @@ const RoomCarousel = () => {
         <Container>
           <h2 className="text-center">Featured Rooms</h2>
           <Row className="justify-content-center">
-            {cheapestRoom && <RoomCard room={cheapestRoom} />}
-            {mostDemandRoom && <RoomCard room={mostDemandRoom} />}
+            {cheapestRoom && (
+              <RoomCard room={cheapestRoom} label="Cheapest Room" />
+            )}
+            {mostDemandRoom && (
+              <RoomCard room={mostDemandRoom} label="Most In-Demand Room" />
+            )}
           </Row>
         </Container>
       </section>
