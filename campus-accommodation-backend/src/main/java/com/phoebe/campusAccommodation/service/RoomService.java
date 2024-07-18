@@ -31,7 +31,7 @@ public class RoomService {
     private PriorityQueue<Room> mostInDemandRooms;
 
     @PostConstruct
-    public void initializeHeaps(){
+    public void initializeHeaps() {
         List<Room> allRooms = roomRepository.findAllWithBookings();
 
         // Initialize min-heap for cheapest rooms
@@ -49,7 +49,7 @@ public class RoomService {
         room.setRoomType(roomType);
         room.setBasePrice(roomPrice);
         room.adjustPriceBasedOnDemand();
-        if(!photo.isEmpty()){
+        if (!photo.isEmpty()) {
             byte[] photoBytes = photo.getBytes();
             Blob photoBlob = new SerialBlob(photoBytes);
             room.setPhoto(photoBlob);
@@ -102,9 +102,9 @@ public class RoomService {
             room.setBasePrice(roomPrice);
         }
         if (photoBytes != null && photoBytes.length > 0) {
-            try{
+            try {
                 room.setPhoto(new SerialBlob(photoBytes));
-            }catch (SQLException exception){
+            } catch (SQLException exception) {
                 throw new InternalServerException("Error updating room");
             }
         }
@@ -115,12 +115,18 @@ public class RoomService {
     }
 
     public synchronized void updateRoom(Room updatedRoom) {
-        if (updatedRoom.isAvailable()) {
-            cheapestRooms.remove(updatedRoom);
-            cheapestRooms.offer(updatedRoom);
+        boolean removed;
+        System.out.println("update room price: " + updatedRoom.getRoomPrice());
+        removed = cheapestRooms.remove(updatedRoom);
+        if (removed) {
+            System.out.println("Room removed successfully from cheapestRooms.");
+        } else {
+            System.out.println("Failed to remove room from cheapestRooms.");
         }
+        cheapestRooms.offer(updatedRoom);
+        System.out.println("cheapestRooms offer room price: " + cheapestRooms.peek().getRoomPrice());
         // Remove and reinsert the room in the most in-demand rooms queue
-        boolean removed = mostInDemandRooms.remove(updatedRoom);
+        removed = mostInDemandRooms.remove(updatedRoom);
         if (removed) {
             System.out.println("Room removed successfully from mostInDemandRooms.");
         } else {
@@ -128,9 +134,6 @@ public class RoomService {
         }
 
         mostInDemandRooms.offer(updatedRoom);
-
-        // Debugging information
-//        System.out.println("After re-insertion: Peek of mostInDemandRooms: " + mostInDemandRooms.peek());
     }
 
 
@@ -143,9 +146,9 @@ public class RoomService {
     }
 
     public Room getCheapestAvailableRoom() {
-        while (!cheapestRooms.isEmpty() && !cheapestRooms.peek().isAvailable()) {
-            cheapestRooms.poll();
-        }
+//        while (!cheapestRooms.isEmpty() && !cheapestRooms.peek().isAvailable()) {
+//            cheapestRooms.poll();
+//        }
         return cheapestRooms.peek();
     }
 
@@ -153,11 +156,12 @@ public class RoomService {
         return mostInDemandRooms.peek();
     }
 
-    public void updatePricesBasedOnDemand(){
+    public void updatePricesBasedOnDemand() {
         List<Room> rooms = roomRepository.findAll();
         for (Room room : rooms) {
             room.adjustPriceBasedOnDemand();
             roomRepository.save(room);
+            updateRoom(room);
         }
         initializeHeaps();
     }
