@@ -1,5 +1,6 @@
 package com.phoebe.campusAccommodation.controller;
 
+import com.phoebe.campusAccommodation.exception.InvalidIssueLoggingRequestException;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,13 @@ public class MaintenanceIssueController {
     @PostMapping("/log")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> logIssue(@RequestParam Long userId, @RequestParam Long roomId, @RequestBody String description) {
-        MaintenanceIssue issue = maintenanceIssueService.logIssue(userId, roomId, description);
-        return ResponseEntity.ok().body("Issue logged successfully");
+        try {
+            MaintenanceIssue issue = maintenanceIssueService.logIssue(userId, roomId, description);
+            return ResponseEntity.ok().body("Issue logged successfully");
+        } catch (InvalidIssueLoggingRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @PutMapping("/update")
