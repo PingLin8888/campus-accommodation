@@ -28,8 +28,8 @@ public class MaintenanceIssue {
     private String description;
     @Column(nullable = false)
     private String status = "Logged";
-    @Column(nullable = false)
+    @Column
     private LocalDateTime createdAt;
-    @Column(nullable = false)
+    @Column
     private LocalDateTime updatedAt;
 }

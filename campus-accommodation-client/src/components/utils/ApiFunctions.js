@@ -262,3 +262,52 @@ export async function getBookingsByUserId(userId, token) {
     throw new Error("Failded to fetch bookings");
   }
 }
+
+export const logMaintenanceIssue = async (userId, roomId, description) => {
+  const response = await axios.post("/api/maintenance/log", null, {
+    params: {
+      userId,
+      roomId,
+      description,
+    },
+  });
+  return response.data;
+};
+
+export const updateMaintenanceIssue = async (issueId, status) => {
+  const response = await axios.put("/api/maintenance/update", null, {
+    params: {
+      issueId,
+      status,
+    },
+  });
+  return response.data;
+};
+
+export const getMaintenanceIssuesByRoom = async (roomId) => {
+  try {
+    const response = await api.get(`/api/maintenance/room/${roomId}`, {
+      headers: getHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching maintenance issue by room: ", error.message);
+    throw new Error("Failded to fetch maintenance issue by room");
+  }
+  // const response = await axios.get(`/api/maintenance/room/${roomId}`);
+  // return response.data;
+};
+
+export const getMaintenanceIssuesByUser = async (userId) => {
+  try {
+    const response = await api.get(`/api/maintenance/user/${userId}`, {
+      headers: getHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching maintenance issue by user: ", error.message);
+    throw new Error("Failded to fetch maintenance issue by user");
+  }
+  // const response = await axios.get(`/api/maintenance/user/${userId}`);
+  // return response.data;
+};

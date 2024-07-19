@@ -12,6 +12,9 @@ const Admin = () => {
       <h4 className="card-title text-center">
         <Link to={"/existing-bookings"}>Manage bookings</Link>
       </h4>
+      <h4 className="card-title text-center">
+        <Link to={"/maintenanceIssue"}>Maintenance</Link>
+      </h4>
     </section>
   );
 };

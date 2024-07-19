@@ -3,22 +3,27 @@ package com.phoebe.campusAccommodation.controller;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/maintenance")
+@RequestMapping("/api/maintenance")
 public class MaintenanceIssueController {
+
+    @Autowired
     private final MaintenanceIssueService maintenanceIssueService;
 
     @PostMapping("/log")
-    public ResponseEntity<MaintenanceIssue> logIssue(@RequestParam Long userId, @RequestParam Long roomId, @RequestBody String description) {
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> logIssue(@RequestParam Long userId, @RequestParam Long roomId, @RequestBody String description) {
         MaintenanceIssue issue = maintenanceIssueService.logIssue(userId, roomId, description);
-        return new ResponseEntity<>(issue, HttpStatus.CREATED);
+        return ResponseEntity.ok().body("Issue logged successfully");
     }
 
     @PutMapping("/update")
@@ -28,6 +33,7 @@ public class MaintenanceIssueController {
     }
 
 
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/room/{roomId}")
     public ResponseEntity<List<MaintenanceIssue>> getIssuesByRoom(@PathVariable Long roomId) {
         List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByRoomId(roomId);
