@@ -2,6 +2,7 @@ package com.phoebe.campusAccommodation.controller;
 
 import com.phoebe.campusAccommodation.exception.InvalidIssueLoggingRequestException;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
+import com.phoebe.campusAccommodation.request.LogIssueRequest;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,9 @@ public class MaintenanceIssueController {
 
     @PostMapping("/log")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> logIssue(@RequestParam Long userId, @RequestParam Long roomId, @RequestBody String description) {
+    public ResponseEntity<?> logIssue(@RequestParam Long userId, @RequestParam Long roomId, @RequestBody LogIssueRequest logIssueRequest) {
         try {
+            String description = logIssueRequest.getDescription();
             MaintenanceIssue issue = maintenanceIssueService.logIssue(userId, roomId, description);
             return ResponseEntity.ok().body("Issue logged successfully");
         } catch (InvalidIssueLoggingRequestException e) {
