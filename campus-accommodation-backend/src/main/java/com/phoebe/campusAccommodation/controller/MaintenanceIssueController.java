@@ -6,6 +6,7 @@ import com.phoebe.campusAccommodation.model.IssueUpdateInfo;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
 import com.phoebe.campusAccommodation.request.LogIssueRequest;
 import com.phoebe.campusAccommodation.response.IssueResponse;
+import com.phoebe.campusAccommodation.response.IssueUpdateInfoResponse;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class MaintenanceIssueController {
     public ResponseEntity<?> logIssue(@RequestParam Long userId, @RequestParam Long roomId, @RequestBody LogIssueRequest logIssueRequest) {
         try {
             String description = logIssueRequest.getDescription();
+            System.out.println("description is : " + description);
             MaintenanceIssue issue = maintenanceIssueService.logIssue(userId, roomId, description);
             return ResponseEntity.ok(issue);
         } catch (InvalidIssueLoggingRequestException e) {
@@ -50,9 +52,6 @@ public class MaintenanceIssueController {
         }
     }
 
-    private IssueResponse getIssueResponse(MaintenanceIssue issue) {
-        return new IssueResponse(issue.getId(), issue.getRoom().getId(), issue.getUser().getId(), issue.getIssueDescription(), issue.getStatus(), issue.getCreatedAt(), issue.getUpdatedAt());
-    }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getIssuesByUser(@PathVariable Long userId) {
@@ -71,20 +70,30 @@ public class MaintenanceIssueController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<IssueResponse> updateIssue(@RequestParam Long issueId, @RequestBody String status,@RequestBody String updateInfo) {
+    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestBody String status, @RequestBody String updateDescription) {
         IssueStatus issueStatus;
         try {
             issueStatus = IssueStatus.valueOf(status.toUpperCase());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
         try {
-            IssueUpdateInfo issueUpdateInfo =
-            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, issueStatus,updateInfo);
-
+            IssueUpdateInfo issueUpdateInfo = new IssueUpdateInfo(updateDescription, issueStatus);
+            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, issueUpdateInfo);
+            IssueResponse response = getIssueResponse(issue);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        IssueResponse response = getIssueResponse(issue);
-        return ResponseEntity.ok(response);
     }
+
+    private IssueResponse getIssueResponse(MaintenanceIssue issue) {
+        List<IssueUpdateInfoResponse> updatesResponses = new ArrayList<>();
+        for (IssueUpdateInfo update : issue.getUpdates()) {
+            updatesResponses.add(new IssueUpdateInfoResponse(update.getId(), update.getUpdateDescription(), update.getStatus().toString(), update.getUpdatedAt()));
+        }
+        return new IssueResponse(issue.getId(), issue.getRoom().getId(), issue.getUser().getId(), issue.getIssueDescription(), issue.getCreatedAt(), updatesResponses);
+    }
+
 
 }

@@ -19,12 +19,8 @@ public class IssueUpdateInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "maintenance_issue_id", nullable = false)
-    private MaintenanceIssue maintenanceIssue;
-
     @Column(nullable = false)
-    private String description;
+    private String updateDescription;
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
@@ -34,10 +30,8 @@ public class IssueUpdateInfo {
     private IssueStatus status = IssueStatus.LOGGED;
 
 
-    public IssueUpdateInfo(Long id, MaintenanceIssue maintenanceIssue, String description, IssueStatus status) {
-        this.id = id;
-        this.maintenanceIssue = maintenanceIssue;
-        this.description = description;
+    public IssueUpdateInfo( String description, IssueStatus status) {
+        this.updateDescription = description;
         this.status = status;
         updatedAt = LocalDateTime.now();
     }

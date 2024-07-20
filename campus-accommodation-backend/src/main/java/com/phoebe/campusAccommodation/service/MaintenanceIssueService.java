@@ -26,20 +26,19 @@ public class MaintenanceIssueService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found."));
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found."));
 
-        MaintenanceIssue issue = new MaintenanceIssue();
-        issue.setUser(user);
-        issue.setRoom(room);
-        issue.setIssueDescription(description);
-        issue.setCreatedAt(LocalDateTime.now());
+        MaintenanceIssue issue = new MaintenanceIssue(room,user,description);
+//        issue.setUser(user);
+//        issue.setRoom(room);
+//        issue.setIssueDescription(description);
+//        issue.setCreatedAt(LocalDateTime.now());
         return maintenanceIssueRepository.save(issue);
     }
 
-    public MaintenanceIssue updateIssue(Long issueId, IssueStatus status, IssueUpdateInfo updateInfo) {
+    public MaintenanceIssue updateIssue(Long issueId, IssueUpdateInfo updateInfo) {
         Optional<MaintenanceIssue> issueOptional = maintenanceIssueRepository.findById(issueId);
         if (issueOptional.isPresent()) {
             MaintenanceIssue issue = issueOptional.get();
-            issue.setStatus(status);
-            issue.setUpdates(issue.getUpdates().add(n));
+            issue.addUpdate(updateInfo);
             return maintenanceIssueRepository.save(issue);
         } else {
             throw new ResourceNotFoundException("Issue not found.");

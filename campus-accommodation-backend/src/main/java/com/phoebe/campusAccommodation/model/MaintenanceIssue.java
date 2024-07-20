@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,15 +34,30 @@ public class MaintenanceIssue {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
+    @Column(name = "issue_description",nullable = false)
     private String issueDescription;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private IssueStatus status = IssueStatus.LOGGED;
 
-
-    @OneToMany(mappedBy = "maintenanceIssue", cascade = CascadeType.ALL)
-    private List<IssueUpdateInfo> updates;
+    @OneToMany
+    private List<IssueUpdateInfo> updates = new ArrayList<>();
 
     @Column
     private LocalDateTime createdAt;
+
+
+    public MaintenanceIssue(Room room, User user, String issueDescription) {
+        this.room = room;
+        this.user = user;
+        this.issueDescription = issueDescription;
+        this.setCreatedAt(LocalDateTime.now());
+    }
+
+    public void addUpdate(IssueUpdateInfo update) {
+        updates.add(update);
+        this.status = update.getStatus();  // Update the status to match the latest update status
+    }
 
 }
