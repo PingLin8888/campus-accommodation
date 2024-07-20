@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 public class IssueResponse {
 
     private Long id;
-    private Room room;
-    private User user;
+    private Long roomId;
+    private Long userId;
     private String description;
     private String status;
     private LocalDateTime createdAt;

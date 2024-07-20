@@ -50,7 +50,7 @@ public class MaintenanceIssueController {
     }
 
     private IssueResponse getIssueResponse(MaintenanceIssue issue) {
-        return new IssueResponse(issue.getId(), issue.getRoom(), issue.getUser(), issue.getDescription(), issue.getStatus(), issue.getCreatedAt(), issue.getUpdatedAt());
+        return new IssueResponse(issue.getId(), issue.getRoom().getId(), issue.getUser().getId(), issue.getDescription(), issue.getStatus(), issue.getCreatedAt(), issue.getUpdatedAt());
     }
 
     @GetMapping("/user/{userId}")

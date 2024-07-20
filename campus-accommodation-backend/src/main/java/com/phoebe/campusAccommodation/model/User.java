@@ -1,7 +1,9 @@
 package com.phoebe.campusAccommodation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +32,6 @@ public class User {
     @JsonIgnore
 // You should consider using @JsonIgnore on fields that may cause circular references or are not necessary to be serialized. In this case, you might want to ignore the roles field to avoid serializing the entire role objects.
     private Collection<Role> roles = new HashSet<>();
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference
-    private List<MaintenanceIssue> maintenanceIssues;
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
