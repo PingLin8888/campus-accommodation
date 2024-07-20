@@ -1,13 +1,14 @@
 package com.phoebe.campusAccommodation.controller;
 
 import com.phoebe.campusAccommodation.exception.InvalidIssueLoggingRequestException;
+import com.phoebe.campusAccommodation.model.IssueStatus;
+import com.phoebe.campusAccommodation.model.IssueUpdateInfo;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
 import com.phoebe.campusAccommodation.request.LogIssueRequest;
 import com.phoebe.campusAccommodation.response.IssueResponse;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +51,7 @@ public class MaintenanceIssueController {
     }
 
     private IssueResponse getIssueResponse(MaintenanceIssue issue) {
-        return new IssueResponse(issue.getId(), issue.getRoom().getId(), issue.getUser().getId(), issue.getDescription(), issue.getStatus(), issue.getCreatedAt(), issue.getUpdatedAt());
+        return new IssueResponse(issue.getId(), issue.getRoom().getId(), issue.getUser().getId(), issue.getIssueDescription(), issue.getStatus(), issue.getCreatedAt(), issue.getUpdatedAt());
     }
 
     @GetMapping("/user/{userId}")
@@ -70,8 +71,18 @@ public class MaintenanceIssueController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<IssueResponse> updateIssue(@RequestParam Long issueId, @RequestBody String status) {
-        MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, status);
+    public ResponseEntity<IssueResponse> updateIssue(@RequestParam Long issueId, @RequestBody String status,@RequestBody String updateInfo) {
+        IssueStatus issueStatus;
+        try {
+            issueStatus = IssueStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        try {
+            IssueUpdateInfo issueUpdateInfo =
+            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, issueStatus,updateInfo);
+
+        }
         IssueResponse response = getIssueResponse(issue);
         return ResponseEntity.ok(response);
     }

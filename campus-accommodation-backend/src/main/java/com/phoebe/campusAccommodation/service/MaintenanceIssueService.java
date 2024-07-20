@@ -1,9 +1,7 @@
 package com.phoebe.campusAccommodation.service;
 
 import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
-import com.phoebe.campusAccommodation.model.MaintenanceIssue;
-import com.phoebe.campusAccommodation.model.Room;
-import com.phoebe.campusAccommodation.model.User;
+import com.phoebe.campusAccommodation.model.*;
 import com.phoebe.campusAccommodation.repository.MaintenanceIssueRepository;
 import com.phoebe.campusAccommodation.repository.RoomRepository;
 import com.phoebe.campusAccommodation.repository.UserRepository;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,16 +29,21 @@ public class MaintenanceIssueService {
         MaintenanceIssue issue = new MaintenanceIssue();
         issue.setUser(user);
         issue.setRoom(room);
-        issue.setDescription(description);
+        issue.setIssueDescription(description);
         issue.setCreatedAt(LocalDateTime.now());
         return maintenanceIssueRepository.save(issue);
     }
 
-    public MaintenanceIssue updateIssue(Long issueId, String status) {
-        MaintenanceIssue issue = maintenanceIssueRepository.findById(issueId).orElseThrow(() -> new ResourceNotFoundException("Issue not found."));
-        issue.setStatus(status);
-        issue.setUpdatedAt(LocalDateTime.now());
-        return maintenanceIssueRepository.save(issue);
+    public MaintenanceIssue updateIssue(Long issueId, IssueStatus status, IssueUpdateInfo updateInfo) {
+        Optional<MaintenanceIssue> issueOptional = maintenanceIssueRepository.findById(issueId);
+        if (issueOptional.isPresent()) {
+            MaintenanceIssue issue = issueOptional.get();
+            issue.setStatus(status);
+            issue.setUpdates(issue.getUpdates().add(n));
+            return maintenanceIssueRepository.save(issue);
+        } else {
+            throw new ResourceNotFoundException("Issue not found.");
+        }
     }
 
     public List<MaintenanceIssue> getIssuesByRoomId(Long roomId) {
