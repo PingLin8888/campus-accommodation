@@ -1,5 +1,6 @@
 package com.phoebe.campusAccommodation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,9 @@ public class Room {
     private List<Booking> bookings;
     @Lob
     private Blob photo;
+    @OneToMany(mappedBy = "room")
+    @JsonBackReference
+    private List<MaintenanceIssue> maintenanceIssues;
 
     public Room() {
         this.bookings = new ArrayList<>();

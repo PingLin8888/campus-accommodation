@@ -28,7 +28,7 @@ public class MaintenanceIssueController {
         try {
             String description = logIssueRequest.getDescription();
             MaintenanceIssue issue = maintenanceIssueService.logIssue(userId, roomId, description);
-            return ResponseEntity.ok().body("Issue logged successfully");
+            return ResponseEntity.ok(issue);
         } catch (InvalidIssueLoggingRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -50,7 +50,7 @@ public class MaintenanceIssueController {
     }
 
     private IssueResponse getIssueResponse(MaintenanceIssue issue) {
-        return new IssueResponse(issue.getId(),  issue.getDescription(), issue.getStatus(), issue.getCreatedAt(), issue.getUpdatedAt());
+        return new IssueResponse(issue.getId(), issue.getRoom(), issue.getUser(), issue.getDescription(), issue.getStatus(), issue.getCreatedAt(), issue.getUpdatedAt());
     }
 
     @GetMapping("/user/{userId}")

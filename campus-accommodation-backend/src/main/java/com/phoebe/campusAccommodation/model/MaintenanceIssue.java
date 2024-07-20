@@ -1,8 +1,6 @@
 package com.phoebe.campusAccommodation.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,10 +21,10 @@ public class MaintenanceIssue {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "room_id",nullable = false)
-    @JsonIgnoreProperties("maintenanceIssues")
+    @JsonManagedReference
     private Room room;
     @ManyToOne
-    @JsonIgnoreProperties("maintenanceIssues")
+    @JsonManagedReference
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
     @Column(nullable = false)
