@@ -23,11 +23,9 @@ public class MaintenanceIssue {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "room_id",nullable = false)
-//    @JsonIgnore
     @JsonIgnoreProperties("maintenanceIssues")
     private Room room;
     @ManyToOne
-//    @JsonIgnore
     @JsonIgnoreProperties("maintenanceIssues")
     @JoinColumn(name = "user_id",nullable = false)
     private User user;

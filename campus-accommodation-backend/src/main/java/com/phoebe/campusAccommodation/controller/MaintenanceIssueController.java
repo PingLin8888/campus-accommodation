@@ -1,9 +1,7 @@
 package com.phoebe.campusAccommodation.controller;
 
 import com.phoebe.campusAccommodation.exception.InvalidIssueLoggingRequestException;
-import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
-import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.request.LogIssueRequest;
 import com.phoebe.campusAccommodation.response.IssueResponse;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
@@ -11,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
