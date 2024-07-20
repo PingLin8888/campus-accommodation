@@ -3,7 +3,9 @@ package com.phoebe.campusAccommodation.controller;
 import com.phoebe.campusAccommodation.exception.InvalidIssueLoggingRequestException;
 import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
+import com.phoebe.campusAccommodation.model.Room;
 import com.phoebe.campusAccommodation.request.LogIssueRequest;
+import com.phoebe.campusAccommodation.response.IssueResponse;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -38,10 +41,19 @@ public class MaintenanceIssueController {
     public ResponseEntity<?> getIssuesByRoom(@PathVariable Long roomId) {
         try {
             List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByRoomId(roomId);
-            return new ResponseEntity<>(issues, HttpStatus.OK);
+            List<IssueResponse> issueResponses = new ArrayList<>();
+            for (MaintenanceIssue issue : issues) {
+                IssueResponse issueResponse = getIssueResponse(issue);
+                issueResponses.add(issueResponse);
+            }
+            return ResponseEntity.ok(issueResponses);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    private IssueResponse getIssueResponse(MaintenanceIssue issue) {
+        return new IssueResponse(issue.getId(),  issue.getDescription(), issue.getStatus(), issue.getCreatedAt(), issue.getUpdatedAt());
     }
 
     @GetMapping("/user/{userId}")
