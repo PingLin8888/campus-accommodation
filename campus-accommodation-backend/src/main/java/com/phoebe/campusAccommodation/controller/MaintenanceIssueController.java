@@ -1,6 +1,7 @@
 package com.phoebe.campusAccommodation.controller;
 
 import com.phoebe.campusAccommodation.exception.InvalidIssueLoggingRequestException;
+import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
 import com.phoebe.campusAccommodation.request.LogIssueRequest;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
@@ -31,21 +32,16 @@ public class MaintenanceIssueController {
         } catch (InvalidIssueLoggingRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<MaintenanceIssue> updateIssue(@RequestParam Long issueId, @RequestParam String status) {
-        MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, status);
-        return new ResponseEntity<>(issue, HttpStatus.OK);
-    }
-
-
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/room/{roomId}")
-    public ResponseEntity<List<MaintenanceIssue>> getIssuesByRoom(@PathVariable Long roomId) {
-        List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByRoomId(roomId);
-        return new ResponseEntity<>(issues, HttpStatus.OK);
+    public ResponseEntity<?> getIssuesByRoom(@PathVariable Long roomId) {
+        try {
+            List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByRoomId(roomId);
+            return new ResponseEntity<>(issues, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/user/{userId}")
@@ -53,4 +49,12 @@ public class MaintenanceIssueController {
         List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByUserId(userId);
         return new ResponseEntity<>(issues, HttpStatus.OK);
     }
+
+
+    @PutMapping("/update")
+    public ResponseEntity<MaintenanceIssue> updateIssue(@RequestParam Long issueId, @RequestParam String status) {
+        MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, status);
+        return new ResponseEntity<>(issue, HttpStatus.OK);
+    }
+
 }
