@@ -54,9 +54,18 @@ public class MaintenanceIssueController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<MaintenanceIssue>> getIssuesByUser(@PathVariable Long userId) {
-        List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByUserId(userId);
-        return new ResponseEntity<>(issues, HttpStatus.OK);
+    public ResponseEntity<?> getIssuesByUser(@PathVariable Long userId) {
+        try {
+            List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByUserId(userId);
+            List<IssueResponse> issueResponses = new ArrayList<>();
+            for (MaintenanceIssue issue : issues) {
+                IssueResponse issueResponse = getIssueResponse(issue);
+                issueResponses.add(issueResponse);
+            }
+            return ResponseEntity.ok(issueResponses);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 
