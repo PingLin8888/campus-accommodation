@@ -70,9 +70,10 @@ public class MaintenanceIssueController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<MaintenanceIssue> updateIssue(@RequestParam Long issueId, @RequestParam String status) {
+    public ResponseEntity<IssueResponse> updateIssue(@RequestParam Long issueId, @RequestBody String status) {
         MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, status);
-        return new ResponseEntity<>(issue, HttpStatus.OK);
+        IssueResponse response = getIssueResponse(issue);
+        return ResponseEntity.ok(response);
     }
 
 }
