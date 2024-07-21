@@ -50,4 +50,8 @@ public class MaintenanceIssueService {
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userEmail));
         return maintenanceIssueRepository.findByUserId(user.getId());
     }
+
+    public MaintenanceIssue getIssuesByIssueId(Long issueId) {
+        return maintenanceIssueRepository.findById(issueId).orElseThrow(()->new ResourceNotFoundException("Issue not found."));
+    }
 }

@@ -56,7 +56,7 @@ function App() {
               element={<MaintenanceIssuesAdmin />}
             />
             <Route path="/issues" element={<IssueList />} />
-            <Route path="/issues/:id" element={<IssueDetail />} />
+            <Route path="/issues/:issueId" element={<IssueDetail />} />
             <Route path="/find-booking" element={<FindBooking />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />

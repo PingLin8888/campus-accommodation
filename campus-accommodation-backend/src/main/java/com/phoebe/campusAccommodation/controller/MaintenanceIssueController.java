@@ -70,6 +70,17 @@ public class MaintenanceIssueController {
         }
     }
 
+    @GetMapping("/issues/{issueId}")
+    public ResponseEntity<?> getIssuesByIssueId(@PathVariable Long issueId) {
+        try {
+            MaintenanceIssue issue = maintenanceIssueService.getIssuesByIssueId(issueId);
+            IssueResponse issueResponse = getIssueResponse(issue);
+            return ResponseEntity.ok(issueResponse);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/userEmail/{userEmail}")
     public ResponseEntity<?> getIssuesByUserEmail(@PathVariable String userEmail) {
         try {

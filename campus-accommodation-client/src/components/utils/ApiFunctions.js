@@ -309,3 +309,18 @@ export const getMaintenanceIssuesByUserEmail = async (userEmail) => {
     throw new Error("Failded to fetch maintenance issue by user");
   }
 };
+
+export const getMaintenanceIssueById = async (issueId) => {
+  try {
+    const response = await api.get(`/api/maintenance/issues/${issueId}`, {
+      headers: getHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error fetching maintenance issue by issueId: ",
+      error.message
+    );
+    throw new Error("Failded to fetch maintenance issue by issueId");
+  }
+};
