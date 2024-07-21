@@ -9,6 +9,7 @@ import com.phoebe.campusAccommodation.request.UpdateIssueRequest;
 import com.phoebe.campusAccommodation.response.IssueResponse;
 import com.phoebe.campusAccommodation.response.IssueUpdateInfoResponse;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -71,14 +72,13 @@ public class MaintenanceIssueController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestBody UpdateIssueRequest updateIssueRequest) {
+    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @Valid @RequestBody UpdateIssueRequest updateIssueRequest) {
         IssueStatus issueStatus;
         String updateDescription= updateIssueRequest.getUpdateDescription();;
         try {
             String status = updateIssueRequest.getStatus();
             issueStatus = IssueStatus.valueOf(status.toUpperCase());
-            IssueUpdateInfo issueUpdateInfo = new IssueUpdateInfo(updateDescription, issueStatus);
-            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, issueUpdateInfo);
+            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, issueStatus, updateDescription);
             IssueResponse response = getIssueResponse(issue);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {

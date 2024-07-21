@@ -2,6 +2,7 @@ package com.phoebe.campusAccommodation.service;
 
 import com.phoebe.campusAccommodation.exception.ResourceNotFoundException;
 import com.phoebe.campusAccommodation.model.*;
+import com.phoebe.campusAccommodation.repository.IssueUpdateInfoRepository;
 import com.phoebe.campusAccommodation.repository.MaintenanceIssueRepository;
 import com.phoebe.campusAccommodation.repository.RoomRepository;
 import com.phoebe.campusAccommodation.repository.UserRepository;
@@ -21,20 +22,20 @@ public class MaintenanceIssueService {
     private final MaintenanceIssueRepository maintenanceIssueRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final IssueUpdateInfoRepository issueUpdateInfoRepository;
+
 
     public MaintenanceIssue logIssue(Long userId, Long roomId, String description) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found."));
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found."));
 
         MaintenanceIssue issue = new MaintenanceIssue(room,user,description);
-//        issue.setUser(user);
-//        issue.setRoom(room);
-//        issue.setIssueDescription(description);
-//        issue.setCreatedAt(LocalDateTime.now());
         return maintenanceIssueRepository.save(issue);
     }
 
-    public MaintenanceIssue updateIssue(Long issueId, IssueUpdateInfo updateInfo) {
+    public MaintenanceIssue updateIssue(Long issueId, IssueStatus issueStatus, String updateDescription) {
+        IssueUpdateInfo updateInfo = new IssueUpdateInfo(updateDescription, issueStatus);
+        issueUpdateInfoRepository.save(updateInfo);
         Optional<MaintenanceIssue> issueOptional = maintenanceIssueRepository.findById(issueId);
         if (issueOptional.isPresent()) {
             MaintenanceIssue issue = issueOptional.get();
