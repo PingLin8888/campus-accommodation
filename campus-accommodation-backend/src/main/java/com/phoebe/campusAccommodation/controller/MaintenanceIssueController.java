@@ -72,13 +72,13 @@ public class MaintenanceIssueController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @Valid @RequestBody UpdateIssueRequest updateIssueRequest) {
+    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestParam Long userId, @Valid @RequestBody UpdateIssueRequest updateIssueRequest) {
         IssueStatus issueStatus;
-        String updateDescription= updateIssueRequest.getUpdateDescription();;
+        String updateDescription = updateIssueRequest.getUpdateDescription();
         try {
             String status = updateIssueRequest.getStatus();
             issueStatus = IssueStatus.valueOf(status.toUpperCase());
-            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, issueStatus, updateDescription);
+            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, userId, issueStatus, updateDescription);
             IssueResponse response = getIssueResponse(issue);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
@@ -89,7 +89,7 @@ public class MaintenanceIssueController {
     private IssueResponse getIssueResponse(MaintenanceIssue issue) {
         List<IssueUpdateInfoResponse> updatesResponses = new ArrayList<>();
         for (IssueUpdateInfo update : issue.getUpdates()) {
-            updatesResponses.add(new IssueUpdateInfoResponse(update.getId(), update.getUpdateDescription(), update.getStatus().toString(), update.getUpdatedAt()));
+            updatesResponses.add(new IssueUpdateInfoResponse(update.getId(),update.getUpdaetUser().getId(), update.getUpdateDescription(), update.getStatus().toString(), update.getUpdatedAt()));
         }
         return new IssueResponse(issue.getId(), issue.getRoom().getId(), issue.getUser().getId(), issue.getIssueDescription(), issue.getCreatedAt(), updatesResponses);
     }

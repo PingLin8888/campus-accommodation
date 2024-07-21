@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class IssueUpdateInfoResponse {
     private Long id;
+    private Long userId;
     private String issueDescription;
     private String status;
     private LocalDateTime updatedAt;

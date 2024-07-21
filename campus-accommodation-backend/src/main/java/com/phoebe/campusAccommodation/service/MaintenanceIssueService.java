@@ -29,21 +29,17 @@ public class MaintenanceIssueService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found."));
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found."));
 
-        MaintenanceIssue issue = new MaintenanceIssue(room,user,description);
+        MaintenanceIssue issue = new MaintenanceIssue(room, user, description);
         return maintenanceIssueRepository.save(issue);
     }
 
-    public MaintenanceIssue updateIssue(Long issueId, IssueStatus issueStatus, String updateDescription) {
-        IssueUpdateInfo updateInfo = new IssueUpdateInfo(updateDescription, issueStatus);
+    public MaintenanceIssue updateIssue(Long issueId,Long userId, IssueStatus issueStatus, String updateDescription) {
+        MaintenanceIssue issue = maintenanceIssueRepository.findById(issueId).orElseThrow(() -> new ResourceNotFoundException("Issue not found."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found."));
+        IssueUpdateInfo updateInfo = new IssueUpdateInfo(updateDescription, issueStatus, user);
         issueUpdateInfoRepository.save(updateInfo);
-        Optional<MaintenanceIssue> issueOptional = maintenanceIssueRepository.findById(issueId);
-        if (issueOptional.isPresent()) {
-            MaintenanceIssue issue = issueOptional.get();
-            issue.addUpdate(updateInfo);
-            return maintenanceIssueRepository.save(issue);
-        } else {
-            throw new ResourceNotFoundException("Issue not found.");
-        }
+        issue.addUpdate(updateInfo);
+        return maintenanceIssueRepository.save(issue);
     }
 
     public List<MaintenanceIssue> getIssuesByRoomId(Long roomId) {

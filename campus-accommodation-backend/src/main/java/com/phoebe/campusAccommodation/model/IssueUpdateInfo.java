@@ -1,5 +1,6 @@
 package com.phoebe.campusAccommodation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,10 +30,16 @@ public class IssueUpdateInfo {
     @Enumerated(EnumType.STRING)
     private IssueStatus status = IssueStatus.LOGGED;
 
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id", nullable = false)
+    private User updaetUser;
 
-    public IssueUpdateInfo( String description, IssueStatus status) {
+
+    public IssueUpdateInfo( String description, IssueStatus status, User updaetUser) {
         this.updateDescription = description;
         this.status = status;
+        this.updaetUser = updaetUser;
         updatedAt = LocalDateTime.now();
     }
 }
