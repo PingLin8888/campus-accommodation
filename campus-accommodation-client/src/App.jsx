@@ -22,6 +22,8 @@ import LogOut from "./components/auth/LogOut";
 import RequireAuth from "./components/auth/RequireAuth";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import MaintenanceIssuesAdmin from "./components/Maintenance/MaintenanceIssuesAdmin";
+import IssueList from "./components/Maintenance/IssueList";
+import IssueDetail from "./components/Maintenance/IssueDetail";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -37,7 +39,6 @@ function App() {
             <Route path="/edit-room/:roomId" element={<EditRoom />} />
             <Route path="/existing-rooms" element={<ExistingRooms />} />
             <Route path="/add/new-room" element={<AddRoom />} />
-
             <Route
               path="/book-room/:roomId"
               element={
@@ -54,6 +55,8 @@ function App() {
               path="/maintenanceIssue"
               element={<MaintenanceIssuesAdmin />}
             />
+            <Route path="/issues" element={<IssueList />} />
+            <Route path="/issues/:id" element={<IssueDetail />} />
             <Route path="/find-booking" element={<FindBooking />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />
