@@ -17,6 +17,7 @@ public class IssueResponse {
     private Long userId;
     private String issueDescription;
     private LocalDateTime createdAt;
+    private String status;
     private List<IssueUpdateInfoResponse> updatesResponses;
 
 }

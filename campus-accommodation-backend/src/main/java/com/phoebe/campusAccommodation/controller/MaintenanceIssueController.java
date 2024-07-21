@@ -55,10 +55,25 @@ public class MaintenanceIssueController {
     }
 
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getIssuesByUser(@PathVariable Long userId) {
+    @GetMapping("/userId/{userId}")
+    public ResponseEntity<?> getIssuesByUserId(@PathVariable Long userId) {
         try {
             List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByUserId(userId);
+            List<IssueResponse> issueResponses = new ArrayList<>();
+            for (MaintenanceIssue issue : issues) {
+                IssueResponse issueResponse = getIssueResponse(issue);
+                issueResponses.add(issueResponse);
+            }
+            return ResponseEntity.ok(issueResponses);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/userEmail/{userEmail}")
+    public ResponseEntity<?> getIssuesByUserEmail(@PathVariable String userEmail) {
+        try {
+            List<MaintenanceIssue> issues = maintenanceIssueService.getIssuesByUserEmail(userEmail);
             List<IssueResponse> issueResponses = new ArrayList<>();
             for (MaintenanceIssue issue : issues) {
                 IssueResponse issueResponse = getIssueResponse(issue);
@@ -89,10 +104,8 @@ public class MaintenanceIssueController {
     private IssueResponse getIssueResponse(MaintenanceIssue issue) {
         List<IssueUpdateInfoResponse> updatesResponses = new ArrayList<>();
         for (IssueUpdateInfo update : issue.getUpdates()) {
-            updatesResponses.add(new IssueUpdateInfoResponse(update.getId(),update.getUpdaetUser().getId(), update.getUpdateDescription(), update.getStatus().toString(), update.getUpdatedAt()));
+            updatesResponses.add(new IssueUpdateInfoResponse(update.getId(), update.getUpdaetUser().getId(), update.getUpdateDescription(), update.getStatus().toString(), update.getUpdatedAt()));
         }
-        return new IssueResponse(issue.getId(), issue.getRoom().getId(), issue.getUser().getId(), issue.getIssueDescription(), issue.getCreatedAt(), updatesResponses);
+        return new IssueResponse(issue.getId(), issue.getRoom().getId(), issue.getUser().getId(), issue.getIssueDescription(), issue.getCreatedAt(), issue.getStatus().toString(), updatesResponses);
     }
-
-
 }

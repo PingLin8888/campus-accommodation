@@ -1,7 +1,7 @@
 // IssueList.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getMaintenanceIssuesByUser, getUser } from "../utils/ApiFunctions";
+import { getMaintenanceIssuesByUserEmail } from "../utils/ApiFunctions";
 
 const IssueList = () => {
   const [issues, setIssues] = useState([]);
@@ -12,11 +12,11 @@ const IssueList = () => {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const response = await getMaintenanceIssuesByUser(userId);
+        const response = await getMaintenanceIssuesByUserEmail(userId);
 
         // Ensure response.data is an array
-        if (Array.isArray(response.data)) {
-          setIssues(response.data);
+        if (Array.isArray(response)) {
+          setIssues(response);
         } else {
           console.error("Unexpected response format:", response.data);
           setError("Failed to fetch issues: Unexpected response format.");
@@ -29,9 +29,6 @@ const IssueList = () => {
 
     fetchIssues();
   }, [userId, token]);
-
-  console.log(Array.isArray(issues)); // Should log true if issues is an array
-  console.log(typeof issues); // Should log "object" if issues is an array (arrays are objects in JavaScript)
 
   if (error) {
     return <div>{error}</div>;

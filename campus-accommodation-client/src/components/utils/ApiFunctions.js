@@ -298,9 +298,9 @@ export const getMaintenanceIssuesByRoom = async (roomId) => {
   // return response.data;
 };
 
-export const getMaintenanceIssuesByUser = async (userId) => {
+export const getMaintenanceIssuesByUserEmail = async (userEmail) => {
   try {
-    const response = await api.get(`/api/maintenance/user/${userId}`, {
+    const response = await api.get(`/api/maintenance/userEmail/${userEmail}`, {
       headers: getHeader(),
     });
     return response.data;
@@ -308,6 +308,4 @@ export const getMaintenanceIssuesByUser = async (userId) => {
     console.error("Error fetching maintenance issue by user: ", error.message);
     throw new Error("Failded to fetch maintenance issue by user");
   }
-  // const response = await axios.get(`/api/maintenance/user/${userId}`);
-  // return response.data;
 };

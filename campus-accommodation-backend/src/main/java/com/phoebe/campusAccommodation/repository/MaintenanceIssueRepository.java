@@ -12,4 +12,5 @@ public interface MaintenanceIssueRepository extends JpaRepository<MaintenanceIss
     List<MaintenanceIssue> findByRoomId(Long roomId);
 
     List<MaintenanceIssue> findByUserId(Long userId);
+
 }

@@ -7,18 +7,14 @@ import com.phoebe.campusAccommodation.repository.MaintenanceIssueRepository;
 import com.phoebe.campusAccommodation.repository.RoomRepository;
 import com.phoebe.campusAccommodation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MaintenanceIssueService {
 
-    @Autowired
     private final MaintenanceIssueRepository maintenanceIssueRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
@@ -50,4 +46,8 @@ public class MaintenanceIssueService {
         return maintenanceIssueRepository.findByUserId(userId);
     }
 
+    public List<MaintenanceIssue> getIssuesByUserEmail(String userEmail) {
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + userEmail));
+        return maintenanceIssueRepository.findByUserId(user.getId());
+    }
 }
