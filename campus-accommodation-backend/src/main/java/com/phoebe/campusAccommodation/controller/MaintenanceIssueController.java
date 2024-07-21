@@ -5,6 +5,7 @@ import com.phoebe.campusAccommodation.model.IssueStatus;
 import com.phoebe.campusAccommodation.model.IssueUpdateInfo;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
 import com.phoebe.campusAccommodation.request.LogIssueRequest;
+import com.phoebe.campusAccommodation.request.UpdateIssueRequest;
 import com.phoebe.campusAccommodation.response.IssueResponse;
 import com.phoebe.campusAccommodation.response.IssueUpdateInfoResponse;
 import com.phoebe.campusAccommodation.service.MaintenanceIssueService;
@@ -70,14 +71,12 @@ public class MaintenanceIssueController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestBody String status, @RequestBody String updateDescription) {
+    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestBody UpdateIssueRequest updateIssueRequest) {
         IssueStatus issueStatus;
+        String updateDescription= updateIssueRequest.getUpdateDescription();;
         try {
+            String status = updateIssueRequest.getStatus();
             issueStatus = IssueStatus.valueOf(status.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        try {
             IssueUpdateInfo issueUpdateInfo = new IssueUpdateInfo(updateDescription, issueStatus);
             MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, issueUpdateInfo);
             IssueResponse response = getIssueResponse(issue);
