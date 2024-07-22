@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMaintenanceIssuesByUserEmail } from "../utils/ApiFunctions";
 import moment from "moment";
+import { Row } from "react-bootstrap";
 
 const IssueList = () => {
   const [issues, setIssues] = useState([]);
@@ -13,7 +14,6 @@ const IssueList = () => {
     const fetchIssues = async () => {
       try {
         const response = await getMaintenanceIssuesByUserEmail(userId, token);
-        console.log(response);
         if (Array.isArray(response)) {
           setIssues(response);
         } else {

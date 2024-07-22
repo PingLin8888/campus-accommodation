@@ -24,6 +24,8 @@ import { AuthProvider } from "./components/auth/AuthProvider";
 import MaintenanceIssuesAdmin from "./components/Maintenance/MaintenanceIssuesAdmin";
 import IssueList from "./components/Maintenance/IssueList";
 import IssueDetail from "./components/Maintenance/IssueDetail";
+import LogIssue from "./components/Maintenance/LogIssue";
+import UpdateIssue from "./components/Maintenance/UpdateIssue";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -62,6 +64,8 @@ function App() {
             <Route path="/register" element={<Registration />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/logout" element={<LogOut />} />
+            <Route path="/log-issue" element={LogIssue} />
+            <Route path="/update-issue" element={UpdateIssue} />
           </Routes>
         </Router>
         <Footer />
