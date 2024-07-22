@@ -1,7 +1,7 @@
-// IssueDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getMaintenanceIssueById } from "../utils/ApiFunctions";
+import moment from "moment";
 
 const IssueDetail = () => {
   const { issueId } = useParams();
@@ -31,41 +31,63 @@ const IssueDetail = () => {
   }
 
   return (
-    <div>
-      <h2>Issue Details</h2>
-      <p>
-        <strong>Issue Id:</strong> {issue.id}
-      </p>
-      <p>
-        <strong>Description:</strong> {issue.issueDescription}
-      </p>
-      <p>
-        <strong>Room Id:</strong> {issue.roomId}
-      </p>
-      <p>
-        <strong>User Id:</strong> {issue.userId}
-      </p>
-      <p>
-        <strong>Created At:</strong>{" "}
-        {new Date(issue.createdAt).toLocaleString()}
-      </p>
-      <h3>Updates</h3>
-      <ul>
-        {issue.updatesResponses.map((update) => (
-          <li key={update.id}>
-            <p>
-              <strong>Status:</strong> {update.status}
-            </p>
-            <p>
-              <strong>Description:</strong> {update.issueDescription}
-            </p>
-            <p>
-              <strong>Updated At:</strong>{" "}
-              {new Date(update.updatedAt).toLocaleString()}
-            </p>
-          </li>
-        ))}
-      </ul>
+    <div className="container">
+      <h2 className="text-center">Issue Details</h2>
+      <div className="card p-4 mt-4 shadow">
+        <table className="table table-bordered table-hover shadow">
+          <tbody>
+            <tr>
+              <th>Issue Id</th>
+              <td>{issue.id}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>{issue.issueDescription}</td>
+            </tr>
+            <tr>
+              <th>Room Id</th>
+              <td>{issue.roomId}</td>
+            </tr>
+            <tr>
+              <th>User Id</th>
+              <td>{issue.userId}</td>
+            </tr>
+            <tr>
+              <th>Created At</th>
+              <td>
+                {moment(issue.createdAt).format("MMM Do, YYYY, h:mm:ss a")}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h3 className="mt-4">Updates</h3>
+        {issue.updatesResponses.length > 0 ? (
+          <table className="table table-bordered table-hover shadow">
+            <thead>
+              <tr>
+                <th scope="col">Update ID</th>
+                <th scope="col">Status</th>
+                <th scope="col">Description</th>
+                <th scope="col">Updated At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {issue.updatesResponses.map((update) => (
+                <tr key={update.id}>
+                  <td>{update.id}</td>
+                  <td>{update.status}</td>
+                  <td>{update.issueDescription}</td>
+                  <td>
+                    {moment(update.updatedAt).format("MMM Do, YYYY, h:mm:ss a")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No updates available for this issue.</p>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
-// IssueList.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMaintenanceIssuesByUserEmail } from "../utils/ApiFunctions";
+import moment from "moment";
 
 const IssueList = () => {
   const [issues, setIssues] = useState([]);
@@ -12,13 +12,12 @@ const IssueList = () => {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const response = await getMaintenanceIssuesByUserEmail(userId);
-
-        // Ensure response.data is an array
+        const response = await getMaintenanceIssuesByUserEmail(userId, token);
+        console.log(response);
         if (Array.isArray(response)) {
           setIssues(response);
         } else {
-          console.error("Unexpected response format:", response.data);
+          console.error("Unexpected response format:", response);
           setError("Failed to fetch issues: Unexpected response format.");
         }
       } catch (error) {
@@ -35,18 +34,43 @@ const IssueList = () => {
   }
 
   return (
-    <div>
-      <h2>My Issues</h2>
-      <ul>
-        {issues.map((issue) => (
-          <li key={issue.id}>
-            <Link to={`/issues/${issue.id}`}>
-              Issue Id: {issue.id}, Description: {issue.issueDescription},
-              Status: {issue.status}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="container">
+      <h2 className="text-center">My Issues</h2>
+      {issues.length > 0 ? (
+        <table className="table table-bordered table-hover shadow">
+          <thead>
+            <tr>
+              <th scope="col">Issue ID</th>
+              <th scope="col">Description</th>
+              <th scope="col">Room ID</th>
+              <th scope="col">Status</th>
+              <th scope="col">Created At</th>
+              <th scope="col">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {issues.map((issue) => (
+              <tr key={issue.id}>
+                <td>{issue.id}</td>
+                <td>{issue.issueDescription}</td>
+                <td>{issue.roomId}</td>
+                <td>{issue.status}</td>
+                <td>{moment(issue.createdAt).format("MMM Do, YYYY")}</td>
+                <td>
+                  <Link
+                    to={`/issues/${issue.id}`}
+                    className="btn btn-primary btn-sm"
+                  >
+                    View Details
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>You have not reported any issues yet.</p>
+      )}
     </div>
   );
 };

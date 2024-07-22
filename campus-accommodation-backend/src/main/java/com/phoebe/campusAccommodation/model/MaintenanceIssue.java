@@ -1,6 +1,7 @@
 package com.phoebe.campusAccommodation.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -45,6 +46,7 @@ public class MaintenanceIssue {
     private List<IssueUpdateInfo> updates = new ArrayList<>();
 
     @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
 
