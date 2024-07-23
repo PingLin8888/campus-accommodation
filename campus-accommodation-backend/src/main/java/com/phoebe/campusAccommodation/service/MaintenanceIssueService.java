@@ -21,8 +21,8 @@ public class MaintenanceIssueService {
     private final IssueUpdateInfoRepository issueUpdateInfoRepository;
 
 
-    public MaintenanceIssue logIssue(Long userId, Long roomId, String description) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found."));
+    public MaintenanceIssue logIssue(String userEmail, Long roomId, String description) {
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User not found."));
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found."));
 
         MaintenanceIssue issue = new MaintenanceIssue(room, user, description);

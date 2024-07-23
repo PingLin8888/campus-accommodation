@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getMaintenanceIssuesByUserEmail } from "../utils/ApiFunctions";
 import moment from "moment";
-import { Row } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 
 const IssueList = () => {
   const [issues, setIssues] = useState([]);
@@ -35,7 +35,16 @@ const IssueList = () => {
 
   return (
     <div className="container">
-      <h2 className="text-center">My Issues</h2>
+      <Row className="mb-3 align-items-center">
+        <Col>
+          <h2>My Issues</h2>
+        </Col>
+        <Col className="text-right">
+          <Link to="/log-issue" className="btn btn-success">
+            Log New Issue
+          </Link>
+        </Col>
+      </Row>
       {issues.length > 0 ? (
         <table className="table table-bordered table-hover shadow">
           <thead>

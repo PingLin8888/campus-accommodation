@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getMaintenanceIssueById } from "../utils/ApiFunctions";
 import moment from "moment";
 
@@ -87,6 +87,11 @@ const IssueDetail = () => {
         ) : (
           <p>No updates available for this issue.</p>
         )}
+        <div className="text-right">
+          <Link to={`/update-issue/${issue.id}`} className="btn btn-primary">
+            Update Issue
+          </Link>
+        </div>
       </div>
     </div>
   );

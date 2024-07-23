@@ -64,8 +64,8 @@ function App() {
             <Route path="/register" element={<Registration />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/logout" element={<LogOut />} />
-            <Route path="/log-issue" element={LogIssue} />
-            <Route path="/update-issue" element={UpdateIssue} />
+            <Route path="/log-issue" element={<LogIssue />} />
+            <Route path="/update-issue" element={<UpdateIssue />} />
           </Routes>
         </Router>
         <Footer />
