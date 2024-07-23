@@ -1,60 +1,61 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { logMaintenanceIssue } from "../utils/ApiFunctions";
 
 const LogIssue = () => {
-  const [userId, setUserId] = useState("");
-  const [roomId, setRoomId] = useState("");
   const [description, setDescription] = useState("");
-  const [response, setResponse] = useState("");
+  const [roomId, setRoomId] = useState("");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const logIssueRequest = { description };
-      const res = await axios.post(
-        `/api/maintenance/log?userId=${userId}&roomId=${roomId}`,
-        logIssueRequest
+      const userEmail = localStorage.getItem("userId");
+      const response = await logMaintenanceIssue(
+        userEmail,
+        roomId,
+        description
       );
-      setResponse(res.data);
+      if (response) {
+        navigate("/issues");
+      }
     } catch (error) {
-      console.error(error);
-      setResponse("Error logging issue");
+      setError("Failed to log issue.");
+      console.error("Error logging issue:", error);
     }
   };
 
   return (
-    <div>
-      <h2>Log Maintenance Issue</h2>
+    <div className="container">
+      <h2 className="text-center">Log New Issue</h2>
+      {error && <p className="text-danger">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>User ID:</label>
+        <div className="form-group">
+          <label htmlFor="roomId">Room ID</label>
           <input
             type="text"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Room ID:</label>
-          <input
-            type="text"
+            id="roomId"
+            className="form-control"
             value={roomId}
             onChange={(e) => setRoomId(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Description:</label>
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
           <textarea
+            id="description"
+            className="form-control"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
-        <button type="submit">Log Issue</button>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
       </form>
-      {response && <p>{response}</p>}
     </div>
   );
 };

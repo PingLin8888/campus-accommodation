@@ -263,17 +263,6 @@ export async function getBookingsByUserId(userId, token) {
   }
 }
 
-export const logMaintenanceIssue = async (userId, roomId, description) => {
-  const response = await axios.post("/api/maintenance/log", null, {
-    params: {
-      userId,
-      roomId,
-      description,
-    },
-  });
-  return response.data;
-};
-
 export const updateMaintenanceIssue = async (issueId, status) => {
   const response = await axios.put("/api/maintenance/update", null, {
     params: {
@@ -322,5 +311,28 @@ export const getMaintenanceIssueById = async (issueId) => {
       error.message
     );
     throw new Error("Failded to fetch maintenance issue by issueId");
+  }
+};
+
+export const logMaintenanceIssue = async (userEmail, roomId, description) => {
+  try {
+    const response = await api.post(
+      "/api/maintenance/log",
+      { description },
+      {
+        headers: getHeader(),
+        params: {
+          userEmail,
+          roomId,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data);
+    } else {
+      throw new Error(`Error logging maintenance issue: ${error.message}`);
+    }
   }
 };
