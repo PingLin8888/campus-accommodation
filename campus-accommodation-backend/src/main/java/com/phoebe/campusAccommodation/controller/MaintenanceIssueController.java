@@ -4,6 +4,7 @@ import com.phoebe.campusAccommodation.exception.InvalidIssueLoggingRequestExcept
 import com.phoebe.campusAccommodation.model.IssueStatus;
 import com.phoebe.campusAccommodation.model.IssueUpdateInfo;
 import com.phoebe.campusAccommodation.model.MaintenanceIssue;
+import com.phoebe.campusAccommodation.model.User;
 import com.phoebe.campusAccommodation.request.LogIssueRequest;
 import com.phoebe.campusAccommodation.request.UpdateIssueRequest;
 import com.phoebe.campusAccommodation.response.IssueResponse;
@@ -28,11 +29,11 @@ public class MaintenanceIssueController {
 
     @PostMapping("/log")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> logIssue(@RequestParam Long userId, @RequestParam Long roomId, @RequestBody LogIssueRequest logIssueRequest) {
+    public ResponseEntity<?> logIssue(@RequestParam String userEmail, @RequestParam Long roomId, @RequestBody LogIssueRequest logIssueRequest) {
         try {
             String description = logIssueRequest.getDescription();
             System.out.println("description is : " + description);
-            MaintenanceIssue issue = maintenanceIssueService.logIssue(userId, roomId, description);
+            MaintenanceIssue issue = maintenanceIssueService.logIssue(userEmail, roomId, description);
             return ResponseEntity.ok(issue);
         } catch (InvalidIssueLoggingRequestException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -98,13 +99,13 @@ public class MaintenanceIssueController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestParam Long userId, @Valid @RequestBody UpdateIssueRequest updateIssueRequest) {
+    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestParam String userEmail, @Valid @RequestBody UpdateIssueRequest updateIssueRequest) {
         IssueStatus issueStatus;
         String updateDescription = updateIssueRequest.getUpdateDescription();
         try {
             String status = updateIssueRequest.getStatus();
             issueStatus = IssueStatus.valueOf(status.toUpperCase());
-            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, userId, issueStatus, updateDescription);
+            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, userEmail, issueStatus, updateDescription);
             IssueResponse response = getIssueResponse(issue);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {

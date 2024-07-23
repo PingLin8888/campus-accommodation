@@ -21,17 +21,17 @@ public class MaintenanceIssueService {
     private final IssueUpdateInfoRepository issueUpdateInfoRepository;
 
 
-    public MaintenanceIssue logIssue(Long userId, Long roomId, String description) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found."));
+    public MaintenanceIssue logIssue(String userEmail, Long roomId, String description) {
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User not found."));
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found."));
 
         MaintenanceIssue issue = new MaintenanceIssue(room, user, description);
         return maintenanceIssueRepository.save(issue);
     }
 
-    public MaintenanceIssue updateIssue(Long issueId,Long userId, IssueStatus issueStatus, String updateDescription) {
+    public MaintenanceIssue updateIssue(Long issueId, String userEmail, IssueStatus issueStatus, String updateDescription) {
         MaintenanceIssue issue = maintenanceIssueRepository.findById(issueId).orElseThrow(() -> new ResourceNotFoundException("Issue not found."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found."));
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User not found."));
         IssueUpdateInfo updateInfo = new IssueUpdateInfo(updateDescription, issueStatus, user);
         issueUpdateInfoRepository.save(updateInfo);
         issue.addUpdate(updateInfo);
@@ -52,6 +52,6 @@ public class MaintenanceIssueService {
     }
 
     public MaintenanceIssue getIssuesByIssueId(Long issueId) {
-        return maintenanceIssueRepository.findById(issueId).orElseThrow(()->new ResourceNotFoundException("Issue not found."));
+        return maintenanceIssueRepository.findById(issueId).orElseThrow(() -> new ResourceNotFoundException("Issue not found."));
     }
 }
