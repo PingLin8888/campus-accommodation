@@ -29,9 +29,9 @@ public class MaintenanceIssueService {
         return maintenanceIssueRepository.save(issue);
     }
 
-    public MaintenanceIssue updateIssue(Long issueId,Long userId, IssueStatus issueStatus, String updateDescription) {
+    public MaintenanceIssue updateIssue(Long issueId, String userEmail, IssueStatus issueStatus, String updateDescription) {
         MaintenanceIssue issue = maintenanceIssueRepository.findById(issueId).orElseThrow(() -> new ResourceNotFoundException("Issue not found."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found."));
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User not found."));
         IssueUpdateInfo updateInfo = new IssueUpdateInfo(updateDescription, issueStatus, user);
         issueUpdateInfoRepository.save(updateInfo);
         issue.addUpdate(updateInfo);
@@ -52,6 +52,6 @@ public class MaintenanceIssueService {
     }
 
     public MaintenanceIssue getIssuesByIssueId(Long issueId) {
-        return maintenanceIssueRepository.findById(issueId).orElseThrow(()->new ResourceNotFoundException("Issue not found."));
+        return maintenanceIssueRepository.findById(issueId).orElseThrow(() -> new ResourceNotFoundException("Issue not found."));
     }
 }

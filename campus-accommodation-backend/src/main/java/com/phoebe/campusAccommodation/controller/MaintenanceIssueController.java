@@ -99,13 +99,13 @@ public class MaintenanceIssueController {
 
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestParam Long userId, @Valid @RequestBody UpdateIssueRequest updateIssueRequest) {
+    public ResponseEntity<?> updateIssue(@RequestParam Long issueId, @RequestParam String userEmail, @Valid @RequestBody UpdateIssueRequest updateIssueRequest) {
         IssueStatus issueStatus;
         String updateDescription = updateIssueRequest.getUpdateDescription();
         try {
             String status = updateIssueRequest.getStatus();
             issueStatus = IssueStatus.valueOf(status.toUpperCase());
-            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, userId, issueStatus, updateDescription);
+            MaintenanceIssue issue = maintenanceIssueService.updateIssue(issueId, userEmail, issueStatus, updateDescription);
             IssueResponse response = getIssueResponse(issue);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {

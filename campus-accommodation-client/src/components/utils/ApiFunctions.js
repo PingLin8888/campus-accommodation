@@ -263,16 +263,6 @@ export async function getBookingsByUserId(userId, token) {
   }
 }
 
-export const updateMaintenanceIssue = async (issueId, status) => {
-  const response = await axios.put("/api/maintenance/update", null, {
-    params: {
-      issueId,
-      status,
-    },
-  });
-  return response.data;
-};
-
 export const getMaintenanceIssuesByRoom = async (roomId) => {
   try {
     const response = await api.get(`/api/maintenance/room/${roomId}`, {
@@ -333,6 +323,33 @@ export const logMaintenanceIssue = async (userEmail, roomId, description) => {
       throw new Error(error.response.data);
     } else {
       throw new Error(`Error logging maintenance issue: ${error.message}`);
+    }
+  }
+};
+
+export const updateMaintenanceIssue = async (
+  issueId,
+  userEmail,
+  updateIssueRequest
+) => {
+  try {
+    const response = await api.put(
+      "/api/maintenance/update",
+      updateIssueRequest,
+      {
+        headers: getHeader(),
+        params: {
+          issueId,
+          userEmail,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data);
+    } else {
+      throw new Error(`Error updating maintenance issue: ${error.message}`);
     }
   }
 };

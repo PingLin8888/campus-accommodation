@@ -1,70 +1,69 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { updateMaintenanceIssue } from "../utils/ApiFunctions";
 
 const UpdateIssue = () => {
-  const [issueId, setIssueId] = useState("");
-  const [userId, setUserId] = useState("");
+  const { issueId } = useParams(); // Ensure issueId is retrieved from the URL parameters
+  const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [updateDescription, setUpdateDescription] = useState("");
-  const [response, setResponse] = useState("");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const updateIssueRequest = { status, updateDescription };
-      const res = await axios.put(
-        `/api/maintenance/update?issueId=${issueId}&userId=${userId}`,
+      const userEmail = localStorage.getItem("userId");
+      console.log("issueId: " + issueId); //undefine
+      const updateIssueRequest = { updateDescription: description, status };
+      const response = await updateMaintenanceIssue(
+        issueId,
+        userEmail,
         updateIssueRequest
       );
-      setResponse(res.data);
+      if (response) {
+        navigate("/issues");
+      }
     } catch (error) {
-      console.error(error);
-      setResponse("Error updating issue");
+      setError("Failed to update issue.");
+      console.error("Error updating issue:", error);
     }
   };
 
   return (
-    <div>
-      <h2>Update Maintenance Issue</h2>
+    <div className="container">
+      <h2 className="text-center">Update Issue</h2>
+      {error && <p className="text-danger">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Issue ID:</label>
-          <input
-            type="text"
-            value={issueId}
-            onChange={(e) => setIssueId(e.target.value)}
+        <div className="form-group">
+          <label htmlFor="description">update description</label>
+          <textarea
+            id="description"
+            className="form-control"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>User ID:</label>
-          <input
-            type="text"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Status:</label>
-          <input
-            type="text"
+        <div className="form-group">
+          <label htmlFor="status">Status</label>
+          <select
+            id="status"
+            className="form-control"
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             required
-          />
+          >
+            <option value="">Select Status</option>
+            <option value="LOGGED">LOGGED</option>
+            <option value="IN_PROGRESS">IN_PROGRESS</option>
+            <option value="RESOLVED">RESOLVED</option>
+            <option value="CLOSED">CLOSED</option>
+          </select>
         </div>
-        <div>
-          <label>Update Description:</label>
-          <textarea
-            value={updateDescription}
-            onChange={(e) => setUpdateDescription(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Update Issue</button>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
       </form>
-      {response && <p>{response}</p>}
     </div>
   );
 };

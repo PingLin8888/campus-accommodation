@@ -65,7 +65,9 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/logout" element={<LogOut />} />
             <Route path="/log-issue" element={<LogIssue />} />
-            <Route path="/update-issue" element={<UpdateIssue />} />
+            {/* <Route path="/update-issue" element={<UpdateIssue />} /> */}
+            {/* if no issueId here, issueId can't be passed in the UpdateIssue.jsx component. */}
+            <Route path="/update-issue/:issueId" element={<UpdateIssue />} />
           </Routes>
         </Router>
         <Footer />
