@@ -1,1 +1,20 @@
-campus-accommodation-client/node_modules/*
+# macOS
+.DS_Store
+
+# IntelliJ IDEA
+.idea/
+
+# Maven build output
+target/
+
+# Frontend build output
+dist/
+build/
+
+# Node dependencies
+node_modules/
+
+# Docker files (if you decide not to commit them)
+# Dockerfile
+# docker-compose.yml
+# nginx.conf

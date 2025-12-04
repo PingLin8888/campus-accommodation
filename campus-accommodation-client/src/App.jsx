@@ -77,8 +77,7 @@ function App() {
           <Footer />
         </main>
       </AuthProvider>
-    </ThemeProvider>
-  );
+    </ThemeProvider>)
 }
 
 export default App;
