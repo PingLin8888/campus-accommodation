@@ -1,7 +1,6 @@
 import React from "react";
-import { Box, Container, Typography, Button, Stack } from "@mui/material";
+import { Box, Container, Typography, Stack } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import { Link } from "react-router-dom";
 
 const MainHeader = () => {
   return (
@@ -60,32 +59,6 @@ const MainHeader = () => {
             perfect room with modern amenities, comfortable living spaces, and a
             vibrant community.
           </Typography>
-          <Stack
-            direction={{ xs: "column", sm: "row" }}
-            alignSelf="center"
-            spacing={1}
-            useFlexGap
-            sx={{ pt: 2, width: { xs: "100%", sm: "auto" } }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              component={Link}
-              to="/browse-all-rooms"
-              sx={{ minWidth: "fit-content" }}
-            >
-              Browse Rooms
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              component={Link}
-              to="/find-booking"
-              sx={{ minWidth: "fit-content" }}
-            >
-              Find Booking
-            </Button>
-          </Stack>
         </Stack>
       </Container>
     </Box>
