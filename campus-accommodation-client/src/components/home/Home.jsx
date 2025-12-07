@@ -1,9 +1,7 @@
 import React from "react";
 import MainHeader from "../layout/MainHeader";
 import HotelService from "../common/HotelService";
-import Parallax from "../common/Parallax";
-import RoomCarousel from "../common/RoomCarousel";
-import RoomSearch from "../common/RoomSearch";
+import MuiFeaturedRooms from "../common/MuiFeaturedRooms";
 import { useLocation } from "react-router-dom";
 import { Box, Container, Alert } from "@mui/material";
 
@@ -21,18 +19,12 @@ const Home = () => {
       )}
       {currentUser && (
         <Container sx={{ pt: 2 }}>
-          <Alert severity="success">
-            You are logged in as {currentUser}
-          </Alert>
+          <Alert severity="success">You are logged in as {currentUser}</Alert>
         </Container>
       )}
       <MainHeader />
-      <Container>
-        <RoomSearch />
-        <RoomCarousel />
-        <HotelService />
-        <Parallax />
-      </Container>
+      <MuiFeaturedRooms />
+      <HotelService />
     </Box>
   );
 };

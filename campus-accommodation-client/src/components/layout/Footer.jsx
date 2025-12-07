@@ -1,20 +1,28 @@
 import React from "react";
-import { Row, Container, Col } from "react-bootstrap";
+import { Box, Container, Typography } from "@mui/material";
 
 const Footer = () => {
   let today = new Date();
   return (
-    <footer className="by-dark text-light py-3 footer mt-lg-5">
-      <Container>
-        <Row>
-          <Col xs={12} md={12} className="text-center">
-            <p className="mb-0">
-              &copy;{today.getFullYear()} campus accommodation
-            </p>
-          </Col>
-        </Row>
+    <Box
+      component="footer"
+      sx={{
+        py: 3,
+        px: 2,
+        mt: "auto",
+        backgroundColor: (theme) =>
+          theme.palette.mode === "light"
+            ? theme.palette.grey[200]
+            : theme.palette.grey[800],
+      }}
+    >
+      <Container maxWidth="lg">
+        <Typography variant="body2" color="text.secondary" align="center">
+          &copy; {today.getFullYear()} Campus Accommodation. All rights
+          reserved.
+        </Typography>
       </Container>
-    </footer>
+    </Box>
   );
 };
 

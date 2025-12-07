@@ -53,10 +53,10 @@ const Room = () => {
   return (
     <Container sx={{ mt: 4 }}>
       <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
-        <Grid item md={6}>
+        <Grid size={{ md: 6 }}>
           <RoomFilter data={data} setFilteredData={setFilteredData} />
         </Grid>
-        <Grid item md={6}>
+        <Grid size={{ md: 6 }}>
           <Box display="flex" justifyContent="flex-end">
             <RoomPaginator
               currentPage={currentPage}
@@ -67,10 +67,12 @@ const Room = () => {
         </Grid>
       </Grid>
 
-      <Grid container>{renderRooms()}</Grid>
+      <Grid container spacing={3}>
+        {renderRooms()}
+      </Grid>
 
       <Grid container sx={{ mt: 2 }}>
-        <Grid item md={12}>
+        <Grid size={{ md: 12 }}>
           <Box display="flex" justifyContent="center">
             <RoomPaginator
               currentPage={currentPage}

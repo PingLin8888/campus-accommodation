@@ -17,7 +17,8 @@ const services = [
   {
     icon: <WifiIcon sx={{ fontSize: 40 }} />,
     title: "High-Speed WiFi",
-    description: "Stay connected with fast and reliable internet access throughout your stay.",
+    description:
+      "Stay connected with fast and reliable internet access throughout your stay.",
   },
   {
     icon: <ThermostatIcon sx={{ fontSize: 40 }} />,
@@ -27,12 +28,14 @@ const services = [
   {
     icon: <LocalLaundryServiceIcon sx={{ fontSize: 40 }} />,
     title: "Laundry Service",
-    description: "Keep your clothes clean and fresh with our convenient laundry facilities.",
+    description:
+      "Keep your clothes clean and fresh with our convenient laundry facilities.",
   },
   {
     icon: <AccessTimeIcon sx={{ fontSize: 40 }} />,
     title: "24-Hour Front Desk",
-    description: "Our friendly staff is available around the clock to assist you.",
+    description:
+      "Our friendly staff is available around the clock to assist you.",
   },
 ];
 
@@ -40,7 +43,11 @@ const HotelService = () => {
   return (
     <Box sx={{ py: { xs: 8, sm: 10 } }}>
       <Container>
-        <Stack spacing={2} useFlexGap sx={{ width: { xs: "100%", sm: "70%" }, mx: "auto", mb: 6 }}>
+        <Stack
+          spacing={2}
+          useFlexGap
+          sx={{ width: { xs: "100%", sm: "70%" }, mx: "auto", mb: 6 }}
+        >
           <Typography
             component="h2"
             variant="h4"
@@ -59,12 +66,13 @@ const HotelService = () => {
               textAlign: "center",
             }}
           >
-            We provide exceptional amenities to make your campus accommodation experience comfortable and convenient
+            We provide exceptional amenities to make your campus accommodation
+            experience comfortable and convenient
           </Typography>
         </Stack>
         <Grid container spacing={3}>
           {services.map((service, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid size={{ xs: 6, sm: 4, md: 3 }} key={index}>
               <Card
                 sx={{
                   height: "100%",
