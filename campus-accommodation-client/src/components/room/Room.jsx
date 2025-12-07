@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getAllRooms } from "../utils/ApiFunctions";
-import RoomCard from "./RoomCard";
-import { Row, Container, Col } from "react-bootstrap";
+import MuiRoomCard from "./MuiRoomCard";
+import { Container, Grid, Box } from "@mui/material";
 import RoomFilter from "../common/RoomFilter";
 import RoomPaginator from "../common/RoomPaginator";
 
@@ -45,43 +45,42 @@ const Room = () => {
   const renderRooms = () => {
     const startIndex = (currentPage - 1) * roomsPerPage;
     const endIndex = startIndex + roomsPerPage;
-    return (
-      filteredData
-        .slice(startIndex, endIndex)
-        /* The .map() function is being used to transform each item in the filteredData array into a corresponding JSX element. In this case, it's mapping each room object in the filteredData array to a RoomCard component. */
-        .map((room) => <RoomCard key={room.id} room={room} />)
-    );
+    return filteredData
+      .slice(startIndex, endIndex)
+      .map((room) => <MuiRoomCard key={room.id} room={room} />);
   };
 
   return (
-    <div>
-      <Container>
-        <Row>
-          <Col md={6} className="mb-3 mb-md-0">
-            <RoomFilter data={data} setFilteredData={setFilteredData} />
-          </Col>
-          <Col md={6} className="d-flex align-items-center justify-content-end">
+    <Container sx={{ mt: 4 }}>
+      <Grid container spacing={2} alignItems="center" sx={{ mb: 2 }}>
+        <Grid item md={6}>
+          <RoomFilter data={data} setFilteredData={setFilteredData} />
+        </Grid>
+        <Grid item md={6}>
+          <Box display="flex" justifyContent="flex-end">
             <RoomPaginator
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}
             />
-          </Col>
-        </Row>
+          </Box>
+        </Grid>
+      </Grid>
 
-        <Row>{renderRooms()}</Row>
+      <Grid container>{renderRooms()}</Grid>
 
-        <Row>
-          <Col md={6} className="d-flex align-items-center justify-content-end">
+      <Grid container sx={{ mt: 2 }}>
+        <Grid item md={12}>
+          <Box display="flex" justifyContent="center">
             <RoomPaginator
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}
             />
-          </Col>
-        </Row>
-      </Container>
-    </div>
+          </Box>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

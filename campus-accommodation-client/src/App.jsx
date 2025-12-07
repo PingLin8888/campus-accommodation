@@ -26,15 +26,15 @@ import IssueList from "./components/Maintenance/IssueList";
 import IssueDetail from "./components/Maintenance/IssueDetail";
 import LogIssue from "./components/Maintenance/LogIssue";
 import UpdateIssue from "./components/Maintenance/UpdateIssue";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-const theme = createTheme();
+import AppTheme from "./components/MUI/AppTheme.jsx";
+import CssBaseline from "@mui/material/CssBaseline";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <ThemeProvider theme={theme}>
+    <AppTheme>
+      <CssBaseline />
       <AuthProvider>
         <main>
           <Router>
@@ -77,7 +77,8 @@ function App() {
           <Footer />
         </main>
       </AuthProvider>
-    </ThemeProvider>)
+    </AppTheme>
+  );
 }
 
 export default App;

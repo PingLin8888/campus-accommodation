@@ -5,6 +5,7 @@ import Parallax from "../common/Parallax";
 import RoomCarousel from "../common/RoomCarousel";
 import RoomSearch from "../common/RoomSearch";
 import { useLocation } from "react-router-dom";
+import { Box, Container, Alert } from "@mui/material";
 
 const Home = () => {
   const location = useLocation();
@@ -12,20 +13,27 @@ const Home = () => {
   const currentUser = localStorage.getItem("userId");
 
   return (
-    <section>
-      {message && <p className="text-warning px-5">{message}</p>}
+    <Box>
+      {message && (
+        <Container sx={{ pt: 2 }}>
+          <Alert severity="warning">{message}</Alert>
+        </Container>
+      )}
       {currentUser && (
-        <h6 className="text-success">You are logged-in as {currentUser}</h6>
+        <Container sx={{ pt: 2 }}>
+          <Alert severity="success">
+            You are logged in as {currentUser}
+          </Alert>
+        </Container>
       )}
       <MainHeader />
-      <div className="container">
+      <Container>
         <RoomSearch />
         <RoomCarousel />
-        {/* <Parallax /> */}
         <HotelService />
         <Parallax />
-      </div>
-    </section>
+      </Container>
+    </Box>
   );
 };
 
