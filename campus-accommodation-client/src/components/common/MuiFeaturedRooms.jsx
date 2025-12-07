@@ -73,6 +73,16 @@ const MuiFeaturedRooms = () => {
         display: "flex",
         flexDirection: "column",
         position: "relative",
+        border: "1px solid",
+        borderColor: "divider",
+        transition: "transform 0.2s, box-shadow 0.2s",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: (theme) =>
+            theme.palette.mode === "light"
+              ? "0 12px 24px rgba(0,0,0,0.1)"
+              : "0 12px 24px rgba(0,0,0,0.3)",
+        },
       }}
     >
       {label && (
