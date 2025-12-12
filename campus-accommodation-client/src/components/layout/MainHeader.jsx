@@ -5,8 +5,16 @@ import { alpha } from "@mui/material/styles";
 const MainHeader = () => {
   return (
     <Box
+      component="section"
       sx={{
         width: "100%",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: (theme) =>
+          theme.palette.mode === "light"
+            ? "#FFF"
+            : theme.palette.background.default,
         backgroundImage: (theme) =>
           theme.palette.mode === "light"
             ? "linear-gradient(180deg, #CEE5FD, #FFF)"

@@ -41,7 +41,17 @@ const services = [
 
 const HotelService = () => {
   return (
-    <Box sx={{ py: { xs: 8, sm: 10 } }}>
+    <Box 
+      component="section"
+      sx={{ 
+        pt: { xs: 8, sm: 10, md: 12 },
+        pb: { xs: 8, sm: 10 },
+        backgroundColor: (theme) => 
+          theme.palette.mode === "light" 
+            ? theme.palette.background.default 
+            : theme.palette.background.paper,
+      }}
+    >
       <Container>
         <Stack
           spacing={2}

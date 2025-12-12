@@ -91,7 +91,17 @@ const Home = () => {
       </Snackbar>
 
       <MainHeader />
-      <MuiFeaturedRooms />
+      <Box
+        component="section"
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.background.default
+              : theme.palette.background.paper,
+        }}
+      >
+        <MuiFeaturedRooms />
+      </Box>
       <HotelService />
     </Box>
   );

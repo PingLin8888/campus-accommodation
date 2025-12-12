@@ -52,7 +52,19 @@ const MuiFeaturedRooms = () => {
 
   if (isLoading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+      <Box 
+        component="section"
+        sx={{ 
+          display: "flex", 
+          justifyContent: "center", 
+          pt: { xs: 8, sm: 10, md: 12 },
+          pb: { xs: 6, sm: 8 },
+          backgroundColor: (theme) => 
+            theme.palette.mode === "light" 
+              ? theme.palette.background.default 
+              : theme.palette.background.paper,
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -147,52 +159,76 @@ const MuiFeaturedRooms = () => {
   );
 
   return (
-    <Box sx={{ py: { xs: 6, sm: 8 } }}>
+    <>
       {/* Featured Rooms Section */}
-      <Container maxWidth="md">
-        <Typography
-          variant="h4"
-          component="h2"
-          align="center"
-          gutterBottom
-          sx={{ fontWeight: 600, mb: 4 }}
-        >
-          Featured Rooms
-        </Typography>
-        <Grid container spacing={3} sx={{ mb: 6, justifyContent: "center" }}>
-          {cheapestRoom && (
-            <Grid size={{ xs: 12, sm: 6, md: 5 }}>
-              <RoomCard room={cheapestRoom} label="Best Value" />
-            </Grid>
-          )}
-          {mostDemandRoom && (
-            <Grid size={{ xs: 12, sm: 6, md: 5 }}>
-              <RoomCard room={mostDemandRoom} label="Most Popular" />
-            </Grid>
-          )}
-        </Grid>
-      </Container>
+      <Box 
+        component="section"
+        sx={{ 
+          pt: { xs: 8, sm: 10, md: 12 },
+          pb: { xs: 6, sm: 8 },
+          backgroundColor: (theme) => 
+            theme.palette.mode === "light" 
+              ? theme.palette.background.default 
+              : theme.palette.background.paper,
+        }}
+      >
+        <Container maxWidth="md">
+          <Typography
+            variant="h4"
+            component="h2"
+            align="center"
+            gutterBottom
+            sx={{ fontWeight: 600, mb: 4 }}
+          >
+            Featured Rooms
+          </Typography>
+          <Grid container spacing={3} sx={{ mb: 6, justifyContent: "center" }}>
+            {cheapestRoom && (
+              <Grid size={{ xs: 12, sm: 6, md: 5 }}>
+                <RoomCard room={cheapestRoom} label="Best Value" />
+              </Grid>
+            )}
+            {mostDemandRoom && (
+              <Grid size={{ xs: 12, sm: 6, md: 5 }}>
+                <RoomCard room={mostDemandRoom} label="Most Popular" />
+              </Grid>
+            )}
+          </Grid>
+        </Container>
+      </Box>
 
       {/* Available Rooms Preview */}
-      <Container>
-        <Typography
-          variant="h5"
-          component="h3"
-          align="center"
-          gutterBottom
-          sx={{ fontWeight: 600, mb: 3 }}
-        >
-          Available Rooms
-        </Typography>
-        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
-          {rooms.map((room) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={room.id}>
-              <RoomCard room={room} />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </Box>
+      <Box
+        component="section"
+        sx={{
+          pt: { xs: 8, sm: 10, md: 12 },
+          pb: { xs: 6, sm: 8 },
+          backgroundColor: (theme) => 
+            theme.palette.mode === "light" 
+              ? theme.palette.background.default 
+              : theme.palette.background.paper,
+        }}
+      >
+        <Container>
+          <Typography
+            variant="h5"
+            component="h3"
+            align="center"
+            gutterBottom
+            sx={{ fontWeight: 600, mb: 3 }}
+          >
+            Available Rooms
+          </Typography>
+          <Grid container spacing={3} sx={{ justifyContent: "center" }}>
+            {rooms.map((room) => (
+              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={room.id}>
+                <RoomCard room={room} />
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+    </>
   );
 };
 
