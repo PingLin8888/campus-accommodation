@@ -12,6 +12,10 @@ import {
 } from "@mui/material";
 
 const formatRoomType = (roomType) => {
+  // Handle undefined, null, or empty string
+  if (!roomType || typeof roomType !== "string" || roomType.trim() === "") {
+    return "Room";
+  }
   // Capitalize first letter, lowercase the rest
   const formatted = roomType.charAt(0).toUpperCase() + roomType.slice(1).toLowerCase();
   // Add "Room" if not already present
@@ -57,7 +61,7 @@ const MuiRoomCard = ({ room }) => {
               color="primary"
               sx={{ fontWeight: 600, textAlign: "left" }}
             >
-              €{room.roomPrice}
+              €{room.roomPrice || 0}
             </Typography>
             <Typography
               variant="body2"

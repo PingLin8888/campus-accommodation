@@ -25,7 +25,7 @@ const Login = ({ setIsLoggedIn }) => {
       const token = success.token;
       const role = success.userRole;
       auth.handleLogin(token);
-      navigate("/");
+      navigate("/", { state: { justLoggedIn: true } });
       // make sure that the LogIn component correctly handles the login process and updates local storage appropriately.
       // setIsLoggedIn(true);
       //   window.location.reload();

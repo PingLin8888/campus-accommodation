@@ -26,14 +26,15 @@ const StyledAlert = styled(Alert)(({ theme, severity }) => ({
 const Home = () => {
   const location = useLocation();
   const message = location.state && location.state.message;
+  const justLoggedIn = location.state && location.state.justLoggedIn;
   const currentUser = localStorage.getItem("userId");
   
   const [showLoginNotification, setShowLoginNotification] = useState(false);
   const [showMessageNotification, setShowMessageNotification] = useState(false);
 
   useEffect(() => {
-    // Show login notification when user is logged in
-    if (currentUser) {
+    // Show login notification only when user just logged in (not on every page visit)
+    if (justLoggedIn && currentUser) {
       setShowLoginNotification(true);
       // Auto-dismiss after 4 seconds
       const timer = setTimeout(() => {
@@ -41,7 +42,7 @@ const Home = () => {
       }, 4000);
       return () => clearTimeout(timer);
     }
-  }, [currentUser]);
+  }, [justLoggedIn, currentUser]);
 
   useEffect(() => {
     // Show message notification if there's a message from navigation

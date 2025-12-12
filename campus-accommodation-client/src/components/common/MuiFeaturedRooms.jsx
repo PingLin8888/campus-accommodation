@@ -67,6 +67,10 @@ const MuiFeaturedRooms = () => {
   }
 
   const formatRoomType = (roomType) => {
+    // Handle undefined, null, or empty string
+    if (!roomType || typeof roomType !== "string" || roomType.trim() === "") {
+      return "Room";
+    }
     // Capitalize first letter, lowercase the rest
     const formatted = roomType.charAt(0).toUpperCase() + roomType.slice(1).toLowerCase();
     // Add "Room" if not already present
@@ -122,7 +126,7 @@ const MuiFeaturedRooms = () => {
         </Typography>
         <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "flex-start" }}>
           <Typography variant="h4" component="div" color="primary" sx={{ fontWeight: 600, textAlign: "left" }}>
-            €{room.roomPrice}
+            €{room.roomPrice || 0}
           </Typography>
           <Typography variant="body2" component="span" color="text.secondary" sx={{ ml: 0.5 }}>
             / night
