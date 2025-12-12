@@ -1,7 +1,17 @@
-import React, { useContext, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../utils/ApiFunctions";
 import { useAuth } from "./AuthProvider";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  Stack,
+  Link,
+} from "@mui/material";
 
 const Login = ({ setIsLoggedIn }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -26,9 +36,6 @@ const Login = ({ setIsLoggedIn }) => {
       const role = success.userRole;
       auth.handleLogin(token);
       navigate("/", { state: { justLoggedIn: true } });
-      // make sure that the LogIn component correctly handles the login process and updates local storage appropriately.
-      // setIsLoggedIn(true);
-      //   window.location.reload();
     } else {
       setErrorMessage("Invalid username or password. Please try again.");
     }
@@ -38,54 +45,72 @@ const Login = ({ setIsLoggedIn }) => {
   };
 
   return (
-    <section className="container col-6 mt-5 mb-5">
-      {errorMessage && <p className="alert alert-danger">{errorMessage}</p>}
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="row mb-3">
-          <label className="col-sm-2 col-form-label" htmlFor="email">
-            Email
-          </label>
-          <div>
-            <input
-              type="email"
+    <Container maxWidth="sm" sx={{ mt: 8, mb: 8 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
+          Login
+        </Typography>
+
+        {errorMessage && (
+          <Alert severity="error" sx={{ width: "100%", mb: 3 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+          <Stack spacing={3}>
+            <TextField
+              fullWidth
               id="email"
               name="email"
+              label="Email"
+              type="email"
               value={login.email}
               onChange={handleInputChange}
+              required
+              autoComplete="email"
             />
-          </div>
-        </div>
 
-        <div className="row mb-3">
-          <label className="col-sm-2 col-form-label" htmlFor="password">
-            Password
-          </label>
-          <div>
-            <input
-              type="password"
+            <TextField
+              fullWidth
               id="password"
               name="password"
+              label="Password"
+              type="password"
               value={login.password}
               onChange={handleInputChange}
+              required
+              autoComplete="current-password"
             />
-          </div>
-        </div>
 
-        <div className="mb-3">
-          <button
-            type="submit"
-            className="btn btn-hotel"
-            style={{ marginRight: "10px" }}
-          >
-            Login
-          </button>
-          <span style={{ marginRight: "10px" }}>
-            Don't have an account yet?<Link to={"/register"}>Register</Link>
-          </span>
-        </div>
-      </form>
-    </section>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              size="large"
+              sx={{ mt: 2 }}
+            >
+              Login
+            </Button>
+
+            <Box sx={{ textAlign: "center", mt: 2 }}>
+              <Typography variant="body2" component="span">
+                Don't have an account yet?{" "}
+                <Link component={RouterLink} to="/register">
+                  Register
+                </Link>
+              </Typography>
+            </Box>
+          </Stack>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

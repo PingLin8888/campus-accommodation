@@ -1,9 +1,19 @@
 import React, { useState } from "react";
 import { userRegistration } from "../utils/ApiFunctions";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  Stack,
+  Link,
+} from "@mui/material";
 
 const Registration = () => {
-  const [registration, setRegistratioin] = useState({
+  const [registration, setRegistration] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -14,7 +24,7 @@ const Registration = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleInputChange = (e) => {
-    setRegistratioin({ ...registration, [e.target.name]: e.target.value });
+    setRegistration({ ...registration, [e.target.name]: e.target.value });
   };
 
   const handleRegistration = async (e) => {
@@ -23,7 +33,7 @@ const Registration = () => {
       const result = await userRegistration(registration);
       setSuccessMessage(result);
       setErrorMessage("");
-      setRegistratioin({
+      setRegistration({
         firstName: "",
         lastName: "",
         email: "",
@@ -40,85 +50,102 @@ const Registration = () => {
   };
 
   return (
-    <section className="container col-6 mt-5 mb-5">
-      {errorMessage && <p className="alert laert-danger">{errorMessage}</p>}
-      {successMessage && <p className="alert laert-danger">{successMessage}</p>}
-      <h2>Register</h2>
-      <form onSubmit={handleRegistration}>
-        <div className="row mb-3">
-          <label className="col-sm-2 col-form-label" htmlFor="firstName">
-            FirstName
-          </label>
-          <div>
-            <input
-              type="firstName"
+    <Container maxWidth="sm" sx={{ mt: 8, mb: 8 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
+          Register
+        </Typography>
+
+        {errorMessage && (
+          <Alert severity="error" sx={{ width: "100%", mb: 3 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
+        {successMessage && (
+          <Alert severity="success" sx={{ width: "100%", mb: 3 }}>
+            {successMessage}
+          </Alert>
+        )}
+
+        <Box component="form" onSubmit={handleRegistration} sx={{ width: "100%" }}>
+          <Stack spacing={3}>
+            <TextField
+              fullWidth
               id="firstName"
               name="firstName"
+              label="First Name"
+              type="text"
               value={registration.firstName}
               onChange={handleInputChange}
+              required
+              autoComplete="given-name"
             />
-          </div>
-        </div>
 
-        <div className="row mb-3">
-          <label className="col-sm-2 col-form-label" htmlFor="lastName">
-            LastName
-          </label>
-          <div>
-            <input
-              type="lastName"
+            <TextField
+              fullWidth
               id="lastName"
               name="lastName"
+              label="Last Name"
+              type="text"
               value={registration.lastName}
               onChange={handleInputChange}
+              required
+              autoComplete="family-name"
             />
-          </div>
-        </div>
 
-        <div className="row mb-3">
-          <label className="col-sm-2 col-form-label" htmlFor="email">
-            Email
-          </label>
-          <div>
-            <input
-              type="email"
+            <TextField
+              fullWidth
               id="email"
               name="email"
+              label="Email"
+              type="email"
               value={registration.email}
               onChange={handleInputChange}
+              required
+              autoComplete="email"
             />
-          </div>
-        </div>
 
-        <div className="row mb-3">
-          <label className="col-sm-2 col-form-label" htmlFor="password">
-            Password
-          </label>
-          <div>
-            <input
-              type="password"
+            <TextField
+              fullWidth
               id="password"
               name="password"
+              label="Password"
+              type="password"
               value={registration.password}
               onChange={handleInputChange}
+              required
+              autoComplete="new-password"
             />
-          </div>
-        </div>
 
-        <div className="mb-3">
-          <button
-            type="submit"
-            className="btn btn-hotel"
-            style={{ marginRight: "10px" }}
-          >
-            Register
-          </button>
-          <span style={{ marginRight: "10px" }}>
-            Already have an account?<Link to={"/login"}>Login</Link>
-          </span>
-        </div>
-      </form>
-    </section>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              size="large"
+              sx={{ mt: 2 }}
+            >
+              Register
+            </Button>
+
+            <Box sx={{ textAlign: "center", mt: 2 }}>
+              <Typography variant="body2" component="span">
+                Already have an account?{" "}
+                <Link component={RouterLink} to="/login">
+                  Login
+                </Link>
+              </Typography>
+            </Box>
+          </Stack>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

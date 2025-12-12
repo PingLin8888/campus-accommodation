@@ -1,7 +1,19 @@
 import React, { useState } from "react";
 import { addRoom } from "../utils/ApiFunctions";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import RoomTypeSelector from "../common/RoomTypeSelector";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  Stack,
+  Link,
+  Card,
+  CardMedia,
+} from "@mui/material";
 
 function AddRoom() {
   const [newRoom, setNewRoom] = useState({
@@ -14,7 +26,6 @@ function AddRoom() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  /* e represents the event object passed to the event handler when an event (such as a change event) occurs on an input element. */
   const handleRoomInputChange = (e) => {
     const name = e.target.name;
     let value = e.target.value;
@@ -59,82 +70,102 @@ function AddRoom() {
     }, 3000);
   };
 
-  //create UI
   return (
-    <>
-      <section className="container, mt-5 mb-5">
-        <div className="row justify-content-center">
-          <div className="clo-md-8 col-lg-6">
-            <h2 className="mt-5 mb-2">Add a new room</h2>
-            {successMessage && (
-              <div className="alert alert-success fade show">
-                {successMessage}
-              </div>
-            )}
-            {errorMessage && (
-              <div className="alert alert-danger fade show">{errorMessage}</div>
-            )}
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="roomType" className="form-label">
-                  Room Type
-                </label>
-                <div>
-                  <RoomTypeSelector
-                    handleRoomInputChange={handleRoomInputChange}
-                    newRoom={newRoom}
-                  />
-                </div>
-              </div>
+    <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
+          Add a New Room
+        </Typography>
 
-              <div className="mb-3">
-                <label htmlFor="roomPrice" className="form-label">
-                  Room Price
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  required
-                  id="roomPrice"
-                  name="roomPrice"
-                  value={newRoom.roomPrice}
-                  onChange={handleRoomInputChange}
-                />
-              </div>
+        {successMessage && (
+          <Alert severity="success" sx={{ width: "100%", mb: 3 }}>
+            {successMessage}
+          </Alert>
+        )}
 
-              <div className="mb-3">
-                <label htmlFor="photo" className="form-label">
-                  Room Photo
-                </label>
+        {errorMessage && (
+          <Alert severity="error" sx={{ width: "100%", mb: 3 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+          <Stack spacing={3}>
+            <Box>
+              <RoomTypeSelector
+                handleRoomInputChange={handleRoomInputChange}
+                newRoom={newRoom}
+              />
+            </Box>
+
+            <TextField
+              fullWidth
+              id="roomPrice"
+              name="roomPrice"
+              label="Room Price"
+              type="number"
+              value={newRoom.roomPrice}
+              onChange={handleRoomInputChange}
+              required
+              inputProps={{ min: 0, step: 0.01 }}
+            />
+
+            <Box>
+              <Button
+                variant="outlined"
+                component="label"
+                fullWidth
+                sx={{ mb: 2 }}
+              >
+                Upload Room Photo
                 <input
                   type="file"
+                  hidden
                   id="photo"
                   name="photo"
-                  className="form-control"
+                  accept="image/*"
                   onChange={handleImageChange}
                 />
-                {imagePreview && (
-                  <img
-                    src={imagePreview}
+              </Button>
+              {imagePreview && (
+                <Card sx={{ mt: 2 }}>
+                  <CardMedia
+                    component="img"
+                    image={imagePreview}
                     alt="Preview Room Photo"
-                    style={{ maxWidth: "400px", maxHeight: "400px" }}
-                    className="mb-3"
+                    sx={{
+                      maxWidth: "100%",
+                      maxHeight: 400,
+                      objectFit: "contain",
+                    }}
                   />
-                )}
-              </div>
-              <div className="d-grid d-md-flex mt-2">
-                <Link to={"/existing-rooms"} className="btn btn-outline-info">
-                  Back to existing rooms
-                </Link>
-                <button type="submit" className="btn btn-outline-primary ml-5">
-                  Save Room
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-    </>
+                </Card>
+              )}
+            </Box>
+
+            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+              <Button
+                component={RouterLink}
+                to="/existing-rooms"
+                variant="outlined"
+                sx={{ flex: 1 }}
+              >
+                Back to Existing Rooms
+              </Button>
+              <Button type="submit" variant="contained" sx={{ flex: 1 }}>
+                Save Room
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 
