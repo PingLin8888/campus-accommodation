@@ -10,7 +10,28 @@ import {
   FaWifi,
   FaWineGlassAlt,
 } from "react-icons/fa";
-import RoomCarousel from "../common/RoomCarousel";
+import {
+  Container,
+  Box,
+  Typography,
+  Card,
+  CardMedia,
+  CardContent,
+  Alert,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Stack,
+} from "@mui/material";
+import WifiIcon from "@mui/icons-material/Wifi";
+import TvIcon from "@mui/icons-material/Tv";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import LocalBarIcon from "@mui/icons-material/LocalBar";
+import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
 
 const Checkout = () => {
   const [error, setError] = useState("");
@@ -22,20 +43,6 @@ const Checkout = () => {
   });
   const { roomId } = useParams();
 
-  //   useEffect(() => {
-  //     setTimeout(() => {
-  //       getRoomById(roomId)
-  //         .then((response) => {
-  //           setRoomInfo(response);
-  //           setIsLoading(false);
-  //         })
-  //         .catch((error) => {
-  //           setError(error);
-  //           setIsLoading(false);
-  //         });
-  //     }, 2000);
-  //   }, [roomId]);
-
   useEffect(() => {
     let isMounted = true;
 
@@ -43,7 +50,6 @@ const Checkout = () => {
       getRoomById(roomId)
         .then((response) => {
           if (isMounted) {
-            // console.log("Response:", response); // Log the response
             setRoomInfo(response);
             setIsLoading(false);
             setError(null);
@@ -51,91 +57,106 @@ const Checkout = () => {
         })
         .catch((error) => {
           if (isMounted) {
-            setError(error);
+            setError(error.message || "Failed to load room information");
             setIsLoading(false);
           }
         });
-    }, 2000);
+    }, 1000);
 
     return () => {
       isMounted = false;
     };
   }, [roomId]);
 
-  return (
-    <div>
-      <section className="container">
-        <div className="row flex-column flex-md-row align-items-center">
-          <div className="col-md-8 mt-5 mb-5">
-            {isLoading ? (
-              <p>Loading room information</p>
-            ) : error ? (
-              <p>{error}</p>
-            ) : (
-              <div className="room-info">
-                <img
-                  src={`data:image/png;base64,${roomInfo.photo}`}
-                  alt="Room Photo"
-                  style={{ width: "100%", height: "200px" }}
-                />
-                <table>
-                  <tbody>
-                    <tr>
-                      <th>Room Type :</th>
-                      <th>{roomInfo.roomType}</th>
-                    </tr>
-                    <tr>
-                      <th>Room Price :</th>
-                      <th>{roomInfo.roomPrice}</th>
-                    </tr>
+  const roomServices = [
+    { icon: <WifiIcon />, text: "WiFi" },
+    { icon: <TvIcon />, text: "Netflix Premium" },
+    { icon: <RestaurantIcon />, text: "Breakfast" },
+    { icon: <LocalBarIcon />, text: "Mini bar refreshment" },
+    { icon: <LocalParkingIcon />, text: "Parking Space" },
+    { icon: <LocalLaundryServiceIcon />, text: "Laundry" },
+  ];
 
-                    <tr>
-                      <th>Room Service:</th>
-                      <td>
-                        <ul className="list-unstyled">
-                          <li>
-                            <FaWifi />
-                            WiFi
-                          </li>
-                          <li>
-                            <FaTv />
-                            Netflix Premium
-                          </li>
-                          <li>
-                            <FaUtensils />
-                            Breakfast
-                          </li>
-                          <li>
-                            <FaWineGlassAlt />
-                            Mini bar refreshment
-                          </li>
-                          <li>
-                            <FaParking />
-                            Parking Space
-                          </li>
-                          <li>
-                            <FaTshirt />
-                            Laundry
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="row flex-column flex-md-row align-items-center">
-          <div className="col-md-8">
-            <BookingForm />
-          </div>
-        </div>
-      </section>
-      <div className="container">
-        <RoomCarousel />
-      </div>
-    </div>
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
+  }
+
+  return (
+    <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
+      <Card sx={{ mb: 4 }}>
+        <CardMedia
+          component="img"
+          image={`data:image/png;base64,${roomInfo.photo}`}
+          alt="Room Photo"
+          sx={{
+            height: { xs: 250, md: 400 },
+            objectFit: "cover",
+          }}
+        />
+        <CardContent>
+          <Stack spacing={3}>
+            <Box>
+              <Typography
+                variant="h5"
+                component="h2"
+                gutterBottom
+                sx={{ fontWeight: 600 }}
+              >
+                {roomInfo.roomType
+                  ? `${roomInfo.roomType
+                      .charAt(0)
+                      .toUpperCase()}${roomInfo.roomType
+                      .slice(1)
+                      .toLowerCase()} Room`
+                  : "Room"}
+              </Typography>
+              <Typography variant="h4" color="primary" sx={{ fontWeight: 600 }}>
+                €{roomInfo.roomPrice} / night
+              </Typography>
+            </Box>
+
+            <Divider />
+
+            <Box>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                Room Services
+              </Typography>
+              <List>
+                {roomServices.map((service, index) => (
+                  <ListItem key={index} disablePadding sx={{ py: 0.5 }}>
+                    <ListItemIcon sx={{ minWidth: 40, color: "primary.main" }}>
+                      {service.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={service.text} />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <BookingForm />
+    </Container>
   );
 };
 
