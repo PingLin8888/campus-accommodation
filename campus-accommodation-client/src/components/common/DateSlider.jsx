@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { Box, Typography, Button, Stack } from "@mui/material";
 
 const DateSlider = ({ onDateChange, onFilterChange }) => {
   const [dateRange, setDateRange] = useState({
@@ -27,17 +28,20 @@ const DateSlider = ({ onDateChange, onFilterChange }) => {
   };
 
   return (
-    <>
-      <h5>Filter bookings by date</h5>
-      <DateRangePicker
-        ranges={[dateRange]}
-        onChange={handleSelect}
-        className="mb-4"
-      />
-      <button className="btn btn-secondary" onClick={handleClearFilter}>
-        Clear Filter
-      </button>
-    </>
+    <Box sx={{ mb: 4 }}>
+      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+        Filter Bookings by Date
+      </Typography>
+      <Stack spacing={2} alignItems="flex-start">
+        <DateRangePicker
+          ranges={[dateRange]}
+          onChange={handleSelect}
+        />
+        <Button variant="outlined" onClick={handleClearFilter}>
+          Clear Filter
+        </Button>
+      </Stack>
+    </Box>
   );
 };
 

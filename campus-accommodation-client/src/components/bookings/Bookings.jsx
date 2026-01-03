@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Header from "../common/Header";
 import BookingTable from "./BookingTable";
 import { cancelBooking, getAllBookings } from "../utils/ApiFunctions";
+import {
+  Container,
+  Box,
+  Typography,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
 
 const Bookings = () => {
   const [bookingInfo, setBookingInfo] = useState([]);
@@ -32,19 +38,38 @@ const Bookings = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <section style={{ backgroundColor: "whitesmoke" }}>
-      <Header title={"Existing Bookings"} />
-      {error && <div className="text-danger">{error}</div>}
-      {isLoading ? (
-        <div>Loading existing bookings</div>
-      ) : (
-        <BookingTable
-          bookingInfo={bookingInfo}
-          handleBookingCancellation={handleBookingCancellation}
-        />
+    <Container maxWidth="xl" sx={{ mt: 8, mb: 8 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+          Existing Bookings
+        </Typography>
+      </Box>
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
       )}
-    </section>
+      <BookingTable
+        bookingInfo={bookingInfo}
+        handleBookingCancellation={handleBookingCancellation}
+      />
+    </Container>
   );
 };
 
