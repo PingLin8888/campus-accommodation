@@ -128,7 +128,7 @@ const HotelService = () => {
                     {service.description}
                   </Typography>
                 </CardContent>
-              </Card>
+            </Card>
             </Grid>
           ))}
         </Grid>

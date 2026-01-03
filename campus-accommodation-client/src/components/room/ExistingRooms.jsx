@@ -1,10 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { deleteRoom, getAllRooms } from "../utils/ApiFunctions";
-import { Row, Col } from "react-bootstrap";
 import RoomPaginator from "../common/RoomPaginator";
 import RoomFilter from "../common/RoomFilter";
 import { FaEdit, FaEye, FaPlus, FaTrashAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  Alert,
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Stack,
+  Grid,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ExistingRooms = () => {
   const [rooms, setRooms] = useState([]);
@@ -15,6 +36,7 @@ const ExistingRooms = () => {
   const [selectedRoomType, setSelectedRoomType] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     fetchRooms();
   }, []);
@@ -27,6 +49,7 @@ const ExistingRooms = () => {
       setIsLoading(false);
     } catch (error) {
       setErrorMessage(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -40,7 +63,7 @@ const ExistingRooms = () => {
       setFilteredRooms(filtered);
     }
     setCurrentPage(1);
-  }, [rooms, selectedRoomType]); //The dependency array [rooms, selectedRoomType] ensures that the effect is re-executed whenever either rooms or selectedRoomType changes.
+  }, [rooms, selectedRoomType]);
 
   const handlePaginationClick = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -54,9 +77,11 @@ const ExistingRooms = () => {
         fetchRooms();
       } else {
         console.error(`Error deleting room: ${result.message}`);
+        setErrorMessage(`Error deleting room: ${result.message}`);
       }
-    } catch (error) {}
-    setErrorMessage(error.message);
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
     setTimeout(() => {
       setSuccessMessage("");
       setErrorMessage("");
@@ -73,80 +98,134 @@ const ExistingRooms = () => {
   const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
   const currentRooms = filteredRooms.slice(indexOfFirstRoom, indexOfLastRoom);
 
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <>
-      {isLoading ? (
-        <p>Loading existing rooms</p>
-      ) : (
-        <>
-          <section className="mt-5 mb-5 container">
-            <div className="d-flex justify-content-between mb-3 mt-5">
-              <h2>Existing rooms</h2>
-            </div>
-            <Row>
-              <Col md={6} className="mb-3 mb-md-0">
-                {/* <RoomFilter data={rooms} setFilteredData={setFilteredRooms} /> */}
-                {rooms && rooms.length > 0 ? (
-                  <RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
-                ) : (
-                  <p>No rooms available</p>
-                )}
-              </Col>
-              <Col md={6} className="d-flex justify-content-end">
-                <Link to={"/add/new-room"}>
-                  <FaPlus />
-                  Add Room
-                </Link>
-              </Col>
-            </Row>
-            <table className="table table-bordered table-hover">
-              <thead>
-                <tr className="text-center">
-                  <th>ID</th>
-                  <th>Room Type</th>
-                  <th>Room Price</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentRooms.map((room) => (
-                  <tr key={room.id} className="text-center">
-                    <td>{room.id}</td>
-                    <td>{room.roomType}</td>
-                    <td>{room.roomPrice}</td>
-                    <td className="gap-2">
-                      <Link to={`/edit-room/${room.id}`}>
-                        <span className="btn btn-info btn-sm">
-                          <FaEye />
-                        </span>
-                        <span className="btn btn-warning btn-sm">
-                          <FaEdit />
-                        </span>
-                      </Link>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDelete(room.id)}
-                      >
-                        <FaTrashAlt />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <RoomPaginator
-              currentPage={currentPage}
-              totalPages={calculateTotalPages(
-                filteredRooms,
-                roomsPerPage,
-                rooms
-              )}
-              onPageChange={handlePaginationClick}
-            />
-          </section>
-        </>
+    <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+          Existing Rooms
+        </Typography>
+      </Box>
+
+      {successMessage && (
+        <Alert severity="success" sx={{ mb: 3 }}>
+          {successMessage}
+        </Alert>
       )}
-    </>
+
+      {errorMessage && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {errorMessage}
+        </Alert>
+      )}
+
+      <Grid container spacing={2} alignItems="center" sx={{ mb: 3 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          {rooms && rooms.length > 0 ? (
+            <RoomFilter data={rooms} setFilteredData={setFilteredRooms} />
+          ) : (
+            <Typography>No rooms available</Typography>
+          )}
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Box display="flex" justifyContent={{ xs: "flex-start", md: "flex-end" }}>
+            <Button
+              component={RouterLink}
+              to="/add/new-room"
+              variant="contained"
+              startIcon={<AddIcon />}
+            >
+              Add Room
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+
+      <TableContainer component={Paper} sx={{ mb: 3 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="center" sx={{ fontWeight: 600 }}>
+                ID
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600 }}>
+                Room Type
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600 }}>
+                Room Price
+              </TableCell>
+              <TableCell align="center" sx={{ fontWeight: 600 }}>
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {currentRooms.map((room) => (
+              <TableRow
+                key={room.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="center">{room.id}</TableCell>
+                <TableCell align="center">{room.roomType}</TableCell>
+                <TableCell align="center">€{room.roomPrice}</TableCell>
+                <TableCell align="center">
+                  <Stack direction="row" spacing={1} justifyContent="center">
+                    <IconButton
+                      component={RouterLink}
+                      to={`/edit-room/${room.id}`}
+                      color="primary"
+                      size="small"
+                      title="View"
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                    <IconButton
+                      component={RouterLink}
+                      to={`/edit-room/${room.id}`}
+                      color="warning"
+                      size="small"
+                      title="Edit"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDelete(room.id)}
+                      color="error"
+                      size="small"
+                      title="Delete"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Box display="flex" justifyContent="center">
+        <RoomPaginator
+          currentPage={currentPage}
+          totalPages={calculateTotalPages(filteredRooms, roomsPerPage, rooms)}
+          onPageChange={handlePaginationClick}
+        />
+      </Box>
+    </Container>
   );
 };
 

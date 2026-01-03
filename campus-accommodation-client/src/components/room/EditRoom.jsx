@@ -1,6 +1,18 @@
 import { getRoomById, updateRoom } from "../utils/ApiFunctions";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  Stack,
+  Card,
+  CardMedia,
+  CircularProgress,
+} from "@mui/material";
 
 const EditRoom = () => {
   const [room, setRoom] = useState({
@@ -12,6 +24,7 @@ const EditRoom = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const { roomId } = useParams();
 
   const handleImageChange = (e) => {
@@ -20,7 +33,6 @@ const EditRoom = () => {
     setImagePreview(URL.createObjectURL(selectedImage));
   };
 
-  /* e represents the event object passed to the event handler when an event (such as a change event) occurs on an input element. */
   const handleRoomInputChange = (e) => {
     const { name, value } = e.target;
     setRoom({ ...room, [name]: value });
@@ -29,11 +41,15 @@ const EditRoom = () => {
   useEffect(() => {
     const fetchRoom = async () => {
       try {
+        setIsLoading(true);
         const roomData = await getRoomById(roomId);
         setRoom(roomData);
         setImagePreview(roomData.photo);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
+        setErrorMessage("Error loading room data");
+        setIsLoading(false);
       }
     };
     fetchRoom();
@@ -46,7 +62,7 @@ const EditRoom = () => {
       if (response.status === 200) {
         setSuccessMessage("Room was updated successfully");
         const updatedRoomData = await getRoomById(roomId);
-        setRoom(updateRoom);
+        setRoom(updatedRoomData);
         setImagePreview(updatedRoomData.photo);
         setErrorMessage("");
       } else {
@@ -62,89 +78,125 @@ const EditRoom = () => {
     }, 3000);
   };
 
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <>
-      <section className="container, mt-5 mb-5">
-        <div className="row justify-content-center">
-          <div className="clo-md-8 col-lg-6">
-            <h2 className="mt-5 mb-2">Edit room</h2>
-            {successMessage && (
-              <div className="alert alert-success" role="alert">
-                {successMessage}
-              </div>
-            )}
-            {errorMessage && (
-              <div className="alert alert-danger" role="alert">
-                {errorMessage}
-              </div>
-            )}
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="roomType" className="form-label hotel-color">
-                  Room Type
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="roomType"
-                  name="roomType"
-                  value={room.roomType}
-                  onChange={handleRoomInputChange}
-                />
-              </div>
+    <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
+          Edit Room
+        </Typography>
 
-              <div className="mb-3">
-                <label htmlFor="roomPrice" className="form-label hotel-color">
-                  Room Price
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="roomPrice"
-                  name="roomPrice"
-                  value={room.roomPrice}
-                  onChange={handleRoomInputChange}
-                />
-              </div>
+        {successMessage && (
+          <Alert severity="success" sx={{ width: "100%", mb: 3 }}>
+            {successMessage}
+          </Alert>
+        )}
 
-              <div className="mb-3">
-                <label htmlFor="photo" className="form-label hotel-color">
-                  Room Photo
-                </label>
+        {errorMessage && (
+          <Alert severity="error" sx={{ width: "100%", mb: 3 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
+          <Stack spacing={3}>
+            <TextField
+              fullWidth
+              id="roomType"
+              name="roomType"
+              label="Room Type"
+              type="text"
+              value={room.roomType}
+              onChange={handleRoomInputChange}
+              required
+            />
+
+            <TextField
+              fullWidth
+              id="roomPrice"
+              name="roomPrice"
+              label="Room Price"
+              type="number"
+              value={room.roomPrice}
+              onChange={handleRoomInputChange}
+              required
+              inputProps={{ min: 0, step: 0.01 }}
+            />
+
+            <Box>
+              <Button
+                variant="outlined"
+                component="label"
+                fullWidth
+                sx={{ mb: 2 }}
+              >
+                Change Room Photo
                 <input
-                  // required
                   type="file"
+                  hidden
                   id="photo"
                   name="photo"
-                  className="form-control"
+                  accept="image/*"
                   onChange={handleImageChange}
                 />
-                {imagePreview && (
-                  <img
-                    src={`data:image/jpeg;base64,${imagePreview}`}
-                    // src={imagePreview}
+              </Button>
+              {imagePreview && (
+                <Card sx={{ mt: 2 }}>
+                  <CardMedia
+                    component="img"
+                    image={
+                      imagePreview.startsWith("data:")
+                        ? imagePreview
+                        : `data:image/jpeg;base64,${imagePreview}`
+                    }
                     alt="Room preview"
-                    style={{ maxWidth: "400px", maxHeight: "400px" }}
-                    className="mb-3"
+                    sx={{
+                      maxWidth: "100%",
+                      maxHeight: 400,
+                      objectFit: "contain",
+                    }}
                   />
-                )}
-              </div>
-              <div className="d-grid gap-2 d-md-flex mt-2">
-                <Link
-                  to={"/existing-rooms"}
-                  className="btn btn-outline-info ml-5"
-                >
-                  back
-                </Link>
-                <button type="submit" className="btn btn-outline-warning">
-                  Edit Room
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-    </>
+                </Card>
+              )}
+            </Box>
+
+            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+              <Button
+                component={RouterLink}
+                to="/existing-rooms"
+                variant="outlined"
+                sx={{ flex: 1 }}
+              >
+                Back
+              </Button>
+              <Button type="submit" variant="contained" sx={{ flex: 1 }}>
+                Update Room
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 

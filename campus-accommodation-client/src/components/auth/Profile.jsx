@@ -6,6 +6,27 @@ import {
   getBookingsByUserId,
   getUser,
 } from "../utils/ApiFunctions";
+import {
+  Container,
+  Box,
+  Typography,
+  Button,
+  Alert,
+  Card,
+  CardContent,
+  Avatar,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Stack,
+  Chip,
+} from "@mui/material";
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -75,152 +96,170 @@ const Profile = () => {
     }
   };
 
+  if (!user.id) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "50vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <div className="container">
-      {errorMessage && <p className="text-danger">{errorMessage}</p>}
-      {message && <p className="text-danger">{message}</p>}
-      {user ? (
-        <div
-          className="card p-5 mt-5"
-          style={{ backgroundColor: "whitesmoke" }}
-        >
-          <h4 className="card-title ttext-center">User Information</h4>
-          <div className="card-body">
-            <div className="col-md-10 mx-auto">
-              <div className="card mb-3 shadow">
-                <div className="row g-0">
-                  <div className="d-flex justify-content-center align-items-center mb-4">
-                    <img
-                      src="https://themindfulanimanifesto.org/wp-content/uploads/2020/09/male-placeholder-image.jpeg"
-                      alt="Profile"
-                      className="rounded-circle"
-                      style={{
-                        width: "150px",
-                        height: "150px",
-                        objecFit: "cover",
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-10">
-                  <div className="card-body">
-                    <div className="form-group row">
-                      <label className="col-md-2 col-form-label fw-bold">
-                        ID:
-                      </label>
-                      <div className="col-md-10">
-                        <p className="card-text">{user.id}</p>
-                      </div>
-                    </div>
-                    <hr />
-                    <div className="form-group row">
-                      <label className="col-md-2 col-form-label fw-bold">
-                        First name:
-                      </label>
-                      <div className="col-md-10">
-                        <p className="card-text">{user.firstName}</p>
-                      </div>
-                    </div>
-                    <hr />
+    <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
+      {errorMessage && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {errorMessage}
+        </Alert>
+      )}
+      {message && (
+        <Alert severity="info" sx={{ mb: 3 }}>
+          {message}
+        </Alert>
+      )}
 
-                    <div className="form-group row">
-                      <label className="col-md-2 col-form-label fw-bold">
-                        Last name:
-                      </label>
-                      <div className="col-md-10">
-                        <p className="card-text">{user.lastName}</p>
-                      </div>
-                    </div>
-                    <hr />
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 600, mb: 4, textAlign: "center" }}>
+            User Information
+          </Typography>
 
-                    <div className="form-group row">
-                      <label className="col-md-2 col-form-label fw-bold">
-                        Email:
-                      </label>
-                      <div className="col-md-10">
-                        <p className="card-text">{user.email}</p>
-                      </div>
-                    </div>
-                    <hr />
+          <Box display="flex" justifyContent="center" sx={{ mb: 4 }}>
+            <Avatar
+              src="https://themindfulanimanifesto.org/wp-content/uploads/2020/09/male-placeholder-image.jpeg"
+              alt="Profile"
+              sx={{ width: 150, height: 150 }}
+            />
+          </Box>
 
-                    <div className="form-group row">
-                      <label className="col-md-2 col-form-label fw-bold">
-                        Roles:
-                      </label>
-                      <div className="col-md-10">
-                        <ul className="list-unstyled">
-                          {user.roles && user.roles.length > 0 ? (
-                            user.roles.map((role) => (
-                              <li key={role.id} className="card-text">
-                                {role.name}
-                              </li>
-                            ))
-                          ) : (
-                            <li>No roles assigned</li>
-                          )}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <h4 className="card-title text-center">Booking History</h4>
-            {bookings.length > 0 ? (
-              <table className="table table-bordered table-hover shadow">
-                <thead>
-                  <tr>
-                    <th scope="col">Booking ID</th>
-                    <th scope="col">Room ID</th>
-                    <th scope="col">Room Type</th>
-                    <th scope="col">Check In Date</th>
-                    <th scope="col">Check Out Date</th>
-                    <th scope="col">Confirmation Code</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
+          <Stack spacing={2} sx={{ maxWidth: 800, mx: "auto" }}>
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                ID
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                {user.id}
+              </Typography>
+              <Divider sx={{ mt: 1 }} />
+            </Box>
+
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                First Name
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                {user.firstName}
+              </Typography>
+              <Divider sx={{ mt: 1 }} />
+            </Box>
+
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                Last Name
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                {user.lastName}
+              </Typography>
+              <Divider sx={{ mt: 1 }} />
+            </Box>
+
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                Email
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                {user.email}
+              </Typography>
+              <Divider sx={{ mt: 1 }} />
+            </Box>
+
+            <Box>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Roles
+              </Typography>
+              <Stack direction="row" spacing={1}>
+                {user.roles && user.roles.length > 0 ? (
+                  user.roles.map((role) => (
+                    <Chip key={role.id} label={role.name} color="primary" />
+                  ))
+                ) : (
+                  <Typography variant="body1">No roles assigned</Typography>
+                )}
+              </Stack>
+            </Box>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <Card sx={{ mb: 4 }}>
+        <CardContent>
+          <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 600, mb: 3, textAlign: "center" }}>
+            Booking History
+          </Typography>
+
+          {bookings.length > 0 ? (
+            <TableContainer component={Paper} variant="outlined">
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 600 }}>Booking ID</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Room ID</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Room Type</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Check In Date</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Check Out Date</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Confirmation Code</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
                   {bookings.map((booking, index) => (
-                    <tr key={index}>
-                      <td>{booking.bookingId}</td>
-                      <td>{booking.room.id}</td>
-                      <td>{booking.room.roomType}</td>
-                      <td>
+                    <TableRow key={index}>
+                      <TableCell>{booking.bookingId}</TableCell>
+                      <TableCell>{booking.room.id}</TableCell>
+                      <TableCell>{booking.room.roomType}</TableCell>
+                      <TableCell>
                         {moment(booking.checkInDate)
                           .subtract(1, "month")
                           .format("MMM Do, YYYY")}
-                      </td>
-                      <td>
+                      </TableCell>
+                      <TableCell>
                         {moment(booking.checkOutDate)
                           .subtract(1, "month")
                           .format("MMM Do, YYYY")}
-                      </td>
-                      <td>{booking.bookingConfirmationCode}</td>
-                      <td className="text-success">On-going</td>
-                    </tr>
+                      </TableCell>
+                      <TableCell>{booking.bookingConfirmationCode}</TableCell>
+                      <TableCell>
+                        <Chip label="On-going" color="success" size="small" />
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </tbody>
-              </table>
-            ) : (
-              <p>You have not made any bookings yet.</p>
-            )}
-            <div className="d-flex justify-content-center">
-              <div className="mx-2">
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={handleDeleteAccount}
-                >
-                  {" "}
-                  Close account
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <p>Loading user data...</p>
-      )}
-    </div>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography align="center" color="text.secondary">
+              You have not made any bookings yet.
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+
+      <Box display="flex" justifyContent="center">
+        <Button
+          variant="contained"
+          color="error"
+          onClick={handleDeleteAccount}
+        >
+          Close Account
+        </Button>
+      </Box>
+    </Container>
   );
 };
 

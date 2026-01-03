@@ -2,8 +2,19 @@ import React, { useEffect, useState } from "react";
 import { bookRoom, getRoomById } from "../utils/ApiFunctions";
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
-import { FormControl, Form, Button } from "react-bootstrap";
 import BookingSummary from "./BookingSummary";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  Grid,
+  Card,
+  CardContent,
+  Stack,
+} from "@mui/material";
 
 const BookingForm = () => {
   const [isValidated, setIsValidated] = useState(false);
@@ -106,164 +117,168 @@ const BookingForm = () => {
   };
 
   return (
-    <>
-      <div className="container mb-5">
-        <div className="row">
-          <div className="col-md-7">
-            <div className="card card-body mt-5">
-              <h4 className="card-title">Reserve Room</h4>
-              <Form noValidate validated={isValidated} onSubmit={handleSubmit}>
-                <Form.Group>
-                  <Form.Label htmlFor="guestName" className="hotel-color">
-                    Full Name:
-                  </Form.Label>
-                  <FormControl
+    <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
+      <Grid container spacing={4}>
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
+                Reserve Room
+              </Typography>
+              <Box component="form" noValidate onSubmit={handleSubmit}>
+                <Stack spacing={3}>
+                  <TextField
                     required
-                    type="text"
+                    fullWidth
                     id="guestName"
                     name="guestName"
+                    label="Full Name"
+                    type="text"
                     value={booking.guestName}
                     placeholder="Enter your full name"
                     onChange={handleInputChange}
+                    error={isValidated && !booking.guestName}
+                    helperText={
+                      isValidated && !booking.guestName
+                        ? "Please enter your fullname"
+                        : ""
+                    }
                   />
-                  <FormControl.Feedback type="invalid">
-                    Please enter your fullname
-                  </FormControl.Feedback>
-                </Form.Group>
 
-                <Form.Group>
-                  <Form.Label htmlFor="guestEmail" className="hotel-color">
-                    Email:
-                  </Form.Label>
-                  <FormControl
+                  <TextField
                     required
-                    type="text"
+                    fullWidth
                     id="guestEmail"
                     name="guestEmail"
+                    label="Email"
+                    type="email"
                     value={booking.guestEmail}
                     placeholder="Enter your email"
                     onChange={handleInputChange}
+                    error={isValidated && !booking.guestEmail}
+                    helperText={
+                      isValidated && !booking.guestEmail
+                        ? "Please enter your email address"
+                        : ""
+                    }
                   />
-                  <FormControl.Feedback type="invalid">
-                    Please enter your email address.
-                  </FormControl.Feedback>
-                </Form.Group>
 
-                <fieldset style={{ border: "2px" }}>
-                  <legend>Lodging period</legend>
-                  <div className="row">
-                    <div className="col-6">
-                      <Form.Label htmlFor="checkInDate" className="hotel-color">
-                        Check-In date:
-                      </Form.Label>
-                      <FormControl
-                        required
-                        type="date"
-                        id="checkInDate"
-                        name="checkInDate"
-                        value={booking.checkInDate}
-                        placeholder="check-in date"
-                        onChange={handleInputChange}
-                      />
-                      <FormControl.Feedback type="invalid">
-                        Please select a check-in-date
-                      </FormControl.Feedback>
-                    </div>
-
-                    <div className="col-6">
-                      <Form.Label
-                        htmlFor="checkOutDate"
-                        className="hotel-color"
-                      >
-                        Check-Out date:
-                      </Form.Label>
-                      <FormControl
-                        required
-                        type="date"
-                        id="checkOutDate"
-                        name="checkOutDate"
-                        value={booking.checkOutDate}
-                        placeholder="check-out date"
-                        onChange={handleInputChange}
-                      />
-                      <FormControl.Feedback type="invalid">
-                        Please select a check-out-date
-                      </FormControl.Feedback>
-                    </div>
+                  <Box>
+                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
+                      Lodging Period
+                    </Typography>
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          required
+                          fullWidth
+                          id="checkInDate"
+                          name="checkInDate"
+                          label="Check-In Date"
+                          type="date"
+                          value={booking.checkInDate}
+                          onChange={handleInputChange}
+                          InputLabelProps={{ shrink: true }}
+                          error={isValidated && !booking.checkInDate}
+                          helperText={
+                            isValidated && !booking.checkInDate
+                              ? "Please select a check-in date"
+                              : ""
+                          }
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          required
+                          fullWidth
+                          id="checkOutDate"
+                          name="checkOutDate"
+                          label="Check-Out Date"
+                          type="date"
+                          value={booking.checkOutDate}
+                          onChange={handleInputChange}
+                          InputLabelProps={{ shrink: true }}
+                          error={isValidated && !booking.checkOutDate}
+                          helperText={
+                            isValidated && !booking.checkOutDate
+                              ? "Please select a check-out date"
+                              : ""
+                          }
+                        />
+                      </Grid>
+                    </Grid>
                     {errorMessage && (
-                      <p className="error-message text-danger">
+                      <Alert severity="error" sx={{ mt: 2 }}>
                         {errorMessage}
-                      </p>
+                      </Alert>
                     )}
-                  </div>
-                </fieldset>
+                  </Box>
 
-                <fieldset style={{ border: "2px" }}>
-                  <legend>Number of Guest</legend>
-                  <div className="row">
-                    <div className="col-6">
-                      <Form.Label
-                        htmlFor="numberOfAdults"
-                        className="hotel-color"
-                      >
-                        Adults:
-                      </Form.Label>
-                      <FormControl
-                        required
-                        type="number"
-                        id="numberOfAdults"
-                        name="numberOfAdults"
-                        value={booking.numberOfAdults}
-                        placeholder="0"
-                        min={1}
-                        onChange={handleInputChange}
-                      />
-                      <FormControl.Feedback type="invalid">
-                        Please select at least 1 adult.
-                      </FormControl.Feedback>
-                    </div>
+                  <Box>
+                    <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
+                      Number of Guests
+                    </Typography>
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          required
+                          fullWidth
+                          id="numberOfAdults"
+                          name="numberOfAdults"
+                          label="Adults"
+                          type="number"
+                          value={booking.numberOfAdults}
+                          onChange={handleInputChange}
+                          inputProps={{ min: 1 }}
+                          error={isValidated && booking.numberOfAdults < 1}
+                          helperText={
+                            isValidated && booking.numberOfAdults < 1
+                              ? "Please select at least 1 adult"
+                              : ""
+                          }
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                          fullWidth
+                          id="numberOfChildren"
+                          name="numberOfChildren"
+                          label="Children"
+                          type="number"
+                          value={booking.numberOfChildren}
+                          onChange={handleInputChange}
+                          inputProps={{ min: 0 }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Box>
 
-                    <div className="col-6">
-                      <Form.Label
-                        htmlFor="numberOfChildren"
-                        className="hotel-color"
-                      >
-                        Children:
-                      </Form.Label>
-                      <FormControl
-                        // required
-                        type="number"
-                        id="numberOfChildren"
-                        name="numberOfChildren"
-                        value={booking.numberOfChildren}
-                        placeholder="0"
-                        min={0}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-                </fieldset>
-                <div className="form-group mt-2 mb-2">
-                  <button className="btn btn-hotel" type="submit">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    fullWidth
+                    sx={{ mt: 2 }}
+                  >
                     Continue
-                  </button>
-                </div>
-              </Form>
-            </div>
-          </div>
-          <div className="col-md-5">
-            {isSubmitted && (
-              <BookingSummary
-                booking={booking}
-                isFormValid={isValidated}
-                onConfirm={handleBooking}
-                calculatePayment={calculatePayment}
-              />
-            )}
-          </div>
-        </div>
-      </div>
-    </>
+                  </Button>
+                </Stack>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid size={{ xs: 12, md: 5 }}>
+          {isSubmitted && (
+            <BookingSummary
+              booking={booking}
+              isFormValid={isValidated}
+              onConfirm={handleBooking}
+              calculatePayment={calculatePayment}
+            />
+          )}
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 

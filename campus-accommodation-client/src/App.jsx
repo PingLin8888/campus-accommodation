@@ -33,48 +33,48 @@ function App() {
   return (
     <AppTheme>
       <CssBaseline />
-      <AuthProvider>
-        <main>
-          <Router>
+    <AuthProvider>
+      <main>
+        <Router>
             <MuiNavBar />
-            <Routes>
-              {/* path attribute in Route is relatively arbitually, as long as you keep consistent with the NavBar component. */}
-              <Route path="/" element={<Home />} />
-              <Route path="/edit-room/:roomId" element={<EditRoom />} />
-              <Route path="/existing-rooms" element={<ExistingRooms />} />
-              <Route path="/add/new-room" element={<AddRoom />} />
-              <Route
-                path="/book-room/:roomId"
-                element={
-                  <RequireAuth>
-                    <Checkout />
-                  </RequireAuth>
-                }
-              />
-              <Route path="/browse-all-rooms" element={<RoomListing />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/booking-success" element={<BookingSuccess />} />
-              <Route path="/existing-bookings" element={<Bookings />} />
-              <Route
-                path="/maintenanceIssue"
-                element={<MaintenanceIssuesAdmin />}
-              />
-              <Route path="/issues" element={<IssueList />} />
-              <Route path="/issues/:issueId" element={<IssueDetail />} />
-              <Route path="/find-booking" element={<FindBooking />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Registration />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/logout" element={<LogOut />} />
-              <Route path="/log-issue" element={<LogIssue />} />
-              {/* <Route path="/update-issue" element={<UpdateIssue />} /> */}
-              {/* if no issueId here, issueId can't be passed in the UpdateIssue.jsx component. */}
-              <Route path="/update-issue/:issueId" element={<UpdateIssue />} />
-            </Routes>
-          </Router>
-          <Footer />
-        </main>
-      </AuthProvider>
+          <Routes>
+            {/* path attribute in Route is relatively arbitually, as long as you keep consistent with the NavBar component. */}
+            <Route path="/" element={<Home />} />
+            <Route path="/edit-room/:roomId" element={<EditRoom />} />
+            <Route path="/existing-rooms" element={<ExistingRooms />} />
+            <Route path="/add/new-room" element={<AddRoom />} />
+            <Route
+              path="/book-room/:roomId"
+              element={
+                <RequireAuth>
+                  <Checkout />
+                </RequireAuth>
+              }
+            />
+            <Route path="/browse-all-rooms" element={<RoomListing />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/booking-success" element={<BookingSuccess />} />
+            <Route path="/existing-bookings" element={<Bookings />} />
+            <Route
+              path="/maintenanceIssue"
+              element={<MaintenanceIssuesAdmin />}
+            />
+            <Route path="/issues" element={<IssueList />} />
+            <Route path="/issues/:issueId" element={<IssueDetail />} />
+            <Route path="/find-booking" element={<FindBooking />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registration />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/logout" element={<LogOut />} />
+            <Route path="/log-issue" element={<LogIssue />} />
+            {/* <Route path="/update-issue" element={<UpdateIssue />} /> */}
+            {/* if no issueId here, issueId can't be passed in the UpdateIssue.jsx component. */}
+            <Route path="/update-issue/:issueId" element={<UpdateIssue />} />
+          </Routes>
+        </Router>
+        <Footer />
+      </main>
+    </AuthProvider>
     </AppTheme>
   );
 }

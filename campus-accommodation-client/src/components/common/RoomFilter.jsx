@@ -1,4 +1,12 @@
 import React, { useState } from "react";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Stack,
+} from "@mui/material";
 
 const RoomFilter = ({ data, setFilteredData }) => {
   const [filter, setFilter] = useState("");
@@ -25,26 +33,32 @@ const RoomFilter = ({ data, setFilteredData }) => {
   ];
 
   return (
-    <div className="input-group mb-3">
-      <span className="input-group-text" id="room-type-filter">
-        Filter rooms by type
-      </span>
-      <select
-        className="form-select"
-        value={filter}
-        onChange={handleSelectChange}
-      >
-        <option value={""}>select a room type to filter...</option>
-        {roomTypes.map((type, index) => (
-          <option key={index} value={type}>
-            {type}
-          </option>
-        ))}
-      </select>
-      <button className="btn btn-hotel" type="button" onClick={clearFilter}>
+    <Stack direction="row" spacing={2} alignItems="center">
+      <FormControl fullWidth>
+        <InputLabel id="room-type-filter-label">Filter by Room Type</InputLabel>
+        <Select
+          labelId="room-type-filter-label"
+          id="room-type-filter"
+          value={filter}
+          label="Filter by Room Type"
+          onChange={handleSelectChange}
+        >
+          <MenuItem value="">
+            <em>All room types</em>
+          </MenuItem>
+          {roomTypes
+            .filter((type) => type !== "")
+            .map((type, index) => (
+              <MenuItem key={index} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+        </Select>
+      </FormControl>
+      <Button variant="outlined" onClick={clearFilter} sx={{ minWidth: 120 }}>
         Clear Filter
-      </button>
-    </div>
+      </Button>
+    </Stack>
   );
 };
 

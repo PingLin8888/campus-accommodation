@@ -83,35 +83,35 @@ function AddRoom() {
           Add a New Room
         </Typography>
 
-        {successMessage && (
+            {successMessage && (
           <Alert severity="success" sx={{ width: "100%", mb: 3 }}>
-            {successMessage}
+                {successMessage}
           </Alert>
-        )}
+            )}
 
-        {errorMessage && (
+            {errorMessage && (
           <Alert severity="error" sx={{ width: "100%", mb: 3 }}>
             {errorMessage}
           </Alert>
-        )}
+            )}
 
         <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
           <Stack spacing={3}>
             <Box>
-              <RoomTypeSelector
-                handleRoomInputChange={handleRoomInputChange}
-                newRoom={newRoom}
-              />
+                  <RoomTypeSelector
+                    handleRoomInputChange={handleRoomInputChange}
+                    newRoom={newRoom}
+                  />
             </Box>
 
             <TextField
               fullWidth
-              id="roomPrice"
-              name="roomPrice"
+                  id="roomPrice"
+                  name="roomPrice"
               label="Room Price"
               type="number"
-              value={newRoom.roomPrice}
-              onChange={handleRoomInputChange}
+                  value={newRoom.roomPrice}
+                  onChange={handleRoomInputChange}
               required
               inputProps={{ min: 0, step: 0.01 }}
             />
@@ -133,7 +133,7 @@ function AddRoom() {
                   onChange={handleImageChange}
                 />
               </Button>
-              {imagePreview && (
+                {imagePreview && (
                 <Card sx={{ mt: 2 }}>
                   <CardMedia
                     component="img"
@@ -146,7 +146,7 @@ function AddRoom() {
                     }}
                   />
                 </Card>
-              )}
+                )}
             </Box>
 
             <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
@@ -159,7 +159,7 @@ function AddRoom() {
                 Back to Existing Rooms
               </Button>
               <Button type="submit" variant="contained" sx={{ flex: 1 }}>
-                Save Room
+                  Save Room
               </Button>
             </Stack>
           </Stack>

@@ -102,7 +102,7 @@ const Home = () => {
       >
         <MuiFeaturedRooms />
       </Box>
-      <HotelService />
+        <HotelService />
     </Box>
   );
 };

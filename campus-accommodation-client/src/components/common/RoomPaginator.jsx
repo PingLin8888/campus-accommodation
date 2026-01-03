@@ -1,27 +1,21 @@
 import React from "react";
+import { Pagination } from "@mui/material";
 
 const RoomPaginator = ({ currentPage, totalPages, onPageChange }) => {
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const handleChange = (event, value) => {
+    onPageChange(value);
+  };
+
   return (
-    <nav>
-      <ul className="pagination, justify-content-center">
-        {pageNumbers.map((pageNumber) => (
-          <li
-            key={pageNumber}
-            className={`page-item ${
-              currentPage === pageNumber ? "active" : ""
-            }`}
-          >
-            <button
-              className="page-link"
-              onClick={() => onPageChange(pageNumber)}
-            >
-              {pageNumber}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <Pagination
+      count={totalPages}
+      page={currentPage}
+      onChange={handleChange}
+      color="primary"
+      size="large"
+      showFirstButton
+      showLastButton
+    />
   );
 };
 

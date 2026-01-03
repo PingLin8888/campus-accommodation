@@ -125,13 +125,13 @@ const Registration = () => {
             />
 
             <Button
-              type="submit"
+            type="submit"
               variant="contained"
               fullWidth
               size="large"
               sx={{ mt: 2 }}
-            >
-              Register
+          >
+            Register
             </Button>
 
             <Box sx={{ textAlign: "center", mt: 2 }}>
