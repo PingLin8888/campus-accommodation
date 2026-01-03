@@ -114,6 +114,9 @@ function AddRoom() {
                   onChange={handleRoomInputChange}
               required
               inputProps={{ min: 0, step: 0.01 }}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <Box>

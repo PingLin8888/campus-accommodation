@@ -3,8 +3,24 @@ import {
   cancelBooking,
   getBookingByConfirmationCode,
 } from "../utils/ApiFunctions";
-import { Form } from "react-bootstrap";
-import moment from "moment";
+import { format, parseISO } from "date-fns";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  CircularProgress,
+  Card,
+  CardContent,
+  Stack,
+  Grid,
+  Divider,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const FindBooking = () => {
   const [confirmationCode, setConfirmationCode] = useState("");
@@ -73,7 +89,7 @@ const FindBooking = () => {
       setBookingInfo(clearBookingInfo);
       setConfirmationCode("");
       setError("");
-      setSuccessCancellMessage("Booking has been cacelled successfully");
+      setSuccessCancellMessage("Booking has been cancelled successfully");
     } catch (error) {
       setError(error.message);
     }
@@ -82,76 +98,226 @@ const FindBooking = () => {
     // }, 2000);
   };
 
-  return (
-    <>
-      <div className="container mt-5 d-flex flex-column justify-content-center align-items-center">
-        <h2>Find Booking</h2>
-        <Form onSubmit={handleFormSubmit} className="col-md-6">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              id="confirmtionCode"
-              name="confirmtionCode"
-              value={confirmationCode}
-              onChange={handleInputChange}
-              placeholder="Enter the booking confirmation code"
-            />
-            <button className="btn btn-hotel input-group-text">
-              Find booking
-            </button>
-          </div>
-        </Form>
-        {isLoading ? (
-          <div>Finding booking...</div>
-        ) : error ? (
-          <div className="text-danger">Error: {error}</div>
-        ) : bookingInfo.bookingConfirmationCode ? (
-          <div className="col-md-6 mt-4 mb-5">
-            <h3>Booking Information</h3>
-            <p className="text-success">
-              Booking Confirmation Code: {bookingInfo.bookingConfirmationCode}
-            </p>
-            {/* <p>Booking ID: {bookingInfo.id}</p> */}
-            <p>Room Number: {bookingInfo.room.id}</p>
-            <p>Room Type: {bookingInfo.room.roomType}</p>
-            <p>
-              Check-in Date:{" "}
-              {moment(bookingInfo.checkInDate)
-                .subtract(1, "month")
-                .format("MMM Do, YYYY")}
-            </p>
-            <p>
-              Check-out Date:{" "}
-              {moment(bookingInfo.checkOutDate)
-                .subtract(1, "month")
-                .format("MMM Do, YYYY")}
-            </p>
-            <p>Full Name: {bookingInfo.guestFullName}</p>
-            <p>Email Address: {bookingInfo.guestEmail}</p>
-            <p>Adults: {bookingInfo.numOfAdults}</p>
-            <p>Children: {bookingInfo.numOfChildren}</p>
-            <p>Total Guests: {bookingInfo.totalNumOfGuest}</p>
-            {!isDeleted && (
-              <button
-                className="btn btn-danger"
-                onClick={() => handleBookingCancellation(bookingInfo.bookingId)}
-              >
-                Cancle Booking
-              </button>
-            )}
-          </div>
-        ) : (
-          <div> FindBooking</div>
-        )}
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    try {
+      // If it's already a string in a readable format, try to parse it
+      if (typeof dateString === "string" && dateString.includes("-")) {
+        return format(parseISO(dateString), "MMM dd, yyyy");
+      }
+      // If it's a Date object
+      if (dateString instanceof Date) {
+        return format(dateString, "MMM dd, yyyy");
+      }
+      // Otherwise return as is
+      return dateString;
+    } catch (error) {
+      console.error("Date formatting error:", error);
+      return dateString;
+    }
+  };
 
-        {isDeleted && (
-          <div className="alert alert-success mt-3 fade show" role="alert">
-            {successCancellMessage}
-          </div>
-        )}
-      </div>
-    </>
+  return (
+    <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
+      <Box sx={{ textAlign: "center", mb: 4 }}>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
+          Find My Booking
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Enter your confirmation code to view or cancel your booking
+        </Typography>
+      </Box>
+
+      <Card elevation={3} sx={{ mb: 4 }}>
+        <CardContent>
+          <Box component="form" onSubmit={handleFormSubmit}>
+            <Stack direction="row" spacing={2}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                id="confirmationCode"
+                name="confirmationCode"
+                value={confirmationCode}
+                onChange={handleInputChange}
+                placeholder="Enter your booking confirmation code"
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                startIcon={<SearchIcon />}
+                disabled={isLoading}
+                sx={{ minWidth: 150 }}
+              >
+                Find
+              </Button>
+            </Stack>
+          </Box>
+        </CardContent>
+      </Card>
+
+      {isLoading && (
+        <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+          <CircularProgress />
+          <Typography sx={{ ml: 2 }}>Finding your booking...</Typography>
+        </Box>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+      )}
+
+      {isDeleted && (
+        <Alert
+          severity="success"
+          icon={<CheckCircleIcon />}
+          sx={{ mb: 3 }}
+        >
+          {successCancellMessage}
+        </Alert>
+      )}
+
+      {bookingInfo.bookingConfirmationCode && !isLoading && (
+        <Card elevation={3}>
+          <CardContent>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, mb: 3 }}>
+              Booking Information
+            </Typography>
+
+            <Alert severity="success" sx={{ mb: 3 }}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                Confirmation Code: {bookingInfo.bookingConfirmationCode}
+              </Typography>
+            </Alert>
+
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Room Number
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {bookingInfo.room.id}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Room Type
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {bookingInfo.room.roomType}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Check-in Date
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {formatDate(bookingInfo.checkInDate)}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Check-out Date
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {formatDate(bookingInfo.checkOutDate)}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12 }}>
+                <Divider sx={{ my: 1 }} />
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Guest Name
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {bookingInfo.guestFullName}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 6 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Email Address
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {bookingInfo.guestEmail}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Adults
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {bookingInfo.numOfAdults}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Children
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {bookingInfo.numOfChildren}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 4 }}>
+                <Box>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    Total Guests
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {bookingInfo.totalNumOfGuest}
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+
+            {!isDeleted && (
+              <Box sx={{ mt: 4, textAlign: "center" }}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="large"
+                  startIcon={<CancelIcon />}
+                  onClick={() => handleBookingCancellation(bookingInfo.bookingId)}
+                >
+                  Cancel Booking
+                </Button>
+              </Box>
+            )}
+          </CardContent>
+        </Card>
+      )}
+    </Container>
   );
 };
 

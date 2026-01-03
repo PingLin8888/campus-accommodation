@@ -67,6 +67,7 @@ const Login = ({ setIsLoggedIn }) => {
           <Stack spacing={3}>
             <TextField
               fullWidth
+              variant="outlined"
               id="email"
               name="email"
               label="Email"
@@ -75,10 +76,14 @@ const Login = ({ setIsLoggedIn }) => {
               onChange={handleInputChange}
               required
               autoComplete="email"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <TextField
               fullWidth
+              variant="outlined"
               id="password"
               name="password"
               label="Password"
@@ -87,6 +92,9 @@ const Login = ({ setIsLoggedIn }) => {
               onChange={handleInputChange}
               required
               autoComplete="current-password"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <Button

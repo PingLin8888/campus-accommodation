@@ -241,16 +241,40 @@ const MaintenanceIssuesAdmin = () => {
                             </Select>
                           </FormControl>
                         </Stack>
-                        <TextField
-                          fullWidth
-                          size="small"
-                          label="What was done to fix/update this issue?"
-                          placeholder="E.g., Replaced broken faucet, Fixed the leak, etc."
-                          value={updateDescriptions[issue.id] || ""}
-                          onChange={(e) => handleDescriptionChange(issue.id, e.target.value)}
-                          multiline
-                          rows={2}
-                        />
+                        <Box>
+                          <Typography variant="body2" sx={{ mb: 0.5, fontWeight: 500 }}>
+                            What was done to fix/update this issue? *
+                          </Typography>
+                          <Box
+                            component="textarea"
+                            placeholder="E.g., Replaced broken faucet, Fixed the leak, etc."
+                            value={updateDescriptions[issue.id] || ""}
+                            onChange={(e) => handleDescriptionChange(issue.id, e.target.value)}
+                            rows={2}
+                            sx={{
+                              width: '100%',
+                              padding: '8.5px 14px',
+                              fontSize: '0.875rem',
+                              fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+                              lineHeight: '1.4375em',
+                              border: '1px solid',
+                              borderColor: 'rgba(0, 0, 0, 0.23)',
+                              borderRadius: '4px',
+                              resize: 'vertical',
+                              backgroundColor: 'transparent',
+                              transition: 'border-color 0.2s',
+                              '&:hover': {
+                                borderColor: 'rgba(0, 0, 0, 0.87)',
+                              },
+                              '&:focus': {
+                                outline: 'none',
+                                borderColor: 'primary.main',
+                                borderWidth: '2px',
+                                padding: '7.5px 13px',
+                              }
+                            }}
+                          />
+                        </Box>
                         <Button
                           variant="contained"
                           size="small"

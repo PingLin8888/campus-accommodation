@@ -129,6 +129,9 @@ const EditRoom = () => {
               value={room.roomType}
               onChange={handleRoomInputChange}
               required
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <TextField
@@ -141,6 +144,9 @@ const EditRoom = () => {
               onChange={handleRoomInputChange}
               required
               inputProps={{ min: 0, step: 0.01 }}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <Box>

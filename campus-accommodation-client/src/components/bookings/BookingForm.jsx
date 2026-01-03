@@ -143,6 +143,9 @@ const BookingForm = () => {
                         ? "Please enter your fullname"
                         : ""
                     }
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                   />
 
                   <TextField
@@ -161,6 +164,9 @@ const BookingForm = () => {
                         ? "Please enter your email address"
                         : ""
                     }
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                   />
 
                   <Box>
@@ -236,6 +242,9 @@ const BookingForm = () => {
                               ? "Please select at least 1 adult"
                               : ""
                           }
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                         />
                       </Grid>
                       <Grid size={{ xs: 12, sm: 6 }}>
@@ -248,6 +257,9 @@ const BookingForm = () => {
                           value={booking.numberOfChildren}
                           onChange={handleInputChange}
                           inputProps={{ min: 0 }}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                         />
                       </Grid>
                     </Grid>

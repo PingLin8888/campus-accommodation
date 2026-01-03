@@ -78,6 +78,7 @@ const Registration = () => {
           <Stack spacing={3}>
             <TextField
               fullWidth
+              variant="outlined"
               id="firstName"
               name="firstName"
               label="First Name"
@@ -86,10 +87,14 @@ const Registration = () => {
               onChange={handleInputChange}
               required
               autoComplete="given-name"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <TextField
               fullWidth
+              variant="outlined"
               id="lastName"
               name="lastName"
               label="Last Name"
@@ -98,10 +103,14 @@ const Registration = () => {
               onChange={handleInputChange}
               required
               autoComplete="family-name"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <TextField
               fullWidth
+              variant="outlined"
               id="email"
               name="email"
               label="Email"
@@ -110,10 +119,14 @@ const Registration = () => {
               onChange={handleInputChange}
               required
               autoComplete="email"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <TextField
               fullWidth
+              variant="outlined"
               id="password"
               name="password"
               label="Password"
@@ -122,6 +135,9 @@ const Registration = () => {
               onChange={handleInputChange}
               required
               autoComplete="new-password"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
 
             <Button

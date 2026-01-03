@@ -83,7 +83,10 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
                     handleAddNewRoomType();
                   }
                 }}
-                />
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
               <Button
                 variant="contained"
                   onClick={handleAddNewRoomType}

@@ -1,70 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   min-height: 100vh;
   padding-bottom: 50px;
-}
-.card {
-  opacity: 0.9;
+  margin: 0;
 }
 
-/* Navigation bar definitions */
- .navbar{
-  padding: 0;
- }
- .navbar .navbar-nav .nav-link{
-  padding: 1em;
- }
- .navbar .navbar-nav .nav-item{
-  position: relative;
- }
-
- .navbar .navbar-nav .nav-item::after{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  content: '';
-  background-color:rgb(169, 77, 123) ;
-  width: 0;
-  margin: 0 auto;
-  height: 4px;
-  transition: all .5s;
- }
- .navbar .navbar-nav .nav-item:hover::after{
-  width: 100%;
- }
- .navbar-dark .navbar-nav .nav-link {
-  color: rgb(25, 24, 24);
-}
-
-.navbar-dark .navbar-brand {
-  color: rgb(25, 24, 24);
-}
-
- @media screen and (min-width: 992px){
-  .navbar{
-  padding: 0;
- }
- .navbar .navbar-nav .nav-link{
-  padding: 1em 0;
- }
- .navbar .navbar-nav .nav-item{
-  margin: 0 1em;
- }
- }
-
-  /* Hotel custom color */
- .btn-hotel{
-  background-color: rgb(169, 77, 123);
-  color: #fff;
-  }
-  .btn-hotel:hover{
-  background-color: rgb(137, 127, 132);
-  color: #fff;
-  transition: 0.7s;
-  outline-color: transparent;
-  outline-style:solid;
-
-  }
+/* Hotel custom color - kept for compatibility */
 
   .hotel-color{
     color: rgb(169, 77, 123);
